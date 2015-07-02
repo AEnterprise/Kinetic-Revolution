@@ -1,0 +1,110 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+    }
+}
+
+apply plugin: "curseforge"
+apply plugin: 'forge'
+
+ext.buildProps = file "gradle.properties"
+
+buildProps.withReader {
+    def prop = new Properties()
+    prop.load(it)
+    ext.config = new ConfigSlurper().parse prop
+}
+
+def curseFile = file 'curse.properties'
+def doCurse = curseFile.exists()
+
+if (doCurse) {
+    curseFile.withReader {
+        def prop = new Properties()
+        prop.load(it)
+        ext.curseProps = new ConfigSlurper().parse prop
+    }
+}
+
+version = "${config.version.mod}"
+group = "com.AEnterprise.KineticRevolution" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "Kinetic Revolution-1.7.10"
+
+if (System.getenv().BUILD_NUMBER != null) {
+    version = "-Kinetic Revolution Jenkins Build ${System.getenv().BUILD_NUMBER}"
+}
+
+minecraft {
+    version = "${config.version.mc}-${config.version.forge}-${config.version.mc}"
+    runDir = "eclipse"
+    replace "@MODVERSION@", config.version.mod
+}
+
+curse {
+    doFirst {
+        println("Curse.properties found, uploading to curse!")
+        apiKey = "${curseProps.api_token}"
+        projectId = "${curseProps.project_id}"
+
+        releaseType = "release"
+        changelog = """
+"""
+    }
+}
+
+task checkCurse() << {
+    if (!doCurse) {
+        throw new GradleException("No curse.properties file specified, This task shoudln't be used!")
+    }
+}
+
+repositories {
+    mavenCentral()
+
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: '*.jar')
+}
+
+processResources
+        {
+            // this will ensure that this task is redone when the versions change.
+            inputs.property "version", project.version
+            inputs.property "mcversion", project.minecraft.version
+
+            // replace stuff in mcmod.info, nothing else
+            from(sourceSets.main.resources.srcDirs) {
+                include '*.info'
+
+                // replace version and mcversion
+                expand 'version': project.version, 'mcversion': project.minecraft.version
+            }
+
+            // copy everything else, thats not the mcmod.info
+            from(sourceSets.main.resources.srcDirs) {
+                exclude '**/*.info'
+            }
+        }
+
+task deobfJar(type: Jar) {
+    from sourceSets.main.output
+    classifier = 'dev'
+}
+
+assemble.dependsOn deobfJar
+curse.dependsOn checkCurse
+
+
+idea { module.outputDir = sourceSets.main.output.classesDir }
