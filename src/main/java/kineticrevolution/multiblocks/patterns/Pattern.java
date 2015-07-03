@@ -64,9 +64,7 @@ public class Pattern {
         //Copy all chars to the new maximized cubic array: comparison
         for (int i = 0; i < patternOther.length; i++) {
             for (int j = 0; j < patternOther[i].length ; j++) {
-                for (int k = 0; k < patternOther[i][j].length ; k++) {
-                    comparison[i][j][k] = patternOther[i][j][k];
-                }
+                System.arraycopy(patternOther[i][j], 0, comparison[i][j], 0, patternOther[i][j].length);
             }
         }
 
@@ -76,6 +74,39 @@ public class Pattern {
             for (int j = 0; j < pattern[i].length ; j++) {
                 for (int k = 0; k < pattern[i][j].length ; k++) {
                     if (comparison[i][j][k] == pattern[i][j][k]){
+                        newPattern[i][j][k] = pattern[i][j][k];
+                    }
+                }
+            }
+        }
+        return new Pattern(newPattern);
+    }
+
+    /*
+    * Warning: The pattern on which the operation is called is the primary one. When conflicts happen, the primary will
+    * remain.
+     */
+    public Pattern combine(Pattern other){
+        char[][][] patternOther = other.getPattern();
+        int x = Math.max(patternOther.length, pattern.length);
+        int y = Math.max(patternOther[0].length,pattern[0].length);
+        int z = Math.max(patternOther[0][0].length,pattern[0][0].length);
+
+        char[][][] newPattern = new char[x][y][z];
+
+
+        //Copy all chars to the new maximized cubic array: comparison
+        for (int i = 0; i < patternOther.length; i++) {
+            for (int j = 0; j < patternOther[i].length ; j++) {
+                System.arraycopy(patternOther[i][j], 0, newPattern[i][j], 0, patternOther[i][j].length);
+            }
+        }
+
+
+        for (int i = 0; i < pattern.length; i++) {
+            for (int j = 0; j < pattern[i].length ; j++) {
+                for (int k = 0; k < pattern[i][j].length ; k++) {
+                    if (pattern[i][j][k] != -1){
                         newPattern[i][j][k] = pattern[i][j][k];
                     }
                 }
