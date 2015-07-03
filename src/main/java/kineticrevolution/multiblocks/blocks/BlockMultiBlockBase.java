@@ -12,6 +12,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
+import java.util.Random;
+
 /**
  * Created by AEnterprise
  */
@@ -36,6 +38,8 @@ public abstract class BlockMultiBlockBase extends BlockContainer {
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entiy, ItemStack stack) {
 		if (pattern.isValid(world, x, y, z)) {
 			pattern.formMultiblock(world, x, y, z);
+		} else {
+			world.scheduleBlockUpdate(x, y, z, this, 100);
 		}
 	}
 
@@ -43,6 +47,15 @@ public abstract class BlockMultiBlockBase extends BlockContainer {
 	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
 		if (pattern.isValid(world, x, y, z)) {
 			pattern.formMultiblock(world, x, y, z);
+		}
+	}
+
+	@Override
+	public void updateTick(World world, int x, int y, int z, Random random) {
+		if (pattern.isValid(world, x, y, z)) {
+			pattern.formMultiblock(world, x, y, z);
+		} else {
+			world.scheduleBlockUpdate(x, y, z, this, 100);
 		}
 	}
 }
