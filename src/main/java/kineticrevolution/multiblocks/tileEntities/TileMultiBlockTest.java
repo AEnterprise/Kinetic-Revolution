@@ -11,11 +11,12 @@ public class TileMultiBlockTest extends TileEntity implements IMultiBlock {
 
 	@Override
 	public void formMultiBlock(int masterXoffset, int masterYoffset, int masterZoffset, int rotation) {
-
+		System.out.println("Forming multiblock");
 	}
 
 	@Override
 	public boolean onBlockClicked(EntityPlayer player) {
-		return false;
+		System.out.println("Click Event Recieved from" + player.getDisplayName());
+		return true;
 	}
 }

@@ -1,6 +1,8 @@
 package kineticrevolution.multiblocks.patterns;
 
 import kineticrevolution.multiblocks.interfaces.IBlockDefinition;
+import kineticrevolution.multiblocks.interfaces.IMultiBlock;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import java.security.InvalidParameterException;
@@ -41,6 +43,7 @@ public class MultiBlockPattern {
 	}
 
 	public boolean isValid(World world, int startX, int startY, int startZ) {
+		//TODO: implement rotation
 		for (int x = 0; x < xSize; x++) {
 			for (int y = 0; y < ySize; y++) {
 				for (int z = 0; z < zSize; z++) {
@@ -52,4 +55,17 @@ public class MultiBlockPattern {
 		return true;
 	}
 
+	public void formMultiblock(World world, int startX, int startY, int startZ) {
+		for (int x = 0; x < xSize; x++) {
+			for (int y = 0; y < ySize; y++) {
+				for (int z = 0; z < zSize; z++) {
+					TileEntity entity = world.getTileEntity(startX, startY, startZ);
+					if (entity instanceof IMultiBlock) {
+						((IMultiBlock) entity).formMultiBlock(x, y, z, 0);//TODO: implement rotation
+					}
+				}
+
+			}
+		}
+	}
 }
