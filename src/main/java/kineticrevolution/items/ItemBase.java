@@ -1,9 +1,12 @@
 package kineticrevolution.items;
 
-import cpw.mods.fml.common.registry.GameRegistry;
-import kineticrevolution.KineticRevolution;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+
+import cpw.mods.fml.common.registry.GameRegistry;
+
+import kineticrevolution.KineticRevolution;
+import kineticrevolution.lib.Reference;
 
 /**
  * Created by AEnterprise
@@ -12,7 +15,7 @@ public class ItemBase extends Item {
 
 	public ItemBase(String name, String registryName, String texture, CreativeTabs tab) {
 		setUnlocalizedName(name);
-		setTextureName("kineticrevolution:" + texture);
+		setTextureName(Reference.MOD_ID + ":" + texture);
 		setCreativeTab(tab);
 		GameRegistry.registerItem(this, registryName);
 	}
