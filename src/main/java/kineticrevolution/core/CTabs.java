@@ -1,8 +1,10 @@
 package kineticrevolution.core;
 
-import kineticrevolution.loaders.ItemLoader;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+
+import kineticrevolution.lib.Reference;
+import kineticrevolution.loaders.ItemLoader;
 
 /**
  * Created by AEnterprise
@@ -12,7 +14,7 @@ public class CTabs {
 	public static class MainTab extends CreativeTabs {
 
 		public MainTab() {
-			super("kineticrevolution");
+			super(Reference.MOD_ID);
 		}
 
 		@Override
