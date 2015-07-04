@@ -3,6 +3,7 @@ package kineticrevolution.multiblocks.patterns;
 import kineticrevolution.loaders.BlockLoader;
 import kineticrevolution.multiblocks.definitions.DefinitionExact;
 import kineticrevolution.multiblocks.interfaces.IBlockDefinition;
+import kineticrevolution.multiblocks.patterns.patternFactories.PatternTypes;
 
 import java.util.HashMap;
 
@@ -15,23 +16,7 @@ public class Patterns {
 
 	public static void compilePatterns() {
 
-		char[][][] pattern = new char[][][]{
-				{
-						{'a', 'a'},
-						{'a', 'a'},
-						{'a', 'a'}
-				},
-				{
-						{'a', 'a'},
-						{'a', 'a'},
-						{'a', 'a'}
-				},
-				{
-						{'a', 'a'},
-						{'a', 'a'},
-						{'a', 'a'}
-				}
-		};
+		char[][][] pattern = PatternTypes.SOLID_BEAM.getFactory().createPattern('a', 3, 3, 2);
 
 		HashMap<Character, IBlockDefinition> definitions = new HashMap<Character, IBlockDefinition>();
 		definitions.put('a', new DefinitionExact(BlockLoader.test));

@@ -19,7 +19,7 @@ public enum PatternTypes {
 	LINE(new LineFactory()),
 	TRIANGLE(new TriangleFactory()),
 	PLANE(new PlaneFactory()),
-	BEAM(new BeamFactory()),
+	SOLID_BEAM(new BeamFactory()),
 	HOLOW_BEAM(new HollowBeamFactory());
 
 	private final IPatternFactory factory;

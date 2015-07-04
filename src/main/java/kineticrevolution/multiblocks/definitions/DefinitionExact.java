@@ -23,8 +23,6 @@ public class DefinitionExact implements IBlockDefinition {
 
     @Override
     public boolean matches(World world, int x, int y, int z) {
-        boolean test = world.getBlock(x, y, z) == this.match && world.getBlockMetadata(x, y, z) == this.meta;
-		System.out.println(test + " " + world.getBlock(x, y, z) + " " + world.getBlockMetadata(x, y, z) + " " + this.match);
 		return world.getBlock(x, y, z) == match && world.getBlockMetadata(x, y, z) == meta;
     }
 }
