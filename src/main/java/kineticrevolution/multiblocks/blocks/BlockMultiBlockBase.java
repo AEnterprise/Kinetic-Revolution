@@ -41,7 +41,7 @@ public abstract class BlockMultiBlockBase extends BlockContainer {
 
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
-		world.scheduleBlockUpdate(x, y, z, this, 1);
+
 	}
 
 	@Override

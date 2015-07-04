@@ -1,0 +1,15 @@
+[
+{
+  "modid": "kineticrevolution",
+  "name": "Kinetic Revolution",
+  "description": "Kinetic Revolution description goes here",
+  "version": "$version",
+  "mcversion": "$mcversion",
+  "url": " ",
+  "authorList": [ "AEnterprise"],
+  "credits": "AEnterprise",
+  "logoFile": "assets/kineticrevolution/logo.png",
+  "requiredMods": [ "Forge" ],
+  "dependencies": []
+}
+]

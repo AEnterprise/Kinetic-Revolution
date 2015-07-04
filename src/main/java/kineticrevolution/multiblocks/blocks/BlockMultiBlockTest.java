@@ -2,7 +2,7 @@ package kineticrevolution.multiblocks.blocks;
 
 import kineticrevolution.multiblocks.patterns.MultiBlockPattern;
 import kineticrevolution.multiblocks.patterns.Patterns;
-import kineticrevolution.multiblocks.tileEntities.TileMultiBlockTest;
+import kineticrevolution.multiblocks.tileEntities.TileMultiBlockBase;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -23,6 +23,6 @@ public class BlockMultiBlockTest extends BlockMultiBlockBase {
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
-		return new TileMultiBlockTest();
+		return new TileMultiBlockBase();
 	}
 }

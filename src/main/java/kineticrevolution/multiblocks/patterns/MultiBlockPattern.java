@@ -107,4 +107,25 @@ public class MultiBlockPattern {
 		}
 	}
 
+	public void deformMultiblock(World world, int startX, int startY, int startZ, int rotation) {
+		for (int y = 0; y < ySize; y++) {
+			for (int x = 0; x < xSize; x++) {
+				for (int z = 0; z < zSize; z++) {
+					int xx, zz;
+					if (rotation == 0 || rotation == 2) {
+						xx = startX + x;
+						zz = startZ + z;
+					} else {
+						xx = startX + z;
+						zz = startZ + x;
+					}
+					TileEntity entity = world.getTileEntity(xx, startY + y, zz);
+					if (entity instanceof IMultiBlock) {
+						((IMultiBlock) entity).deformMultiBlock();
+					}
+				}
+			}
+		}
+	}
+
 }
