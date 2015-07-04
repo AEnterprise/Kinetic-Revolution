@@ -16,24 +16,24 @@ public class Patterns {
 
 		char[][][] pattern = new char[][][]{
 				{
-						{'a', 'a', 'a'},
-						{'a', 'a', 'a'},
-						{'a', 'a', 'a'}
+						{'a', 'a'},
+						{'a', 'a'},
+						{'a', 'a'}
 				},
 				{
-						{'a', 'a', 'a'},
-						{'a', 'a', 'a'},
-						{'a', 'a', 'a'}
+						{'a', 'a'},
+						{'a', 'a'},
+						{'a', 'a'}
 				},
 				{
-						{'a', 'a', 'a'},
-						{'a', 'a', 'a'},
-						{'a', 'a', 'a'}
+						{'a', 'a'},
+						{'a', 'a'},
+						{'a', 'a'}
 				}
 		};
 
 		HashMap<Character, IBlockDefinition> definitions = new HashMap<Character, IBlockDefinition>();
 		definitions.put('a', new DefinitionTest());
-		TEST_PATTERN = new MultiBlockPattern(pattern, definitions, 3, 3, 3);
+		TEST_PATTERN = new MultiBlockPattern(pattern, definitions, 3, 3, 2);
 	}
 }

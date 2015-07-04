@@ -1,17 +1,20 @@
 package kineticrevolution.client.gui.base;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import kineticrevolution.util.ClientUtil;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
-import java.awt.Rectangle;
+import java.awt.*;
 import java.util.List;
 
 
 /**
  * Created by big_Xplosion
  */
+@SideOnly(Side.CLIENT)
 public class WidgetBase {
 
     public final int id;

@@ -36,24 +36,19 @@ public abstract class BlockMultiBlockBase extends BlockContainer {
 
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entiy, ItemStack stack) {
-		if (pattern.isValid(world, x, y, z)) {
-			pattern.formMultiblock(world, x, y, z);
-		} else {
-			world.scheduleBlockUpdate(x, y, z, this, 100);
-		}
+		world.scheduleBlockUpdate(x, y, z, this, 1);
 	}
 
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
-		if (pattern.isValid(world, x, y, z)) {
-			pattern.formMultiblock(world, x, y, z);
-		}
+		world.scheduleBlockUpdate(x, y, z, this, 1);
 	}
 
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random random) {
-		if (pattern.isValid(world, x, y, z)) {
-			pattern.formMultiblock(world, x, y, z);
+		int rotation = pattern.checkMultiBlock(world, x, y, z);
+		if (rotation != -1) {
+			pattern.formMultiblock(world, x, y, z, rotation);
 		} else {
 			world.scheduleBlockUpdate(x, y, z, this, 100);
 		}

@@ -2,6 +2,7 @@ package kineticrevolution.multiblocks.patterns;
 
 import kineticrevolution.multiblocks.interfaces.IBlockDefinition;
 import kineticrevolution.multiblocks.interfaces.IMultiBlock;
+import kineticrevolution.util.RotationUtils;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -42,12 +43,42 @@ public class MultiBlockPattern {
 		this.zSize = zSize;
 	}
 
-	public boolean isValid(World world, int startX, int startY, int startZ) {
-		//TODO: implement rotation
-		for (int x = 0; x < xSize; x++) {
-			for (int y = 0; y < ySize; y++) {
+	/**
+	 * checks if the multiblock is valid
+	 *
+	 * @param world  the world
+	 * @param startX xCoord from where to start
+	 * @param startY yCoord from where to start
+	 * @param startZ zCoord from where to start
+	 * @return the rotation of the multiblock if it's valid, -1 if not
+	 */
+	public int checkMultiBlock(World world, int startX, int startY, int startZ) {
+		for (int i = 0; i < 4; i++) {
+			if (isValid(world, startX, startY, startZ, i)) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	private boolean isValid(World world, int startX, int startY, int startZ, int rotation) {
+		for (int y = 0; y < ySize; y++) {
+			char[][] array = RotationUtils.rotate(pattern[y], rotation);
+			for (int x = 0; x < xSize; x++) {
 				for (int z = 0; z < zSize; z++) {
-					if (!definitions.get(pattern[y][x][z]).matches(world, startX + x, startY + y, startZ + z))
+					int xx, zz, xc, zc;
+					if (rotation == 0 || rotation == 2) {
+						xc = x;
+						zc = z;
+						xx = startX + xc;
+						zz = startZ + zc;
+					} else {
+						xc = z;
+						zc = x;
+						xx = startX + xc;
+						zz = startZ + zc;
+					}
+					if (!definitions.get(array[xc][zc]).matches(world, xx, startY + y, zz))
 						return false;
 				}
 			}
@@ -55,17 +86,25 @@ public class MultiBlockPattern {
 		return true;
 	}
 
-	public void formMultiblock(World world, int startX, int startY, int startZ) {
-		for (int x = 0; x < xSize; x++) {
-			for (int y = 0; y < ySize; y++) {
+	public void formMultiblock(World world, int startX, int startY, int startZ, int rotation) {
+		for (int y = 0; y < ySize; y++) {
+			for (int x = 0; x < xSize; x++) {
 				for (int z = 0; z < zSize; z++) {
-					TileEntity entity = world.getTileEntity(startX, startY, startZ);
+					int xx, zz;
+					if (rotation == 0 || rotation == 2) {
+						xx = startX + x;
+						zz = startZ + z;
+					} else {
+						xx = startX + z;
+						zz = startZ + x;
+					}
+					TileEntity entity = world.getTileEntity(xx, startY + y, zz);
 					if (entity instanceof IMultiBlock) {
-						((IMultiBlock) entity).formMultiBlock(x, y, z, 0);//TODO: implement rotation
+						((IMultiBlock) entity).formMultiBlock(x, y, z, rotation);
 					}
 				}
-
 			}
 		}
 	}
+
 }

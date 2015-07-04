@@ -1,5 +1,7 @@
 package kineticrevolution.util;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.gui.FontRenderer;
@@ -13,6 +15,7 @@ import net.minecraft.world.World;
 /**
  * Created by big_Xplosion
  */
+@SideOnly(Side.CLIENT)
 public class ClientUtil {
 
     public static final ResourceLocation MC_BLOCK_SHEET = TextureMap.locationBlocksTexture;

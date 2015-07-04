@@ -1,6 +1,8 @@
 package kineticrevolution.client.gui.base;
 
 import com.google.common.collect.Lists;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import kineticrevolution.util.ClientUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -16,6 +18,7 @@ import java.util.List;
 /**
  * Created by big_Xplosion
  */
+@SideOnly(Side.CLIENT)
 public abstract class GuiBase extends GuiContainer {
 
     public static final ResourceLocation PLAYER_INV_TEXTURE = new ResourceLocation("bcadditions:textures/gui/guiPlayerInv.png");
