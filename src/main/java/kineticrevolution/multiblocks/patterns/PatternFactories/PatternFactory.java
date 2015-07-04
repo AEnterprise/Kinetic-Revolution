@@ -17,6 +17,8 @@ public final class PatternFactory {
         factories.add(new TriangleFactory());   //Factory #2
         factories.add(new HollowCubeFactory()); //Factory #3
         factories.add(new PlaneFactory());      //Factory #4
+        factories.add(new BeamFactory());       //Factory #5
+        factories.add(new HollowBeamFactory()); //Factory #6
     }
 
     //Create a pattern that resembles a solid cube.
@@ -39,5 +41,13 @@ public final class PatternFactory {
 
     public static Pattern createPlane(char a, int...size)throws PatternException{
         return factories.get(4).createPattern(a,size);
+    }
+
+    public static Pattern createBeam(char a, int...size)throws PatternException{
+        return factories.get(5).createPattern(a,size);
+    }
+
+    public static Pattern createHollowBeam(char a, int...size)throws PatternException{
+        return factories.get(6).createPattern(a,size);
     }
 }
