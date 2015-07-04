@@ -9,12 +9,17 @@ import kineticrevolution.multiblocks.patterns.Pattern;
  */
 public class HollowCubeFactory implements IPatternFactory {
     @Override
-    public Pattern createPattern(int size, char a) throws PatternException {
-        char[][][] pattern = new char[size][size][size];
-        for (int i = 0; i < size ; i++) {
-            for (int j = 0; j < size ; j++) {
-                for (int k = 0; k < size ; k++) {
-                    if (i == 0 || j == 0 || k == 0 || i == size-1 || j == size-1|| k == size-1 ){
+    public Pattern createPattern(char a,int... size) throws PatternException {
+        if (size.length != 1){
+            throw new PatternException("Invalid size list given");
+        }
+
+        int Isize = size[0];
+        char[][][] pattern = new char[Isize][Isize][Isize];
+        for (int i = 0; i < Isize ; i++) {
+            for (int j = 0; j < Isize ; j++) {
+                for (int k = 0; k < Isize ; k++) {
+                    if (i == 0 || j == 0 || k == 0 || i == Isize-1 || j == Isize-1|| k == Isize-1 ){
                         pattern[i][j][k] = a;
                     }
                 }

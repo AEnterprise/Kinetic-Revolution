@@ -3,8 +3,9 @@ package kineticrevolution.multiblocks.patterns;
 /**
  * Created by MrKickkiller on 3/07/2015.
  */
-public class Pattern {
-    char[][][] pattern;
+public final class Pattern {
+
+    final char[][][] pattern;
 
     public Pattern(char[][][] pattern) {
         this.pattern = pattern;
@@ -18,6 +19,25 @@ public class Pattern {
 
     public void modifyPattern(){
         // TODO: Modify a pattern
+    }
+
+    public Pattern translation(int x, int y, int z) throws PatternException {
+        if (x < 0 || y < 0 || z <0){
+            throw new PatternException("Can't translate a pattern with negative delta");
+        }
+
+        int i = pattern.length;
+        int j = pattern[0].length;
+        int k = pattern[0][0].length;
+
+        char[][][] newPattern = new char[i+x][j+y][k+z];
+        for (int l = 0; l < i ; l++) {
+            for (int m = 0; m <j ; m++) {
+                System.arraycopy(pattern[l][m], 0, newPattern[l + x][m + y], 0 + z, k);
+            }
+        }
+        return new Pattern(newPattern);
+
     }
 
     public char[][][] getPattern() {
@@ -85,6 +105,7 @@ public class Pattern {
     /*
     * Warning: The pattern on which the operation is called is the primary one. When conflicts happen, the primary will
     * remain.
+    * TODO : Make it a list of Pattern's instead of single pattern with single pattern.
      */
     public Pattern combine(Pattern other){
         char[][][] patternOther = other.getPattern();
