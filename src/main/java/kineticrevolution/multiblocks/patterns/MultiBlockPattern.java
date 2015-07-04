@@ -105,6 +105,7 @@ public class MultiBlockPattern {
 				}
 			}
 		}
+
 	}
 
 	public void deformMultiblock(World world, int startX, int startY, int startZ, int rotation) {
