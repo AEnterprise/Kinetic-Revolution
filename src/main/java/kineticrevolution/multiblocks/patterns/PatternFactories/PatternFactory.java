@@ -20,24 +20,24 @@ public final class PatternFactory {
     }
 
     //Create a pattern that resembles a solid cube.
-    public static Pattern createSolidCube(int size, char a) throws PatternException {
-        return factories.get(0).createPattern(size, a);
+    public static Pattern createSolidCube(char a, int size) throws PatternException {
+        return factories.get(0).createPattern(a, size);
     }
 
     //Create a pattern that resembles a beam of length size and orientated around the Z-axis
-    public static Pattern createLine(int size, char a) throws PatternException {
-        return factories.get(1).createPattern(size, a);
+    public static Pattern createLine(char a, int size) throws PatternException {
+        return factories.get(1).createPattern(a,size);
     }
 
-    public static Pattern createTriangle(int size,char a) throws PatternException {
-        return factories.get(2).createPattern(size, a);
+    public static Pattern createTriangle(char a, int size) throws PatternException {
+        return factories.get(2).createPattern(a, size);
     }
 
-    public static Pattern createHollowCube(int size,char a) throws PatternException {
-        return factories.get(3).createPattern(size, a);
+    public static Pattern createHollowCube(char a,int size) throws PatternException {
+        return factories.get(3).createPattern(a, size);
     }
 
-    public static Pattern createPlane(int size, char a)throws PatternException{
-        return factories.get(4).createPattern(size, a);
+    public static Pattern createPlane(char a, int...size)throws PatternException{
+        return factories.get(4).createPattern(a,size);
     }
 }
