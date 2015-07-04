@@ -1,6 +1,5 @@
 package kineticrevolution.multiblocks.patterns.patternFactories.factories;
 
-import kineticrevolution.multiblocks.patterns.Pattern;
 import kineticrevolution.multiblocks.patterns.patternFactories.IPatternFactory;
 
 import java.security.InvalidParameterException;
@@ -11,7 +10,7 @@ import java.security.InvalidParameterException;
 public class LineFactory implements IPatternFactory {
 
 	@Override
-	public Pattern createPattern(char a, int... args) {
+	public char[][][] createPattern(char a, int... args) {
 		if (args.length != 1)
 			throw new InvalidParameterException("Invalid size list given");
 
@@ -20,6 +19,6 @@ public class LineFactory implements IPatternFactory {
 		for (int i = 0; i < size; i++) {
 			pattern[0][0][i] = a;
 		}
-		return new Pattern(pattern);
+		return pattern;
 	}
 }

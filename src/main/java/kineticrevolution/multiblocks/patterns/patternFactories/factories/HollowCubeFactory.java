@@ -1,6 +1,5 @@
 package kineticrevolution.multiblocks.patterns.patternFactories.factories;
 
-import kineticrevolution.multiblocks.patterns.Pattern;
 import kineticrevolution.multiblocks.patterns.patternFactories.IPatternFactory;
 
 import java.security.InvalidParameterException;
@@ -11,7 +10,7 @@ import java.security.InvalidParameterException;
 public class HollowCubeFactory implements IPatternFactory {
 
 	@Override
-	public Pattern createPattern(char a, int... args) {
+	public char[][][] createPattern(char a, int... args) {
 		if (args.length != 1)
 			throw new InvalidParameterException("Invalid size list given");
 
@@ -27,6 +26,6 @@ public class HollowCubeFactory implements IPatternFactory {
 			}
 		}
 
-		return new Pattern(pattern);
+		return pattern;
 	}
 }
