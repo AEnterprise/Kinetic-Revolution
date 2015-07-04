@@ -24,7 +24,7 @@ public final class Pattern {
 		char[][][] newPattern = new char[i + x][j + y][k + z];
 		for (int l = 0; l < i; l++) {
 			for (int m = 0; m < j; m++) {
-				System.arraycopy(pattern[l][m], 0, newPattern[l + x][m + y], 0 + z, k);
+				System.arraycopy(pattern[l][m], 0, newPattern[l + x][m + y], z, k);
 			}
 		}
 		return new Pattern(newPattern);

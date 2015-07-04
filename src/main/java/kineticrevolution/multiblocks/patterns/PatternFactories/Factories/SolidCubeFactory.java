@@ -1,7 +1,7 @@
-package kineticrevolution.multiblocks.patterns.PatternFactories.Factories;
+package kineticrevolution.multiblocks.patterns.patternFactories.factories;
 
 import kineticrevolution.multiblocks.patterns.Pattern;
-import kineticrevolution.multiblocks.patterns.PatternFactories.IPatternFactory;
+import kineticrevolution.multiblocks.patterns.patternFactories.IPatternFactory;
 
 import java.security.InvalidParameterException;
 

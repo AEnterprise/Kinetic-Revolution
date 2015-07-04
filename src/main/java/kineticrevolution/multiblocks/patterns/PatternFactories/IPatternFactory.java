@@ -1,4 +1,4 @@
-package kineticrevolution.multiblocks.patterns.PatternFactories;
+package kineticrevolution.multiblocks.patterns.patternFactories;
 
 import kineticrevolution.multiblocks.patterns.Pattern;
 

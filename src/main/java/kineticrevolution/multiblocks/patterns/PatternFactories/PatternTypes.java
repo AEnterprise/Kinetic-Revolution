@@ -1,6 +1,13 @@
-package kineticrevolution.multiblocks.patterns.PatternFactories;
+package kineticrevolution.multiblocks.patterns.patternFactories;
 
-import kineticrevolution.multiblocks.patterns.PatternFactories.Factories.*;
+
+import kineticrevolution.multiblocks.patterns.patternFactories.factories.BeamFactory;
+import kineticrevolution.multiblocks.patterns.patternFactories.factories.HollowBeamFactory;
+import kineticrevolution.multiblocks.patterns.patternFactories.factories.HollowCubeFactory;
+import kineticrevolution.multiblocks.patterns.patternFactories.factories.LineFactory;
+import kineticrevolution.multiblocks.patterns.patternFactories.factories.PlaneFactory;
+import kineticrevolution.multiblocks.patterns.patternFactories.factories.SolidCubeFactory;
+import kineticrevolution.multiblocks.patterns.patternFactories.factories.TriangleFactory;
 
 /**
  * Created by AEnterprise
