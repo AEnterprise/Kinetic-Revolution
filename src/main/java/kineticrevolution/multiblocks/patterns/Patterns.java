@@ -1,6 +1,7 @@
 package kineticrevolution.multiblocks.patterns;
 
-import kineticrevolution.multiblocks.definitions.DefinitionTest;
+import kineticrevolution.loaders.BlockLoader;
+import kineticrevolution.multiblocks.definitions.DefinitionExact;
 import kineticrevolution.multiblocks.interfaces.IBlockDefinition;
 
 import java.util.HashMap;
@@ -10,9 +11,9 @@ import java.util.HashMap;
  */
 public class Patterns {
 
-	public static final MultiBlockPattern TEST_PATTERN;
+	public static MultiBlockPattern TEST_PATTERN;
 
-	static {
+	public static void compilePatterns() {
 
 		char[][][] pattern = new char[][][]{
 				{
@@ -33,7 +34,7 @@ public class Patterns {
 		};
 
 		HashMap<Character, IBlockDefinition> definitions = new HashMap<Character, IBlockDefinition>();
-		definitions.put('a', new DefinitionTest());
+		definitions.put('a', new DefinitionExact(BlockLoader.test));
 		TEST_PATTERN = new MultiBlockPattern(pattern, definitions, 3, 3, 2);
 	}
 }

@@ -1,16 +1,16 @@
 package kineticrevolution;
 
-import net.minecraft.creativetab.CreativeTabs;
-
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-
 import kineticrevolution.core.CTabs;
 import kineticrevolution.lib.Reference;
 import kineticrevolution.loaders.BlockLoader;
 import kineticrevolution.loaders.ItemLoader;
+import kineticrevolution.multiblocks.patterns.Patterns;
 import kineticrevolution.proxy.CommonProxy;
+import net.minecraft.creativetab.CreativeTabs;
 
 /**
  * Created by AEnterprise
@@ -29,5 +29,10 @@ public class KineticRevolution {
 	public void preInit(FMLPreInitializationEvent event) {
 		ItemLoader.init();
 		BlockLoader.init();
+	}
+
+	@Mod.EventHandler
+	public void postInit(FMLPostInitializationEvent event) {
+		Patterns.compilePatterns();
 	}
 }

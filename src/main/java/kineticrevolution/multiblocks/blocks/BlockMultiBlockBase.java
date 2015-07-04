@@ -18,15 +18,15 @@ import java.util.Random;
  * Created by AEnterprise
  */
 public abstract class BlockMultiBlockBase extends BlockContainer {
-	protected final MultiBlockPattern pattern;
 
-	protected BlockMultiBlockBase(MultiBlockPattern pattern, String name, String texture) {
+	protected BlockMultiBlockBase(String name, String texture) {
 		super(Material.iron);
-		this.pattern = pattern;
 		setBlockName(name);
 		setBlockTextureName(texture);
 		GameRegistry.registerBlock(this, name);
 	}
+
+	public abstract MultiBlockPattern getPattern();
 
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
@@ -46,9 +46,9 @@ public abstract class BlockMultiBlockBase extends BlockContainer {
 
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random random) {
-		int rotation = pattern.checkMultiBlock(world, x, y, z);
+		int rotation = getPattern().checkMultiBlock(world, x, y, z);
 		if (rotation != -1) {
-			pattern.formMultiblock(world, x, y, z, rotation);
+			getPattern().formMultiblock(world, x, y, z, rotation);
 		} else {
 			world.scheduleBlockUpdate(x, y, z, this, 100);
 		}

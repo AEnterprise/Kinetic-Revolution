@@ -1,5 +1,6 @@
 package kineticrevolution.multiblocks.blocks;
 
+import kineticrevolution.multiblocks.patterns.MultiBlockPattern;
 import kineticrevolution.multiblocks.patterns.Patterns;
 import kineticrevolution.multiblocks.tileEntities.TileMultiBlockTest;
 import net.minecraft.tileentity.TileEntity;
@@ -12,7 +13,12 @@ public class BlockMultiBlockTest extends BlockMultiBlockBase {
 
 
 	public BlockMultiBlockTest() {
-		super(Patterns.TEST_PATTERN, "TestBlock", "noTextureYet");
+		super("TestBlock", "noTextureYet");
+	}
+
+	@Override
+	public MultiBlockPattern getPattern() {
+		return Patterns.TEST_PATTERN;
 	}
 
 	@Override
