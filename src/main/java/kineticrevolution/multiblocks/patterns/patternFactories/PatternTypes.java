@@ -15,12 +15,12 @@ import kineticrevolution.multiblocks.patterns.patternFactories.factories.Triangl
 public enum PatternTypes {
 
 	SOLID_CUBE(new SolidCubeFactory()),
-	HOLOW_CUBE(new HollowCubeFactory()),
+	HOLLOW_CUBE(new HollowCubeFactory()),
 	LINE(new LineFactory()),
 	TRIANGLE(new TriangleFactory()),
 	PLANE(new PlaneFactory()),
 	SOLID_BEAM(new BeamFactory()),
-	HOLOW_BEAM(new HollowBeamFactory());
+	HOLLOW_BEAM(new HollowBeamFactory());
 
 	private final IPatternFactory factory;
 
