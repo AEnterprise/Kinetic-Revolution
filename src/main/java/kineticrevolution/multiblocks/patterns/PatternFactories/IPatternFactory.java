@@ -8,5 +8,5 @@ import kineticrevolution.multiblocks.patterns.PatternException;
  */
 public interface IPatternFactory {
 
-    public Pattern createPattern(int size, char a) throws PatternException;
+    Pattern createPattern(char a, int... size) throws PatternException;
 }
