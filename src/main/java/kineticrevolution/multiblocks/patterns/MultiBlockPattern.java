@@ -105,7 +105,7 @@ public class MultiBlockPattern {
 				}
 			}
 		}
-
+		System.out.println("formed a multiblock");
 	}
 
 	public void deformMultiblock(World world, int startX, int startY, int startZ, int rotation) {

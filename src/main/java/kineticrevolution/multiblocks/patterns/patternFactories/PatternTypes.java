@@ -31,4 +31,8 @@ public enum PatternTypes {
 	public IPatternFactory getFactory() {
 		return factory;
 	}
+
+	public char[][][] createPattern(char a, int... size) {
+		return factory.createPattern(a, size);
+	}
 }
