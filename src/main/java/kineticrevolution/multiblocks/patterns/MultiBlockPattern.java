@@ -15,9 +15,9 @@ import java.util.HashMap;
 public class MultiBlockPattern {
 	private final char[][][] pattern;
 	private final HashMap<Character, IBlockDefinition> definitions;
-	private final int xSize, ySize, zSize;
+	private final int xSize, ySize, zSize, masterXoffset, masterYoffset, masterZoffset;
 
-	public MultiBlockPattern(char[][][] pattern, HashMap<Character, IBlockDefinition> definitions, int xSize, int ySize, int zSize) {
+	public MultiBlockPattern(char[][][] pattern, HashMap<Character, IBlockDefinition> definitions, int xSize, int ySize, int zSize, int masterXoffset, int masterYoffset, int masterZoffset) {
 		if (pattern == null)
 			throw new InvalidParameterException("A pattern is required!");
 		if (definitions == null)
@@ -41,6 +41,9 @@ public class MultiBlockPattern {
 		this.xSize = xSize;
 		this.ySize = ySize;
 		this.zSize = zSize;
+		this.masterXoffset = masterXoffset;
+		this.masterYoffset = masterYoffset;
+		this.masterZoffset = masterZoffset;
 	}
 
 	/**
@@ -66,19 +69,15 @@ public class MultiBlockPattern {
 			char[][] array = RotationUtils.rotate(pattern[y], rotation);
 			for (int x = 0; x < xSize; x++) {
 				for (int z = 0; z < zSize; z++) {
-					int xx, zz, xc, zc;
+					int xc, zc;
 					if (rotation == 0 || rotation == 2) {
 						xc = x;
 						zc = z;
-						xx = startX + xc;
-						zz = startZ + zc;
 					} else {
 						xc = z;
 						zc = x;
-						xx = startX + xc;
-						zz = startZ + zc;
 					}
-					if (!definitions.get(array[xc][zc]).matches(world, xx, startY + y, zz))
+					if (!definitions.get(array[xc][zc]).matches(world, startX + xc, startY + y, startZ + zc))
 						return false;
 				}
 			}
@@ -90,17 +89,21 @@ public class MultiBlockPattern {
 		for (int y = 0; y < ySize; y++) {
 			for (int x = 0; x < xSize; x++) {
 				for (int z = 0; z < zSize; z++) {
-					int xx, zz;
+					int xx, zz, realMasterXoffset, realMasterZoffset;
 					if (rotation == 0 || rotation == 2) {
 						xx = startX + x;
 						zz = startZ + z;
+						realMasterXoffset = masterXoffset;
+						realMasterZoffset = masterZoffset;
 					} else {
 						xx = startX + z;
 						zz = startZ + x;
+						realMasterXoffset = masterZoffset;
+						realMasterZoffset = masterXoffset;
 					}
 					TileEntity entity = world.getTileEntity(xx, startY + y, zz);
 					if (entity instanceof IMultiBlock) {
-						((IMultiBlock) entity).formMultiBlock(x, y, z, rotation);
+						((IMultiBlock) entity).formMultiBlock(startX - xx + realMasterXoffset, -y + masterYoffset, startZ - zz + realMasterZoffset, rotation);
 					}
 				}
 			}
@@ -129,4 +132,15 @@ public class MultiBlockPattern {
 		}
 	}
 
+	public int getMasterXoffset() {
+		return masterXoffset;
+	}
+
+	public int getMasterYoffset() {
+		return masterYoffset;
+	}
+
+	public int getMasterZoffset() {
+		return masterZoffset;
+	}
 }

@@ -9,6 +9,7 @@ import kineticrevolution.lib.Reference;
 import kineticrevolution.loaders.BlockLoader;
 import kineticrevolution.loaders.ItemLoader;
 import kineticrevolution.multiblocks.patterns.Patterns;
+import kineticrevolution.networking.PacketHandler;
 import kineticrevolution.proxy.CommonProxy;
 import net.minecraft.creativetab.CreativeTabs;
 
@@ -29,6 +30,8 @@ public class KineticRevolution {
 	public void preInit(FMLPreInitializationEvent event) {
 		ItemLoader.init();
 		BlockLoader.init();
+		proxy.setupRenderers();
+		PacketHandler.init();
 	}
 
 	@Mod.EventHandler

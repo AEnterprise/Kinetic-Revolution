@@ -1,5 +1,6 @@
 package kineticrevolution.multiblocks.interfaces;
 
+import kineticrevolution.multiblocks.patterns.MultiBlockPattern;
 import net.minecraft.entity.player.EntityPlayer;
 
 /**
@@ -13,11 +14,15 @@ public interface IMultiBlock {
 
 	boolean onBlockClicked(EntityPlayer player);
 
-	void blockUpdate(int x, int y, int z);
+	void blockUpdate();
 
 	int getMasterX();
 
 	int getMasterY();
 
 	int getMasterZ();
+
+	MultiBlockPattern getPattern();
+
+	boolean isMaster();
 }

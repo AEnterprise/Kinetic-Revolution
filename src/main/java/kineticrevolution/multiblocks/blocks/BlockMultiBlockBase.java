@@ -48,7 +48,10 @@ public abstract class BlockMultiBlockBase extends BlockContainer {
 
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
-
+		TileEntity entity = world.getTileEntity(x, y, z);
+		if (entity instanceof IMultiBlock) {
+			((IMultiBlock) entity).blockUpdate();
+		}
 	}
 
 	@Override

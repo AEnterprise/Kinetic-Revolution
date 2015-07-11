@@ -2,6 +2,7 @@ package kineticrevolution.multiblocks.blocks;
 
 import kineticrevolution.multiblocks.patterns.MultiBlockPattern;
 import kineticrevolution.multiblocks.patterns.Patterns;
+import kineticrevolution.multiblocks.tileEntities.TileKineticGenerator;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -20,7 +21,7 @@ public class BlockGeneratorCasing extends BlockMultiBlockBase {
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
-		return null;
+	public TileEntity createNewTileEntity(World world, int meta) {
+		return new TileKineticGenerator();
 	}
 }
