@@ -22,6 +22,8 @@ public interface IMultiBlock {
 
 	int getMasterZ();
 
+	int getRotation();
+
 	MultiBlockPattern getPattern();
 
 	boolean isMaster();

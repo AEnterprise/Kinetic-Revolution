@@ -15,7 +15,8 @@ import net.minecraft.tileentity.TileEntity;
  * Created by AEnterprise
  */
 public abstract class TileMultiBlockBase extends TileEntity implements IMultiBlock, ISynchronizedTile {
-	public final MultiBlockData data;
+	protected final MultiBlockData data;
+	private int timer = 100;
 
 	public TileMultiBlockBase() {
 		data = new MultiBlockData(getPattern());
@@ -24,8 +25,11 @@ public abstract class TileMultiBlockBase extends TileEntity implements IMultiBlo
 
 	@Override
 	public void updateEntity() {
-		if (worldObj.isRemote && isMaster())
-			System.out.println("I'M THE MASTER");
+		timer--;
+		if (timer <= 0) {
+			sync();
+			timer = 100;
+		}
 	}
 
 	@Override
@@ -34,12 +38,13 @@ public abstract class TileMultiBlockBase extends TileEntity implements IMultiBlo
 		data.setMasterXoffset(masterXoffset);
 		data.setMasterYoffset(masterYoffset);
 		data.setMasterZoffset(masterZoffset);
+		data.setRotation(rotation);
 		worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 1, 2);
 		if (masterXoffset == 0 && masterYoffset == 0 && masterZoffset == 0) {
 			data.setMaster(true);
 		}
 		data.setValid(true);
-		sync();
+		timer = 0;
 	}
 
 	public void sync() {
@@ -52,7 +57,8 @@ public abstract class TileMultiBlockBase extends TileEntity implements IMultiBlo
 	public void deformMultiBlock() {
 		worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 0, 2);
 		worldObj.scheduleBlockUpdate(xCoord, yCoord, zCoord, worldObj.getBlock(xCoord, yCoord, zCoord), 100);
-		sync();
+		data.setMaster(false);
+		timer = 0;
 	}
 
 	@Override
@@ -119,6 +125,11 @@ public abstract class TileMultiBlockBase extends TileEntity implements IMultiBlo
 	@Override
 	public int getY() {
 		return yCoord;
+	}
+
+	@Override
+	public int getRotation() {
+		return data.getRotation();
 	}
 
 	@Override

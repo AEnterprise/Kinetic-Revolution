@@ -55,7 +55,6 @@ public class MultiBlockData implements ISyncObject {
 
 	public void setMaster(boolean master) {
 		this.master = master;
-		System.out.println("setting master");
 	}
 
 	public MultiBlockPattern getPattern() {
@@ -95,11 +94,12 @@ public class MultiBlockData implements ISyncObject {
 	@Override
 	public void writeToByteBuff(ByteBuf buf) {
 		buf.writeBoolean(master);
+		buf.writeInt(rotation);
 	}
 
 	@Override
 	public void readFromByteBuff(ByteBuf buf) {
 		master = buf.readBoolean();
-		System.out.println("setting master to " + String.valueOf(master));
+		rotation = buf.readInt();
 	}
 }
