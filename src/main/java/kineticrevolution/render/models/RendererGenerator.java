@@ -2,7 +2,6 @@ package kineticrevolution.render.models;
 
 import kineticrevolution.lib.Reference;
 import kineticrevolution.multiblocks.interfaces.IMultiBlock;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -22,10 +21,12 @@ public class RendererGenerator extends TileEntitySpecialRenderer {
 		if (entity instanceof IMultiBlock && ((IMultiBlock) entity).isMaster()) {
 			GL11.glPushMatrix();
 			GL11.glTranslated(x, y, z);
-			Minecraft.getMinecraft().getTextureManager().bindTexture(TEXTURE);
+			bindTexture(TEXTURE);
 			MODEL.renderAll();
 			GL11.glPopMatrix();
 
 		}
 	}
+
+
 }

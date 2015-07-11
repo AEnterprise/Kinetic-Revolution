@@ -11,16 +11,7 @@ import net.minecraft.nbt.NBTTagCompound;
 public class MultiBlockData implements ISyncObject {
 	private int masterXoffset, masterYoffset, masterZoffset, rotation;
 	private MultiBlockPattern pattern;
-	private boolean master;
-
-	public MultiBlockData(int masterXoffset, int masterYoffset, int masterZoffset, int rotation, MultiBlockPattern pattern) {
-		this.masterXoffset = masterXoffset;
-		this.masterYoffset = masterYoffset;
-		this.masterZoffset = masterZoffset;
-		this.rotation = rotation;
-		this.pattern = pattern;
-		master = false;
-	}
+	private boolean master, valid;
 
 	public MultiBlockData(MultiBlockPattern pattern) {
 		this.pattern = pattern;
@@ -64,10 +55,19 @@ public class MultiBlockData implements ISyncObject {
 
 	public void setMaster(boolean master) {
 		this.master = master;
+		System.out.println("setting master");
 	}
 
 	public MultiBlockPattern getPattern() {
 		return pattern;
+	}
+
+	public boolean isValid() {
+		return valid;
+	}
+
+	public void setValid(boolean valid) {
+		this.valid = valid;
 	}
 
 	public void saveToNBT(NBTTagCompound tag) {
@@ -80,9 +80,9 @@ public class MultiBlockData implements ISyncObject {
 		tag.setTag("data", data);
 	}
 
-	public MultiBlockData loadFromNBT(NBTTagCompound tag) {
+	public void loadFromNBT(NBTTagCompound tag) {
 		if (!tag.hasKey("data"))
-			return null;
+			return;
 		NBTTagCompound data = tag.getCompoundTag("data");
 
 		masterXoffset = data.getInteger("masterXoffset");
@@ -90,7 +90,6 @@ public class MultiBlockData implements ISyncObject {
 		masterZoffset = data.getInteger("masterZoffset");
 		rotation = data.getInteger("rotation");
 		master = data.getBoolean("master");
-		return this;
 	}
 
 	@Override
@@ -101,5 +100,6 @@ public class MultiBlockData implements ISyncObject {
 	@Override
 	public void readFromByteBuff(ByteBuf buf) {
 		master = buf.readBoolean();
+		System.out.println("setting master to " + String.valueOf(master));
 	}
 }

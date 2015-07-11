@@ -15,7 +15,12 @@ import net.minecraft.tileentity.TileEntity;
  * Created by AEnterprise
  */
 public abstract class TileMultiBlockBase extends TileEntity implements IMultiBlock, ISynchronizedTile {
-	private MultiBlockData data;
+	public final MultiBlockData data;
+
+	public TileMultiBlockBase() {
+		data = new MultiBlockData(getPattern());
+		data.setValid(false);
+	}
 
 	@Override
 	public void updateEntity() {
@@ -26,11 +31,14 @@ public abstract class TileMultiBlockBase extends TileEntity implements IMultiBlo
 	@Override
 	public void formMultiBlock(int masterXoffset, int masterYoffset, int masterZoffset, int rotation) {
 		System.out.println(String.format("Forming multiblock, master location (x:%s, y:%s, z:%s), rotation:%s, own location(x:%s, y:%s,z:%s)", xCoord + masterXoffset, yCoord + masterYoffset, zCoord + masterZoffset, rotation, xCoord, yCoord, zCoord));
-		data = new MultiBlockData(masterXoffset, masterYoffset, masterZoffset, rotation, getPattern());
+		data.setMasterXoffset(masterXoffset);
+		data.setMasterYoffset(masterYoffset);
+		data.setMasterZoffset(masterZoffset);
 		worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 1, 2);
 		if (masterXoffset == 0 && masterYoffset == 0 && masterZoffset == 0) {
 			data.setMaster(true);
 		}
+		data.setValid(true);
 		sync();
 	}
 
@@ -43,7 +51,6 @@ public abstract class TileMultiBlockBase extends TileEntity implements IMultiBlo
 	@Override
 	public void deformMultiBlock() {
 		worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 0, 2);
-		data = null;
 		worldObj.scheduleBlockUpdate(xCoord, yCoord, zCoord, worldObj.getBlock(xCoord, yCoord, zCoord), 100);
 		sync();
 	}
@@ -88,7 +95,7 @@ public abstract class TileMultiBlockBase extends TileEntity implements IMultiBlo
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
-		data = new MultiBlockData(getPattern()).loadFromNBT(tag);
+		data.loadFromNBT(tag);
 	}
 
 	@Override
@@ -130,7 +137,6 @@ public abstract class TileMultiBlockBase extends TileEntity implements IMultiBlo
 	@Override
 	public void readFromByteBuff(ByteBuf buf) {
 		if (buf.readBoolean()) {
-			data = new MultiBlockData(getPattern());
 			data.readFromByteBuff(buf);
 		}
 	}
