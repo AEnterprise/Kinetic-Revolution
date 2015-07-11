@@ -20,11 +20,11 @@ public class RendererGenerator extends TileEntitySpecialRenderer {
 	public void renderTileEntityAt(TileEntity entity, double x, double y, double z, float fl) {
 		if (entity instanceof IMultiBlock && ((IMultiBlock) entity).isMaster()) {
 			GL11.glPushMatrix();
+			GL11.glDisable(GL11.GL_LIGHTING);
 			GL11.glTranslated(x, y, z);
 			bindTexture(TEXTURE);
 			MODEL.renderAll();
 			GL11.glPopMatrix();
-
 		}
 	}
 

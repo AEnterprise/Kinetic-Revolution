@@ -108,7 +108,7 @@ public abstract class TileMultiBlockBase extends TileEntity implements IMultiBlo
 
 	@Override
 	public boolean isMaster() {
-		return data != null && data.isMaster();
+		return data.isMaster();
 	}
 
 	@Override

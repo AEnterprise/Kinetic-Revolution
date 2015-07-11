@@ -74,4 +74,19 @@ public abstract class BlockMultiBlockBase extends BlockContainer {
 	public IIcon getIcon(int side, int meta) {
 		return meta == 1 ? invisible : super.getIcon(side, meta);
 	}
+
+	@Override
+	public boolean isBlockNormalCube() {
+		return false;
+	}
+
+	@Override
+	public boolean isNormalCube() {
+		return false;
+	}
+
+	@Override
+	public boolean isOpaqueCube() {
+		return false;
+	}
 }
