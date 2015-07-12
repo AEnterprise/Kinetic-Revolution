@@ -97,11 +97,13 @@ public class MultiBlockData implements ISyncObject {
 	public void writeToByteBuff(ByteBuf buf) {
 		buf.writeBoolean(master);
 		buf.writeInt(rotation);
+		buf.writeBoolean(valid);
 	}
 
 	@Override
 	public void readFromByteBuff(ByteBuf buf) {
 		master = buf.readBoolean();
 		rotation = buf.readInt();
+		valid = buf.readBoolean();
 	}
 }

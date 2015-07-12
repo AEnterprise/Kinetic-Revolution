@@ -58,6 +58,7 @@ public abstract class TileMultiBlockBase extends TileEntity implements IMultiBlo
 		worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 0, 2);
 		worldObj.scheduleBlockUpdate(xCoord, yCoord, zCoord, worldObj.getBlock(xCoord, yCoord, zCoord), 100);
 		data.setMaster(false);
+		data.setValid(false);
 		timer = 0;
 	}
 
