@@ -63,18 +63,18 @@ public abstract class TileMultiBlockBase extends TileEntity implements IMultiBlo
 
 	@Override
 	public boolean onBlockClicked(EntityPlayer player) {
-		return data != null;
+		return data.isValid();
 	}
 
 	@Override
 	public void blockUpdate() {
-		if (data == null) {
+		if (!data.isValid()) {
 			return;
 		}
-		if (data.getPattern().checkMultiBlock(worldObj,
+		if (!data.getPattern().isStillValid(worldObj,
 				xCoord + data.getMasterXoffset() - data.getPattern().getMasterXoffset(),
 				yCoord + data.getMasterYoffset() - data.getPattern().getMasterYoffset(),
-				zCoord + data.getMasterZoffset() - data.getPattern().getMasterZoffset()) != data.getRotation()) {
+				zCoord + data.getMasterZoffset() - data.getPattern().getMasterZoffset(), data.getRotation())) {
 			data.getPattern().deformMultiblock(worldObj,
 					xCoord + data.getMasterXoffset() - data.getPattern().getMasterXoffset(),
 					yCoord + data.getMasterYoffset() - data.getPattern().getMasterYoffset(),

@@ -15,7 +15,12 @@ public class DefinitionHardness implements IBlockDefinition {
 	}
 
 	@Override
-	public boolean matches(World world, int x, int y, int z) {
+	public boolean matchesUnformed(World world, int x, int y, int z) {
 		return world.getBlock(x, y, z).getBlockHardness(world, x, y, z) >= hardness;
+	}
+
+	@Override
+	public boolean matchesFormed(World world, int x, int y, int z) {
+		return matchesFormed(world, x, y, z);
 	}
 }

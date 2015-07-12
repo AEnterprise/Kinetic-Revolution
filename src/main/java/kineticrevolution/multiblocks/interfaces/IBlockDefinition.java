@@ -7,5 +7,7 @@ import net.minecraft.world.World;
  */
 public interface IBlockDefinition {
 
-	boolean matches(World world, int x, int y, int z);
+	boolean matchesUnformed(World world, int x, int y, int z);
+
+	boolean matchesFormed(World world, int x, int y, int z);
 }

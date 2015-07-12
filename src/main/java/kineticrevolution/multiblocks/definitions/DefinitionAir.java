@@ -9,7 +9,12 @@ import net.minecraft.world.World;
 public class DefinitionAir implements IBlockDefinition {
 
 	@Override
-	public boolean matches(World world, int x, int y, int z) {
+	public boolean matchesUnformed(World world, int x, int y, int z) {
 		return world.isAirBlock(x, y, z);
+	}
+
+	@Override
+	public boolean matchesFormed(World world, int x, int y, int z) {
+		return matchesUnformed(world, x, y, z);
 	}
 }

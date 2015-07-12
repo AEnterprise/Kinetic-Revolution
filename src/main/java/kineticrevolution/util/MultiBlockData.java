@@ -76,6 +76,7 @@ public class MultiBlockData implements ISyncObject {
 		data.setInteger("masterZoffset", masterZoffset);
 		data.setInteger("rotation", rotation);
 		data.setBoolean("master", master);
+		data.setBoolean("valid", valid);
 		tag.setTag("data", data);
 	}
 
@@ -88,6 +89,7 @@ public class MultiBlockData implements ISyncObject {
 		masterYoffset = data.getInteger("masterYoffset");
 		masterZoffset = data.getInteger("masterZoffset");
 		rotation = data.getInteger("rotation");
+		valid = data.getBoolean("valid");
 		master = data.getBoolean("master");
 	}
 

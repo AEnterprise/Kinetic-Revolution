@@ -77,7 +77,28 @@ public class MultiBlockPattern {
 						xc = z;
 						zc = x;
 					}
-					if (!definitions.get(array[xc][zc]).matches(world, startX + xc, startY + y, startZ + zc))
+					if (!definitions.get(array[xc][zc]).matchesUnformed(world, startX + xc, startY + y, startZ + zc))
+						return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	public boolean isStillValid(World world, int startX, int startY, int startZ, int rotation) {
+		for (int y = 0; y < ySize; y++) {
+			char[][] array = RotationUtils.rotate(pattern[y], rotation);
+			for (int x = 0; x < xSize; x++) {
+				for (int z = 0; z < zSize; z++) {
+					int xc, zc;
+					if (rotation == 0 || rotation == 2) {
+						xc = x;
+						zc = z;
+					} else {
+						xc = z;
+						zc = x;
+					}
+					if (!definitions.get(array[xc][zc]).matchesFormed(world, startX + xc, startY + y, startZ + zc))
 						return false;
 				}
 			}

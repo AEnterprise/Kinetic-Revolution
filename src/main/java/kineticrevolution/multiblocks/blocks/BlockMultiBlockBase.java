@@ -89,4 +89,6 @@ public abstract class BlockMultiBlockBase extends BlockContainer {
 	public boolean isOpaqueCube() {
 		return false;
 	}
+
+	
 }

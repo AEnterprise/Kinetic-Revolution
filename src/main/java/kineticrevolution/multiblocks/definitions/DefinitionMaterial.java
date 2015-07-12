@@ -16,7 +16,12 @@ public class DefinitionMaterial implements IBlockDefinition {
 	}
 
 	@Override
-	public boolean matches(World world, int x, int y, int z) {
+	public boolean matchesUnformed(World world, int x, int y, int z) {
 		return world.getBlock(x, y, z).getMaterial() == material;
+	}
+
+	@Override
+	public boolean matchesFormed(World world, int x, int y, int z) {
+		return matchesUnformed(world, x, y, z);
 	}
 }
