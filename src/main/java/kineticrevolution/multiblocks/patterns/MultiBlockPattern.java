@@ -13,7 +13,7 @@ import java.util.HashMap;
 /**
  * Created by AEnterprise
  */
-public class MultiBlockPattern implements Comparable<MultiBlockPattern> {
+public class MultiBlockPattern {
     private final char[][][] pattern;
     private final HashMap<Character, IBlockDefinition> definitions;
 	private final int xSize, ySize, zSize, masterXoffset, masterYoffset, masterZoffset;
@@ -173,26 +173,34 @@ public class MultiBlockPattern implements Comparable<MultiBlockPattern> {
     * Warning: Assumes both spaces in a pattern have equal dimensions!
     * Equal shapes, but with different pattern dimensions will not pass!
     *
-    * NotNull to make sure no NullPointerException's can be thrown when a
-     */
+    * NotNull to make sure no NullPointerException's can be thrown.
+    *
+    */
     @Override
-    public int compareTo(@Nonnull MultiBlockPattern o) {
+    public boolean equals(@Nonnull Object o) {
+
+        if (!(o instanceof MultiBlockPattern)) {
+            throw new InvalidParameterException("Object is not a MultiBlockPattern");
+        }
+
+        MultiBlockPattern mb1 = (MultiBlockPattern) o;
+
         // Check for the dimensions to be equal to eachother.
-        if (this.pattern.length == o.pattern.length &&
-                this.pattern[0].length == o.pattern[0].length &&
-                this.pattern[0][0].length == o.pattern[0][0].length) {
+        if (this.pattern.length == mb1.pattern.length &&
+                this.pattern[0].length == mb1.pattern[0].length &&
+                this.pattern[0][0].length == mb1.pattern[0][0].length) {
 
             for (int i = 0; i < this.pattern.length; i++) {
                 for (int j = 0; j < this.pattern[i].length; j++) {
                     for (int k = 0; k < this.pattern[i][j].length; k++) {
-                        if (this.pattern[i][j][k] != o.pattern[i][j][k]) {
-                            return -1;
+                        if (this.pattern[i][j][k] != mb1.pattern[i][j][k]) {
+                            return false;
                         }
                     }
                 }
             }
-            return 0;
+            return true;
         }
-        return -1;
+        return false;
     }
 }
