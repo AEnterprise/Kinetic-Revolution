@@ -6,15 +6,16 @@ import kineticrevolution.util.RotationUtils;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import java.security.InvalidParameterException;
 import java.util.HashMap;
 
 /**
  * Created by AEnterprise
  */
-public class MultiBlockPattern {
-	private final char[][][] pattern;
-	private final HashMap<Character, IBlockDefinition> definitions;
+public class MultiBlockPattern implements Comparable<MultiBlockPattern> {
+    private final char[][][] pattern;
+    private final HashMap<Character, IBlockDefinition> definitions;
 	private final int xSize, ySize, zSize, masterXoffset, masterYoffset, masterZoffset;
 
 	public MultiBlockPattern(char[][][] pattern, HashMap<Character, IBlockDefinition> definitions, int xSize, int ySize, int zSize, int masterXoffset, int masterYoffset, int masterZoffset) {
@@ -164,4 +165,34 @@ public class MultiBlockPattern {
 	public int getMasterZoffset() {
 		return masterZoffset;
 	}
+
+    /*
+    * Allows for one to use == on two patterns to check for their equality.
+    * This will avoid the standard comparison for equal object.
+    *
+    * Warning: Assumes both spaces in a pattern have equal dimensions!
+    * Equal shapes, but with different pattern dimensions will not pass!
+    *
+    * NotNull to make sure no NullPointerException's can be thrown when a
+     */
+    @Override
+    public int compareTo(@Nonnull MultiBlockPattern o) {
+        // Check for the dimensions to be equal to eachother.
+        if (this.pattern.length == o.pattern.length &&
+                this.pattern[0].length == o.pattern[0].length &&
+                this.pattern[0][0].length == o.pattern[0][0].length) {
+
+            for (int i = 0; i < this.pattern.length; i++) {
+                for (int j = 0; j < this.pattern[i].length; j++) {
+                    for (int k = 0; k < this.pattern[i][j].length; k++) {
+                        if (this.pattern[i][j][k] != o.pattern[i][j][k]) {
+                            return -1;
+                        }
+                    }
+                }
+            }
+            return 0;
+        }
+        return -1;
+    }
 }
