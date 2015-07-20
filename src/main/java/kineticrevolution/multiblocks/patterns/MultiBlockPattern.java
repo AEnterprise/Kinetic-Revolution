@@ -180,7 +180,7 @@ public class MultiBlockPattern {
     public boolean equals(@Nonnull Object o) {
 
         if (!(o instanceof MultiBlockPattern)) {
-            throw new InvalidParameterException("Object is not a MultiBlockPattern");
+            throw new InvalidParameterException("Passed Object is not a MultiBlockPattern");
         }
 
         MultiBlockPattern mb1 = (MultiBlockPattern) o;
@@ -188,7 +188,8 @@ public class MultiBlockPattern {
         // Check for the dimensions to be equal to eachother.
         if (this.pattern.length == mb1.pattern.length &&
                 this.pattern[0].length == mb1.pattern[0].length &&
-                this.pattern[0][0].length == mb1.pattern[0][0].length) {
+                this.pattern[0][0].length == mb1.pattern[0][0].length &&
+                this.definitions == mb1.definitions) {
 
             for (int i = 0; i < this.pattern.length; i++) {
                 for (int j = 0; j < this.pattern[i].length; j++) {
