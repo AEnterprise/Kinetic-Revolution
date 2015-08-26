@@ -16,7 +16,7 @@ import net.minecraft.tileentity.TileEntity;
  */
 public abstract class TileMultiBlockBase extends TileEntity implements IMultiBlock, ISynchronizedTile {
 	protected final MultiBlockData data;
-	private int timer = 100;
+	private int timer = 0;
 
 	public TileMultiBlockBase() {
 		data = new MultiBlockData(getPattern());
@@ -108,9 +108,7 @@ public abstract class TileMultiBlockBase extends TileEntity implements IMultiBlo
 	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
-		if (data != null) {
-			data.saveToNBT(tag);
-		}
+		data.saveToNBT(tag);
 	}
 
 	@Override
