@@ -1,14 +1,16 @@
 package kineticrevolution.items.dusts;
 
-import kineticrevolution.core.CTabs;
-import kineticrevolution.items.ItemBase;
-import kineticrevolution.loaders.ItemLoader;
-import kineticrevolution.util.Utils;
+import java.util.List;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import java.util.List;
+import kineticrevolution.core.CTabs;
+import kineticrevolution.items.ItemBase;
+import kineticrevolution.lib.Names;
+import kineticrevolution.loaders.ItemLoader;
+import kineticrevolution.util.Utils;
 
 /**
  * Created by AEnterprise
@@ -17,7 +19,7 @@ public class ItemDust extends ItemBase {
 
 
 	public ItemDust() {
-		super("dust", "dust", "dust", CTabs.DUST_TAB);
+		super(Names.Items.DUST, CTabs.DUST_TAB);
 		setHasSubtypes(true);
 	}
 

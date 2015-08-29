@@ -1,5 +1,6 @@
 package kineticrevolution.multiblocks.blocks;
 
+import kineticrevolution.lib.Names;
 import kineticrevolution.multiblocks.patterns.MultiBlockPattern;
 import kineticrevolution.multiblocks.patterns.Patterns;
 import kineticrevolution.multiblocks.tileEntities.TileKineticGenerator;
@@ -12,7 +13,7 @@ import net.minecraft.world.World;
 public class BlockGeneratorInductor extends BlockMultiBlockBase {
 
 	public BlockGeneratorInductor() {
-		super("generatorInductor");
+		super(Names.Blocks.GENERATOR_INDUCTOR);
 	}
 
 	@Override
