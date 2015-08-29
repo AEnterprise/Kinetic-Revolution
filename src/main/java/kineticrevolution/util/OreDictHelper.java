@@ -1,16 +1,20 @@
 package kineticrevolution.util;
 
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
-
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import com.google.common.collect.Maps;
+
+import net.minecraft.item.ItemStack;
+
+import net.minecraftforge.oredict.OreDictionary;
 
 /**
  * Created by AEnterprise
  */
 public class OreDictHelper {
-	private static HashMap<String, List<ItemStack>> lookups = new HashMap<String, List<ItemStack>>();
+
+	private static final Map<String, List<ItemStack>> lookups = Maps.newHashMap();
 
 	public static List<ItemStack> lookup(String key) {
 		if (!lookups.containsKey(key)) {
@@ -20,7 +24,8 @@ public class OreDictHelper {
 	}
 
 	public static ItemStack getFirstStack(String key) {
-		ItemStack stack = lookup(key).get(0);
-		return stack != null ? stack.copy() : null;
+		List<ItemStack> stacks = lookup(key);
+		return stacks == null || stacks.isEmpty() ? null : ItemStack.copyItemStack(stacks.get(0));
 	}
+
 }
