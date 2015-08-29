@@ -1,6 +1,8 @@
 package kineticrevolution.loaders;
 
 import cpw.mods.fml.common.registry.GameRegistry;
+
+import kineticrevolution.lib.Names;
 import kineticrevolution.multiblocks.blocks.BlockGeneratorCasing;
 import kineticrevolution.multiblocks.blocks.BlockGeneratorInductor;
 import kineticrevolution.multiblocks.tileEntities.TileKineticGenerator;
@@ -19,8 +21,8 @@ public class BlockLoader {
 		generatorCasing = new BlockGeneratorCasing();
 		generatorInductor = new BlockGeneratorInductor();
 
-		GameRegistry.registerTileEntity(TileMultiBlockBase.class, "tileMultiBlockTest");
-		GameRegistry.registerTileEntity(TileKineticGenerator.class, "tileKineticGenerator");
+		GameRegistry.registerTileEntity(TileMultiBlockBase.class, Names.TileEntities.MULTIBLOCK_BASE);
+		GameRegistry.registerTileEntity(TileKineticGenerator.class, Names.TileEntities.MULTIBLOCK_GENERATOR);
 	}
 
 	public static void addRecipes() {

@@ -1,10 +1,17 @@
-#creative tab
+### English Language File for Kinetic Revolution ###
+
+# Creative Tab #
 itemGroup.kineticrevolution=Kinetic Revolution
 
-#tools
+## Items ##
+
+# Tools #
 item.machineConfigurator.name=Machine Configurator
 
-#dusts
+## Resources ##
+item.grindingWheel.name=Grinding Wheel
+
+# Dusts #
 item.dust.name=%s Dust
 material.iron.name=Iron
 material.gold.name=Gold
