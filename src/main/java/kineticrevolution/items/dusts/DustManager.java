@@ -1,11 +1,16 @@
 package kineticrevolution.items.dusts;
 
 import cpw.mods.fml.common.registry.GameRegistry;
+import kineticrevolution.recipes.DusterOutput;
+import kineticrevolution.recipes.DusterRecipeManager;
+import kineticrevolution.recipes.IDusterRecipe;
 import kineticrevolution.util.OreDictHelper;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by AEnterprise
@@ -113,7 +118,7 @@ public class DustManager {
 		register(new Dust(name, color));
 	}
 
-	public static void registerMetal(String name, int color) {
+	public static void registerMetal(final String name, int color) {
 		register(new Dust(name, color) {
 			@Override
 			public boolean shouldRegister() {
@@ -125,6 +130,27 @@ public class DustManager {
 				return OreDictHelper.getFirstStack("ingot" + name);
 			}
 		});
+		//ingot -> dust
+		if (OreDictHelper.getFirstStack("ingot" + name) != null) {
+			DusterRecipeManager.registerRecipe(new IDusterRecipe() {
+				@Override
+				public boolean validInput(ItemStack input) {
+					int id = OreDictionary.getOreID("ingot" + name);
+					for (int key : OreDictionary.getOreIDs(input)) {
+						if (id == key)
+							return true;
+					}
+					return false;
+				}
+
+				@Override
+				public List<DusterOutput> getOutputs() {
+					ArrayList<DusterOutput> list = new ArrayList<DusterOutput>();
+					list.add(new DusterOutput(OreDictHelper.getFirstStack("ingot" + name), 100, 0, 0, 0, 0));
+					return list;
+				}
+			});
+		}
 	}
 
 	public static void register(Dust dust) {
