@@ -8,4 +8,10 @@ public class Textures {
 
 	}
 
+	public static class Blocks {
+
+		public static final String MULTIBLOCK_INVISIBLE = "multiBlockInvisible";
+
+	}
+
 }

@@ -1,5 +1,6 @@
 package kineticrevolution.multiblocks.blocks;
 
+import kineticrevolution.lib.Names;
 import kineticrevolution.multiblocks.patterns.MultiBlockPattern;
 import kineticrevolution.multiblocks.patterns.Patterns;
 import kineticrevolution.multiblocks.tileEntities.TileKineticGenerator;
@@ -12,7 +13,7 @@ import net.minecraft.world.World;
 public class BlockGeneratorCasing extends BlockMultiBlockBase {
 
 	public BlockGeneratorCasing() {
-		super("generatorCasing");
+		super(Names.Blocks.GENERATOR_CASING);
 	}
 
 	@Override

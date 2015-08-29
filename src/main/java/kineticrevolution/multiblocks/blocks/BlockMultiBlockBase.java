@@ -1,6 +1,9 @@
 package kineticrevolution.multiblocks.blocks;
 
 import cpw.mods.fml.common.registry.GameRegistry;
+
+import kineticrevolution.lib.Reference;
+import kineticrevolution.lib.Textures;
 import kineticrevolution.multiblocks.interfaces.IMultiBlock;
 import kineticrevolution.multiblocks.patterns.MultiBlockPattern;
 import net.minecraft.block.Block;
@@ -25,7 +28,7 @@ public abstract class BlockMultiBlockBase extends BlockContainer {
 	protected BlockMultiBlockBase(String name, String texture) {
 		super(Material.iron);
 		setBlockName(name);
-		setBlockTextureName("kineticrevolution:" + texture);
+		setBlockTextureName(Reference.MOD_ID + ":" + texture);
 		GameRegistry.registerBlock(this, name);
 	}
 
@@ -67,7 +70,7 @@ public abstract class BlockMultiBlockBase extends BlockContainer {
 	@Override
 	public void registerBlockIcons(IIconRegister register) {
 		super.registerBlockIcons(register);
-		invisible = register.registerIcon("kineticrevolution:multiBlockInvisible");
+		invisible = register.registerIcon(Reference.MOD_ID + ":" + Textures.Blocks.MULTIBLOCK_INVISIBLE);
 	}
 
 	@Override
