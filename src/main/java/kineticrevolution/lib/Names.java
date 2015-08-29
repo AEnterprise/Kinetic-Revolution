@@ -5,6 +5,7 @@ public class Names {
 	public static class Items {
 
 		public static final String MACHINE_CONFIGURATOR = "machineConfigurator";
+		public static final String DUST = "dust";
 
 	}
 
