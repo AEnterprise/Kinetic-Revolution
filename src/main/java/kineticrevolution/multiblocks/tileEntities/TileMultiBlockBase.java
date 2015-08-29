@@ -7,9 +7,12 @@ import kineticrevolution.networking.ISynchronizedTile;
 import kineticrevolution.networking.MessageByteBuff;
 import kineticrevolution.networking.PacketHandler;
 import kineticrevolution.util.MultiBlockData;
+import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+
+import java.util.concurrent.Callable;
 
 /**
  * Created by AEnterprise
@@ -30,6 +33,17 @@ public abstract class TileMultiBlockBase extends TileEntity implements IMultiBlo
 			sync();
 			timer = 100;
 		}
+	}
+
+	@Override
+	public void func_145828_a(CrashReportCategory crash) {
+		super.func_145828_a(crash);
+		crash.addCrashSectionCallable("Multiblock data", new Callable() {
+			@Override
+			public Object call() throws Exception {
+				return data.toString();
+			}
+		});
 	}
 
 	@Override

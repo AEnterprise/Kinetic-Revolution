@@ -106,4 +106,9 @@ public class MultiBlockData implements ISyncObject {
 		rotation = buf.readInt();
 		valid = buf.readBoolean();
 	}
+
+	@Override
+	public String toString() {
+		return String.format("masterXoffset: %s, masterYoffset: %s, masterZoffset: %s, rotation: %s, valid: %s, master: %s", masterXoffset, masterYoffset, masterZoffset, rotation, valid, master);
+	}
 }

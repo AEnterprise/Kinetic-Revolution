@@ -1,12 +1,10 @@
 package kineticrevolution.items;
 
+import cpw.mods.fml.common.registry.GameRegistry;
+import kineticrevolution.core.CTabs;
+import kineticrevolution.lib.Reference;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
-
-import cpw.mods.fml.common.registry.GameRegistry;
-
-import kineticrevolution.KineticRevolution;
-import kineticrevolution.lib.Reference;
 
 /**
  * Created by AEnterprise
@@ -21,7 +19,7 @@ public class ItemBase extends Item {
 	}
 
 	public ItemBase(String name, String texture) {
-		this(name, name, texture, KineticRevolution.MAIN_TAB);
+		this(name, name, texture, CTabs.MAIN_TAB);
 	}
 
 	public ItemBase(String name) {

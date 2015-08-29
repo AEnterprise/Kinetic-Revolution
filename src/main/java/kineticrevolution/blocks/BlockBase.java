@@ -1,13 +1,11 @@
 package kineticrevolution.blocks;
 
+import cpw.mods.fml.common.registry.GameRegistry;
+import kineticrevolution.core.CTabs;
+import kineticrevolution.lib.Reference;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
-
-import cpw.mods.fml.common.registry.GameRegistry;
-
-import kineticrevolution.KineticRevolution;
-import kineticrevolution.lib.Reference;
 
 /**
  * Created by AEnterprise
@@ -23,7 +21,7 @@ public class BlockBase extends Block {
 	}
 
 	public BlockBase(String name, String texture) {
-		this(name, name, texture, KineticRevolution.MAIN_TAB);
+		this(name, name, texture, CTabs.MAIN_TAB);
 	}
 
 	public BlockBase(String name) {
