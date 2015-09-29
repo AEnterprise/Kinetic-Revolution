@@ -49,7 +49,7 @@ if (doCurse) {
     }
 }
 
-version = "${config.minecraft_version}-${config.version.mod}"
+version = "${config.version.mc}-${config.version.mod}"
 group = "com.AEnterprise.KineticRevolution" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "KineticRevolution"
 
