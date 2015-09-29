@@ -4,6 +4,8 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+
+import kineticrevolution.api.recipe.KineticRevolutionRecipeManager;
 import kineticrevolution.items.dusts.DustManager;
 import kineticrevolution.lib.Reference;
 import kineticrevolution.loaders.BlockLoader;
@@ -11,10 +13,7 @@ import kineticrevolution.loaders.ItemLoader;
 import kineticrevolution.multiblocks.patterns.Patterns;
 import kineticrevolution.networking.PacketHandler;
 import kineticrevolution.proxy.CommonProxy;
-
-/**
- * Created by AEnterprise
- */
+import kineticrevolution.recipes.duster.DusterRecipeManager;
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.MOD_VERSION, dependencies = Reference.MOD_DEPENDENCIES, acceptableRemoteVersions = Reference.MC_VERSION, acceptedMinecraftVersions = Reference.MC_VERSION)
 public class KineticRevolution {
@@ -26,6 +25,7 @@ public class KineticRevolution {
 
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
+		KineticRevolutionRecipeManager.dusterRecipes = new DusterRecipeManager();
 		ItemLoader.init();
 		BlockLoader.init();
 		proxy.setupRenderers();

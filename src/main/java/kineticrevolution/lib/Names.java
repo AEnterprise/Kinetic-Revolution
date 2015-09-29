@@ -30,4 +30,11 @@ public class Names {
 
 	}
 
+	public static class CTabs {
+
+		public static final String MAIN_TAB = Reference.MOD_ID;
+		public static final String DUST_TAB = "krDusts";
+
+	}
+
 }
