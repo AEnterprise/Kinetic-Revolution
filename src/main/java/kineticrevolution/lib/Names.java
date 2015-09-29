@@ -30,6 +30,22 @@ public class Names {
 
 	}
 
+	public static class Recipes {
+
+		public static final String DUSTING = "dusting";
+
+	}
+
+	public static class GUIs {
+
+		public static class NEI {
+
+			public static final String DUSTING = "gui." + Reference.MOD_ID + ".nei." + Recipes.DUSTING + ".name";
+
+		}
+
+	}
+
 	public static class CTabs {
 
 		public static final String MAIN_TAB = Reference.MOD_ID;

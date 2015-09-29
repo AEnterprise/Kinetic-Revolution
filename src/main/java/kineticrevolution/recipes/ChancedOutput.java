@@ -33,7 +33,7 @@ public class ChancedOutput implements IChancedOutput {
 	}
 
 	@Override
-	public int getPercentOutput() {
+	public int getPercentChance() {
 		return (int) (chance * 100 + 0.5);
 	}
 

@@ -19,9 +19,7 @@ import kineticrevolution.api.recipe.duster.IDusterRecipe;
 import kineticrevolution.recipes.ChancedOutput;
 import kineticrevolution.util.OreDictHelper;
 
-/**
- * Created by AEnterprise
- */
+//TODO: Security
 public class DustManager {
 
 	private static final Map<Integer, Dust> registeredDusts = Maps.newHashMap();
@@ -154,7 +152,8 @@ public class DustManager {
 				@Override
 				public List<IChancedOutput> getOutputs() {
 					List<IChancedOutput> list = Lists.newArrayList();
-					list.add(new ChancedOutput(OreDictHelper.getFirstStack("ingot" + name), 1));
+					Dust dust = DustManager.getDust(name);
+					list.add(new ChancedOutput(dust != null ? dust.getStack() : OreDictHelper.getFirstStack("dust" + name), 1));
 					return list;
 				}
 
@@ -170,6 +169,7 @@ public class DustManager {
 		dusts.add(dust.getName());
 		if (dust.shouldRegister()) {
 			registeredDusts.put(dusts.indexOf(dust.getName()), dust);
+			OreDictionary.registerOre("dust" + dust.getName(), dust.getStack());
 			if (dust.getSmeltingOutput() != null)
 				GameRegistry.addSmelting(dust.getStack(), dust.getSmeltingOutput(), 0.5f);
 		}

@@ -10,7 +10,7 @@ public interface IChancedOutput {
 
 	ItemStack getOutput();
 
-	int getPercentOutput();
+	int getPercentChance();
 
 	ItemStack getOutput(Random random);
 
