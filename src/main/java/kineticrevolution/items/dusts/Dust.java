@@ -1,14 +1,14 @@
 package kineticrevolution.items.dusts;
 
-import kineticrevolution.loaders.ItemLoader;
 import net.minecraft.item.ItemStack;
 
-/**
- * Created by AEnterprise
- */
+import kineticrevolution.loaders.ItemLoader;
+
+
 public class Dust {
-	public final String name;
-	public final int color;
+
+	private final String name;
+	private final int color;
 
 	public Dust(String name, int color) {
 		this.name = name;
@@ -28,6 +28,15 @@ public class Dust {
 	}
 
 	public ItemStack getStack(int count) {
-		return new ItemStack(ItemLoader.dust, count, DustManager.dusts.indexOf(name));
+		return new ItemStack(ItemLoader.dust, count, DustManager.getMeta(name));
 	}
+
+	public String getName() {
+		return name;
+	}
+
+	public int getColor() {
+		return color;
+	}
+
 }

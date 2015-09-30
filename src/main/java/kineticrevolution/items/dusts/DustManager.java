@@ -1,27 +1,33 @@
 package kineticrevolution.items.dusts;
 
-import cpw.mods.fml.common.registry.GameRegistry;
-import kineticrevolution.recipes.DusterOutput;
-import kineticrevolution.recipes.DusterRecipeManager;
-import kineticrevolution.recipes.IDusterRecipe;
-import kineticrevolution.util.OreDictHelper;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
 import net.minecraft.item.ItemStack;
+
+import cpw.mods.fml.common.registry.GameRegistry;
+
 import net.minecraftforge.oredict.OreDictionary;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import kineticrevolution.api.recipe.IChancedOutput;
+import kineticrevolution.api.recipe.KineticRevolutionRecipeManager;
+import kineticrevolution.api.recipe.duster.IDusterRecipe;
+import kineticrevolution.recipes.ChancedOutput;
+import kineticrevolution.util.OreDictHelper;
 
-/**
- * Created by AEnterprise
- */
+//TODO: Security
 public class DustManager {
-	static final HashMap<Integer, Dust> registeredDusts = new HashMap<Integer, Dust>();
-	static final ArrayList<String> dusts = new ArrayList<String>();
 
-	/**
-	 * Should only ever be called once or things will break
-	 * add new dusts on the bottom to avoid 'transmutations'
+	private static final Map<Integer, Dust> registeredDusts = Maps.newHashMap();
+	private static final List<String> dusts = Lists.newArrayList();
+
+	/*
+	 * Should only ever be called once or things will break.
+	 * Add new dusts on the bottom to avoid 'transmutations'!
 	 */
 	public static void registerDusts() {
 		registerMetal("Iron", 0xD2CEC9);
@@ -132,9 +138,9 @@ public class DustManager {
 		});
 		//ingot -> dust
 		if (OreDictHelper.getFirstStack("ingot" + name) != null) {
-			DusterRecipeManager.registerRecipe(new IDusterRecipe() {
+			KineticRevolutionRecipeManager.dusterRecipes.addRecipe(new IDusterRecipe() {
 				@Override
-				public boolean validInput(ItemStack input) {
+				public boolean isValidInput(ItemStack input) {
 					int id = OreDictionary.getOreID("ingot" + name);
 					for (int key : OreDictionary.getOreIDs(input)) {
 						if (id == key)
@@ -144,19 +150,26 @@ public class DustManager {
 				}
 
 				@Override
-				public List<DusterOutput> getOutputs() {
-					ArrayList<DusterOutput> list = new ArrayList<DusterOutput>();
-					list.add(new DusterOutput(OreDictHelper.getFirstStack("ingot" + name), 100, 0, 0, 0, 0));
+				public List<IChancedOutput> getOutputs() {
+					List<IChancedOutput> list = Lists.newArrayList();
+					Dust dust = DustManager.getDust(name);
+					list.add(new ChancedOutput(dust != null ? dust.getStack() : OreDictHelper.getFirstStack("dust" + name), 1));
 					return list;
+				}
+
+				@Override
+				public List<ItemStack> getExampleInputs() {
+					return OreDictionary.getOres("ingot" + name);
 				}
 			});
 		}
 	}
 
 	public static void register(Dust dust) {
-		dusts.add(dust.name);
+		dusts.add(dust.getName());
 		if (dust.shouldRegister()) {
-			registeredDusts.put(dusts.indexOf(dust.name), dust);
+			registeredDusts.put(dusts.indexOf(dust.getName()), dust);
+			OreDictionary.registerOre("dust" + dust.getName(), dust.getStack());
 			if (dust.getSmeltingOutput() != null)
 				GameRegistry.addSmelting(dust.getStack(), dust.getSmeltingOutput(), 0.5f);
 		}
@@ -172,5 +185,13 @@ public class DustManager {
 
 	public static boolean ingotPresent(String metalname) {
 		return !OreDictHelper.lookup("ingot" + metalname).isEmpty();
+	}
+
+	public static int getMeta(String name) {
+		return dusts.indexOf(name);
+	}
+
+	public static Set<Integer> getRegisteredDustMetas() {
+		return registeredDusts.keySet();
 	}
 }

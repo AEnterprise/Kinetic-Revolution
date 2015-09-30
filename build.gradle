@@ -37,9 +37,9 @@ if (doCurse) {
     }
 }
 
-version = "${config.version.mod}"
+version = "${config.version.mc}-${config.version.mod}"
 group = "com.AEnterprise.KineticRevolution" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "Kinetic Revolution-1.7.10"
+archivesBaseName = "KineticRevolution"
 
 if (System.getenv().BUILD_NUMBER != null) {
     version = "-Kinetic Revolution Jenkins Build ${System.getenv().BUILD_NUMBER}"
@@ -49,6 +49,7 @@ minecraft {
     version = "${config.version.mc}-${config.version.forge}-${config.version.mc}"
     runDir = "eclipse"
     replace "@MODVERSION@", config.version.mod
+	replace "@APIVERSION@", config.version.api
 }
 
 curse {
@@ -65,38 +66,48 @@ curse {
 
 task checkCurse() << {
     if (!doCurse) {
-        throw new GradleException("No curse.properties file specified, This task shoudln't be used!")
+        throw new GradleException("No curse.properties file specified, This task should not be used!")
     }
 }
 
 repositories {
     mavenCentral()
-
+    maven {
+        name = "chickenbones"
+        url = "http://chickenbones.net/maven"
+    }
+    maven {
+        name = "waila"
+        url = "http://mobiusstrip.eu/maven"
+    }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: '*.jar')
+	compile "codechicken:CodeChickenLib:${config.version.mc}-${config.version.ccl}:dev"
+	compile "codechicken:CodeChickenCore:${config.version.mc}-${config.version.ccc}:dev"
+	compile "codechicken:NotEnoughItems:${config.version.mc}-${config.version.nei}:dev"
+	compile "mcp.mobius.waila:Waila:${config.version.waila}_${config.version.mc}"
+	compile fileTree(dir: 'libs', include: '*.jar')
 }
 
-processResources
-        {
-            // this will ensure that this task is redone when the versions change.
-            inputs.property "version", project.version
-            inputs.property "mcversion", project.minecraft.version
+processResources {
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
 
-            // replace stuff in mcmod.info, nothing else
-            from(sourceSets.main.resources.srcDirs) {
-                include '*.info'
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include '*.info'
+		
+        // replace version and mcversion
+        expand 'version': project.version, 'mcversion': project.minecraft.version
+    }
 
-                // replace version and mcversion
-                expand 'version': project.version, 'mcversion': project.minecraft.version
-            }
-
-            // copy everything else, thats not the mcmod.info
-            from(sourceSets.main.resources.srcDirs) {
-                exclude '**/*.info'
-            }
-        }
+    // copy everything else, thats not the mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude '**/*.info'
+    }
+}
 
 task deobfJar(type: Jar) {
     from sourceSets.main.output
