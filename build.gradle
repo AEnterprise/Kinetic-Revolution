@@ -15,18 +15,6 @@ buildscript {
     }
 }
 
-repositories {
-    mavenCentral()
-    maven {
-        name = "chickenbones"
-        url = "http://chickenbones.net/maven"
-    }
-    maven {
-        name = "waila"
-        url = "http://mobiusstrip.eu/maven"
-    }
-}
-
 apply plugin: "curseforge"
 apply plugin: 'forge'
 
@@ -57,17 +45,11 @@ if (System.getenv().BUILD_NUMBER != null) {
     version = "-Kinetic Revolution Jenkins Build ${System.getenv().BUILD_NUMBER}"
 }
 
-dependencies {
-	compile "codechicken:CodeChickenLib:${config.version.mc}-${config.version.ccl}:dev"
-	compile "codechicken:CodeChickenCore:${config.version.mc}-${config.version.ccc}:dev"
-	compile "codechicken:NotEnoughItems:${config.version.mc}-${config.version.nei}:dev"
-	compile "mcp.mobius.waila:Waila:${config.version.waila}_${config.version.mc}"
-}
-
 minecraft {
     version = "${config.version.mc}-${config.version.forge}-${config.version.mc}"
     runDir = "eclipse"
     replace "@MODVERSION@", config.version.mod
+	replace "@APIVERSION@", config.version.api
 }
 
 curse {
@@ -90,11 +72,22 @@ task checkCurse() << {
 
 repositories {
     mavenCentral()
-
+    maven {
+        name = "chickenbones"
+        url = "http://chickenbones.net/maven"
+    }
+    maven {
+        name = "waila"
+        url = "http://mobiusstrip.eu/maven"
+    }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: '*.jar')
+	compile "codechicken:CodeChickenLib:${config.version.mc}-${config.version.ccl}:dev"
+	compile "codechicken:CodeChickenCore:${config.version.mc}-${config.version.ccc}:dev"
+	compile "codechicken:NotEnoughItems:${config.version.mc}-${config.version.nei}:dev"
+	compile "mcp.mobius.waila:Waila:${config.version.waila}_${config.version.mc}"
+	compile fileTree(dir: 'libs', include: '*.jar')
 }
 
 processResources {
@@ -105,11 +98,10 @@ processResources {
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
         include '*.info'
+		
+        // replace version and mcversion
+        expand 'version': project.version, 'mcversion': project.minecraft.version
     }
-
-    // replace version and mcversion
-    expand 'version': project.version, 'mcversion': project.minecraft.version
-    
 
     // copy everything else, thats not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
