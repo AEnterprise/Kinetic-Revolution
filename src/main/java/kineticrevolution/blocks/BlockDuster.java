@@ -11,14 +11,12 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import kineticrevolution.lib.Names;
 import kineticrevolution.recipes.DusterRecipeManager;
 import kineticrevolution.recipes.IChancedOutput;
 import kineticrevolution.recipes.IDusterRecipe;
 import kineticrevolution.util.Utils;
 
-/**
- * Created by AEnterprise
- */
 public class BlockDuster extends BlockBase {
 	private AxisAlignedBB[] boxes = {
 			AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1),
@@ -28,7 +26,7 @@ public class BlockDuster extends BlockBase {
 	};
 
 	public BlockDuster() {
-		super("duster");
+		super(Names.Blocks.DUSTER);
 	}
 
 	@Override
@@ -58,19 +56,22 @@ public class BlockDuster extends BlockBase {
 
 	@Override
 	public void onFallenUpon(World world, int x, int y, int z, Entity entity, float distance) {
-		if (distance < 0.8)
-			return;
-		IDusterRecipe recipe = DusterRecipeManager.getRecipe(world, x, y - 1, z);
-		if (recipe == null)
-			return;
-		int meta = world.getBlockMetadata(x, y, z) + 1;
-		if (meta >= 4) {
-			world.setBlockToAir(x, y - 1, z);
-			world.setBlock(x, y - 1, z, this, 0, 2);
-			world.setBlockToAir(x, y, z);
-			handleOutputs(world, x, y, z, getOutputs(recipe, world.rand));
-		} else {
-			world.setBlockMetadataWithNotify(x, y, z, meta, 2);
+		if (!world.isRemote) {
+			if (distance < 0.8)
+				return;
+			IDusterRecipe recipe = DusterRecipeManager.getRecipe(world, x, y - 1, z);
+			if (recipe == null)
+				return;
+			int meta = world.getBlockMetadata(x, y, z) + 1;
+			if (meta >= 4) {
+				//TODO: Maybe make the duster fall like an anvil?
+				world.setBlockToAir(x, y - 1, z);
+				world.setBlock(x, y - 1, z, this, 0, 2);
+				world.setBlockToAir(x, y, z);
+				handleOutputs(world, x, y, z, getOutputs(recipe, world.rand));
+			} else {
+				world.setBlockMetadataWithNotify(x, y, z, meta, 2);
+			}
 		}
 	}
 
@@ -104,8 +105,4 @@ public class BlockDuster extends BlockBase {
 		Utils.dropItemstacks(world, x + .5, y + .5, z + .5, outputs);
 	}
 
-	@Override
-	public int damageDropped(int meta) {
-		return 0;
-	}
 }

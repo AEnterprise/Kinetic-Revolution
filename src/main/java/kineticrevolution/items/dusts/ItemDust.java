@@ -12,11 +12,7 @@ import kineticrevolution.lib.Names;
 import kineticrevolution.loaders.ItemLoader;
 import kineticrevolution.util.Utils;
 
-/**
- * Created by AEnterprise
- */
 public class ItemDust extends ItemBase {
-
 
 	public ItemDust() {
 		super(Names.Items.DUST, CTabs.DUST_TAB);
@@ -26,31 +22,31 @@ public class ItemDust extends ItemBase {
 	@Override
 	public int getColorFromItemStack(ItemStack stack, int pass) {
 		Dust dust = DustManager.getDust(stack.getItemDamage());
-		return dust != null ? dust.color : super.getColorFromItemStack(stack, pass);
+		return dust != null ? dust.getColor() : super.getColorFromItemStack(stack, pass);
 	}
 
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
 		Dust dust = DustManager.getDust(stack.getItemDamage());
-		return dust != null ? "item.dust" + dust.name : super.getUnlocalizedName(stack);
+		return dust != null ? "item.dust" + dust.getName() : super.getUnlocalizedName(stack);
 	}
 
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
 		Dust dust = DustManager.getDust(stack.getItemDamage());
 		if (dust != null) {
-			String s = "item.dust" + dust.name;
+			String s = "item.dust" + dust.getName();
 			String tS = Utils.localize(s);
 			if (!s.equalsIgnoreCase(tS))
 				return tS;
-			return Utils.localizeAllFormatted("item.dust.name", "material." + Utils.decapitalizeFirstChar(dust.name) + ".name");
+			return Utils.localizeAllFormatted("item.dust.name", "material." + Utils.decapitalizeFirstChar(dust.getName()) + ".name");
 		}
 		return super.getItemStackDisplayName(stack);
 	}
 
 	@Override
 	public void getSubItems(Item item, CreativeTabs tab, List list) {
-		for (int meta : DustManager.registeredDusts.keySet()) {
+		for (int meta : DustManager.getRegisteredDustMetas()) {
 			list.add(new ItemStack(ItemLoader.dust, 1, meta));
 		}
 	}

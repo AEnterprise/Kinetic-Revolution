@@ -20,6 +20,7 @@ public class Names {
 
 		public static final String GENERATOR_CASING = "generatorCasing";
 		public static final String GENERATOR_INDUCTOR = "generatorInductor";
+		public static final String DUSTER = "duster";
 
 	}
 
