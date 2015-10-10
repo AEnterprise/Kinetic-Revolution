@@ -1,13 +1,11 @@
 package kineticrevolution.core;
 
-import kineticrevolution.lib.Reference;
-import kineticrevolution.loaders.ItemLoader;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 
-/**
- * Created by AEnterprise
- */
+import kineticrevolution.lib.Names;
+import kineticrevolution.loaders.ItemLoader;
+
 public class CTabs {
 	public static final CreativeTabs MAIN_TAB = new MainTab();
 	public static final CreativeTabs DUST_TAB = new DustTab();
@@ -15,7 +13,7 @@ public class CTabs {
 	public static class MainTab extends CreativeTabs {
 
 		public MainTab() {
-			super(Reference.MOD_ID);
+			super(Names.CTabs.MAIN_TAB);
 		}
 
 		@Override
@@ -27,7 +25,7 @@ public class CTabs {
 	public static class DustTab extends CreativeTabs {
 
 		public DustTab() {
-			super("KRDusts");
+			super(Names.CTabs.DUST_TAB);
 		}
 
 		@Override

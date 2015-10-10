@@ -1,24 +1,18 @@
 package kineticrevolution.items.dusts;
 
-import kineticrevolution.loaders.ItemLoader;
 import net.minecraft.item.ItemStack;
 
-/**
- * Created by AEnterprise
- */
+import kineticrevolution.loaders.ItemLoader;
+
+
 public class Dust {
-	public final String name;
-	public final int color;
-	public final int dustPerOre;
+
+	private final String name;
+	private final int color;
 
 	public Dust(String name, int color) {
-		this(name, color, 2);
-	}
-
-	public Dust(String name, int color, int dustPerOre) {
 		this.name = name;
 		this.color = color;
-		this.dustPerOre = dustPerOre;
 	}
 
 	public boolean shouldRegister() {
@@ -34,6 +28,15 @@ public class Dust {
 	}
 
 	public ItemStack getStack(int count) {
-		return new ItemStack(ItemLoader.dust, count, DustManager.dusts.indexOf(name));
+		return new ItemStack(ItemLoader.dust, count, DustManager.getMeta(name));
 	}
+
+	public String getName() {
+		return name;
+	}
+
+	public int getColor() {
+		return color;
+	}
+
 }

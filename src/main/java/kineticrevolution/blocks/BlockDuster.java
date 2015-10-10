@@ -1,13 +1,20 @@
 package kineticrevolution.blocks;
 
-import kineticrevolution.recipes.DusterRecipeManager;
-import kineticrevolution.recipes.IDusterRecipe;
+import java.util.List;
+import java.util.Random;
+
+import com.google.common.collect.Lists;
+
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import kineticrevolution.recipes.DusterRecipeManager;
+import kineticrevolution.recipes.IChancedOutput;
+import kineticrevolution.recipes.IDusterRecipe;
+import kineticrevolution.util.Utils;
 
 /**
  * Created by AEnterprise
@@ -24,15 +31,29 @@ public class BlockDuster extends BlockBase {
 		super("duster");
 	}
 
+	@Override
+	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
+		int meta = world.getBlockMetadata(x, y, z);
+		if (meta < 0 || meta > 3)
+			meta = 0;
+		AxisAlignedBB aabb = boxes[meta];
+		setBlockBounds((float) aabb.minX, (float) aabb.minY, (float) aabb.minZ, (float) aabb.maxX, (float) aabb.maxY, (float) aabb.maxZ);
+	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
-		int meta = world.getBlockMetadata(x, y, z);
-		if (meta < 0 || meta > 3) {
-			meta = 0;
-			world.setBlockMetadataWithNotify(x, y, z, 0, 2);
-		}
-		return boxes[meta].copy().offset(x, y, z);
+	public void setBlockBoundsForItemRender() {
+		AxisAlignedBB aabb = boxes[0];
+		setBlockBounds((float) aabb.minX, (float) aabb.minY, (float) aabb.minZ, (float) aabb.maxX, (float) aabb.maxY, (float) aabb.maxZ);
+	}
+
+	@Override
+	public boolean isOpaqueCube() {
+		return false;
+	}
+
+	@Override
+	public boolean renderAsNormalBlock() {
+		return false;
 	}
 
 	@Override
@@ -43,16 +64,48 @@ public class BlockDuster extends BlockBase {
 		if (recipe == null)
 			return;
 		int meta = world.getBlockMetadata(x, y, z) + 1;
-		if (meta == 4) {
+		if (meta >= 4) {
 			world.setBlockToAir(x, y - 1, z);
 			world.setBlock(x, y - 1, z, this, 0, 2);
 			world.setBlockToAir(x, y, z);
+			handleOutputs(world, x, y, z, getOutputs(recipe, world.rand));
+		} else {
+			world.setBlockMetadataWithNotify(x, y, z, meta, 2);
 		}
-		world.setBlockMetadataWithNotify(x, y, z, meta, 2);
+	}
+
+	private List<ItemStack> getOutputs(IDusterRecipe recipe, Random random) {
+		List<ItemStack> outputs = Lists.newArrayList();
+		if (recipe != null && random != null) {
+			for (IChancedOutput cOutput : recipe.getOutputs()) {
+				if (cOutput != null) {
+					ItemStack output = cOutput.getOutput();
+					if (output != null && output.getItem() != null && output.stackSize > 0) {
+						double chance = cOutput.getChance() + getChanceModifier();
+						while (chance >= 1) {
+							outputs.add(output.copy());
+							chance--;
+						}
+						if (chance > 0 && random.nextDouble() < chance) {
+							outputs.add(output.copy());
+						}
+					}
+				}
+			}
+		}
+		return outputs;
+	}
+
+	public double getChanceModifier() {
+		return 0;
+	}
+
+	public void handleOutputs(World world, int x, int y, int z, List<ItemStack> outputs) {
+		Utils.dropItemstacks(world, x + .5, y + .5, z + .5, outputs);
 	}
 
 	@Override
-	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player) {
-		return new ItemStack(this, 1, 0);
+	public int damageDropped(int meta) {
+		return 0;
 	}
 }
