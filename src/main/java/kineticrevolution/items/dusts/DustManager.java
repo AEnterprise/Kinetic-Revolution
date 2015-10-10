@@ -5,8 +5,8 @@ import kineticrevolution.recipes.DusterOutput;
 import kineticrevolution.recipes.DusterRecipeManager;
 import kineticrevolution.recipes.IDusterRecipe;
 import kineticrevolution.util.OreDictHelper;
-import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
@@ -159,9 +159,9 @@ public class DustManager {
 		if (OreDictHelper.getFirstStack("ore" + name) != null) {
 			DusterRecipeManager.registerRecipe(new IDusterRecipe() {
 				@Override
-				public boolean validInput(Block block, int meta) {
+				public boolean validInput(World world, int x, int y, int z) {
 					int id = OreDictionary.getOreID("ore" + name);
-					for (int key : OreDictionary.getOreIDs(new ItemStack(block, 1, meta))) {
+					for (int key : OreDictionary.getOreIDs(new ItemStack(world.getBlock(x, y, z), 1, world.getBlockMetadata(x, y, z)))) {
 						if (id == key)
 							return true;
 					}
