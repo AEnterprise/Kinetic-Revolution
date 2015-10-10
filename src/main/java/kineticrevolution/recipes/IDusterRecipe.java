@@ -1,6 +1,6 @@
 package kineticrevolution.recipes;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.block.Block;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface IDusterRecipe {
 
-	boolean validInput(ItemStack input);
+	boolean validInput(Block block, int meta);
 
 	List<DusterOutput> getOutputs();
 

@@ -9,10 +9,16 @@ import net.minecraft.item.ItemStack;
 public class Dust {
 	public final String name;
 	public final int color;
+	public final int dustPerOre;
 
 	public Dust(String name, int color) {
+		this(name, color, 2);
+	}
+
+	public Dust(String name, int color, int dustPerOre) {
 		this.name = name;
 		this.color = color;
+		this.dustPerOre = dustPerOre;
 	}
 
 	public boolean shouldRegister() {

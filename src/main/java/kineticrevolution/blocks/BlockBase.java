@@ -10,7 +10,7 @@ import net.minecraft.creativetab.CreativeTabs;
 /**
  * Created by AEnterprise
  */
-public class BlockBase extends Block {
+public abstract class BlockBase extends Block {
 
 	public BlockBase(String name, String registryName, String texture, CreativeTabs tab) {
 		super(Material.iron);
@@ -27,4 +27,5 @@ public class BlockBase extends Block {
 	public BlockBase(String name) {
 		this(name, name);
 	}
+
 }

@@ -1,13 +1,11 @@
 package kineticrevolution.util;
 
+import com.google.common.collect.Maps;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
+
 import java.util.List;
 import java.util.Map;
-
-import com.google.common.collect.Maps;
-
-import net.minecraft.item.ItemStack;
-
-import net.minecraftforge.oredict.OreDictionary;
 
 /**
  * Created by AEnterprise
@@ -25,7 +23,7 @@ public class OreDictHelper {
 
 	public static ItemStack getFirstStack(String key) {
 		List<ItemStack> stacks = lookup(key);
-		return stacks == null || stacks.isEmpty() ? null : ItemStack.copyItemStack(stacks.get(0));
+		return stacks.isEmpty() ? null : ItemStack.copyItemStack(stacks.get(0));
 	}
 
 }

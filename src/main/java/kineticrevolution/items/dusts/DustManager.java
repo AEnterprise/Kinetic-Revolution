@@ -5,6 +5,7 @@ import kineticrevolution.recipes.DusterOutput;
 import kineticrevolution.recipes.DusterRecipeManager;
 import kineticrevolution.recipes.IDusterRecipe;
 import kineticrevolution.util.OreDictHelper;
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -119,7 +120,7 @@ public class DustManager {
 	}
 
 	public static void registerMetal(final String name, int color) {
-		register(new Dust(name, color) {
+		final Dust dust = new Dust(name, color) {
 			@Override
 			public boolean shouldRegister() {
 				return ingotPresent(name);
@@ -129,9 +130,11 @@ public class DustManager {
 			public ItemStack getSmeltingOutput() {
 				return OreDictHelper.getFirstStack("ingot" + name);
 			}
-		});
+		};
+
+		register(dust);
 		//ingot -> dust
-		if (OreDictHelper.getFirstStack("ingot" + name) != null) {
+		/*if (OreDictHelper.getFirstStack("ingot" + name) != null) {
 			DusterRecipeManager.registerRecipe(new IDusterRecipe() {
 				@Override
 				public boolean validInput(ItemStack input) {
@@ -147,6 +150,30 @@ public class DustManager {
 				public List<DusterOutput> getOutputs() {
 					ArrayList<DusterOutput> list = new ArrayList<DusterOutput>();
 					list.add(new DusterOutput(OreDictHelper.getFirstStack("ingot" + name), 100, 0, 0, 0, 0));
+					return list;
+				}
+			});
+		}*/
+
+		//ore -> dust
+		if (OreDictHelper.getFirstStack("ore" + name) != null) {
+			DusterRecipeManager.registerRecipe(new IDusterRecipe() {
+				@Override
+				public boolean validInput(Block block, int meta) {
+					int id = OreDictionary.getOreID("ore" + name);
+					for (int key : OreDictionary.getOreIDs(new ItemStack(block, 1, meta))) {
+						if (id == key)
+							return true;
+					}
+					return false;
+				}
+
+				@Override
+				public List<DusterOutput> getOutputs() {
+					ArrayList<DusterOutput> list = new ArrayList<DusterOutput>();
+					ItemStack stack = dust.getStack();
+					list.add(new DusterOutput(stack.copy(), 100, 0, 0, 0, 0));
+					list.add(new DusterOutput(stack.copy(), 80, 5, 10, 15, 20));
 					return list;
 				}
 			});
