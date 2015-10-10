@@ -1,14 +1,18 @@
 ### English Language File for Kinetic Revolution ###
 
-# Creative Tab #
+# Creative Tabs #
 itemGroup.kineticrevolution=Kinetic Revolution
+itemGroup.krDusts=Kinetic Revolution: Dusts
+
+## Blocks ##
+tile.duster.name=Duster
 
 ## Items ##
 
 # Tools #
 item.machineConfigurator.name=Machine Configurator
 
-## Resources ##
+# Resources #
 item.grindingWheel.name=Grinding Wheel
 
 # Dusts #
@@ -104,3 +108,9 @@ material.ludicrite.name=Ludicrite
 material.pyrotheum.name=Pyrotheum
 material.cryotheum.name=Cryotheum
 material.blizz.name=Blizz
+
+## GUIs ##
+
+# NEI #
+gui.kineticrevolution.nei.dusting.name=Dusting
+gui.kineticrevolution.nei.dusting.chance=Chance: %d %%

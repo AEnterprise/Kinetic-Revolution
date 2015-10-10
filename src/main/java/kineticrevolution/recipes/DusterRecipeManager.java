@@ -1,14 +1,15 @@
 package kineticrevolution.recipes;
 
+import java.util.List;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-
-/**
- * Created by AEnterprise
- */
 public class DusterRecipeManager {
-	private static ArrayList<IDusterRecipe> recipes = new ArrayList<IDusterRecipe>();
+
+	private static final List<IDusterRecipe> recipes = Lists.newArrayList();
 
 	public static void registerRecipe(IDusterRecipe recipe) {
 		recipes.add(recipe);
@@ -16,10 +17,14 @@ public class DusterRecipeManager {
 
 	public static IDusterRecipe getRecipe(World world, int x, int y, int z) {
 		for (IDusterRecipe recipe : recipes) {
-			if (recipe.validInput(world, x, y, z))
+			if (recipe.isValidInput(world, x, y, z))
 				return recipe;
 		}
 		return null;
+	}
+
+	public static List<? extends IDusterRecipe> getRecipeList() {
+		return ImmutableList.copyOf(recipes);
 	}
 
 

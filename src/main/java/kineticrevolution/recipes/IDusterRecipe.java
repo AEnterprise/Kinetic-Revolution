@@ -1,16 +1,16 @@
 package kineticrevolution.recipes;
 
-import net.minecraft.world.World;
-
 import java.util.List;
 
-/**
- * Created by AEnterprise
- */
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+
 public interface IDusterRecipe {
 
-	boolean validInput(World world, int x, int y, int z);
+	boolean isValidInput(World world, int x, int y, int z);
 
-	List<DusterOutput> getOutputs();
+	List<IChancedOutput> getOutputs();
+
+	List<ItemStack> getExampleInputs();
 
 }
