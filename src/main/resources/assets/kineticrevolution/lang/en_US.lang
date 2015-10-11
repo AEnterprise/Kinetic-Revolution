@@ -5,7 +5,9 @@ itemGroup.kineticrevolution=Kinetic Revolution
 itemGroup.krDusts=Kinetic Revolution: Dusts
 
 ## Blocks ##
-tile.duster.name=Duster
+
+# Duster #
+tile.dusterBasic.name=Basic Duster
 
 ## Items ##
 
