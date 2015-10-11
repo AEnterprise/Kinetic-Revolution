@@ -5,7 +5,6 @@ import kineticrevolution.lib.Names;
 import kineticrevolution.recipes.DusterRecipeManager;
 import kineticrevolution.recipes.IChancedOutput;
 import kineticrevolution.recipes.IDusterRecipe;
-import kineticrevolution.util.Utils;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
@@ -15,7 +14,7 @@ import net.minecraft.world.World;
 import java.util.List;
 import java.util.Random;
 
-public class BlockDuster extends BlockBase {
+public abstract class BlockDuster extends BlockBase {
 	private AxisAlignedBB[] boxes = {
 			AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1),
 			AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 0.8, 1),
@@ -23,8 +22,8 @@ public class BlockDuster extends BlockBase {
 			AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 0.4, 1),
 	};
 
-	public BlockDuster() {
-		super(Names.Blocks.DUSTER);
+	protected BlockDuster(String name) {
+		super(Names.Blocks.DUSTER + name);
 	}
 
 	@Override
@@ -81,7 +80,7 @@ public class BlockDuster extends BlockBase {
 		}
 	}
 
-	private List<ItemStack> getOutputs(IDusterRecipe recipe, Random random) {
+	protected List<ItemStack> getOutputs(IDusterRecipe recipe, Random random) {
 		List<ItemStack> outputs = Lists.newArrayList();
 		if (recipe != null && random != null) {
 			for (IChancedOutput cOutput : recipe.getOutputs()) {
@@ -103,11 +102,7 @@ public class BlockDuster extends BlockBase {
 		return outputs;
 	}
 
-	public double getChanceModifier() {
-		return 0;
-	}
+	public abstract double getChanceModifier();
 
-	public void handleOutputs(World world, int x, int y, int z, List<ItemStack> outputs) {
-		Utils.dropItemstacks(world, x + .5, y + .5, z + .5, outputs);
-	}
+	public abstract void handleOutputs(World world, int x, int y, int z, List<ItemStack> outputs);
 }

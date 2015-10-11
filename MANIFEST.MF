@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+FMLCorePlugin: kineticrevolution.core.CorePlugin
+Created-By: 1.7.0 (Oracle Corporation)
+FMLCorePluginContainsFMLMod: ulovebreakingstuffcpwdontcha

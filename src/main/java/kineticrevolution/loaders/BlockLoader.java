@@ -1,7 +1,7 @@
 package kineticrevolution.loaders;
 
 import cpw.mods.fml.common.registry.GameRegistry;
-import kineticrevolution.blocks.BlockDuster;
+import kineticrevolution.blocks.BlockDusterBasic;
 import kineticrevolution.lib.Names;
 import kineticrevolution.multiblocks.blocks.BlockGeneratorCasing;
 import kineticrevolution.multiblocks.blocks.BlockGeneratorInductor;
@@ -21,7 +21,9 @@ public class BlockLoader {
 		//generator
 		generatorCasing = new BlockGeneratorCasing();
 		generatorInductor = new BlockGeneratorInductor();
-		duster = new BlockDuster();
+
+		//dusters
+		duster = new BlockDusterBasic();
 
 		GameRegistry.registerTileEntity(TileMultiBlockBase.class, Names.TileEntities.MULTIBLOCK_BASE);
 		GameRegistry.registerTileEntity(TileKineticGenerator.class, Names.TileEntities.MULTIBLOCK_GENERATOR);

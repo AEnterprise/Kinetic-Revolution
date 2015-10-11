@@ -1,0 +1,1 @@
+-Dfml.coreMods.load=kineticrevolution.core.CorePlugin
