@@ -1,21 +1,19 @@
 package kineticrevolution.blocks;
 
-import java.util.List;
-import java.util.Random;
-
 import com.google.common.collect.Lists;
-
+import kineticrevolution.lib.Names;
+import kineticrevolution.recipes.DusterRecipeManager;
+import kineticrevolution.recipes.IChancedOutput;
+import kineticrevolution.recipes.IDusterRecipe;
+import kineticrevolution.util.Utils;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import kineticrevolution.lib.Names;
-import kineticrevolution.recipes.DusterRecipeManager;
-import kineticrevolution.recipes.IChancedOutput;
-import kineticrevolution.recipes.IDusterRecipe;
-import kineticrevolution.util.Utils;
+import java.util.List;
+import java.util.Random;
 
 public class BlockDuster extends BlockBase {
 	private AxisAlignedBB[] boxes = {
@@ -36,6 +34,14 @@ public class BlockDuster extends BlockBase {
 			meta = 0;
 		AxisAlignedBB aabb = boxes[meta];
 		setBlockBounds((float) aabb.minX, (float) aabb.minY, (float) aabb.minZ, (float) aabb.maxX, (float) aabb.maxY, (float) aabb.maxZ);
+	}
+
+	@Override
+	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
+		int meta = world.getBlockMetadata(x, y, z);
+		if (meta < 0 || meta > 3)
+			meta = 0;
+		return boxes[meta].copy().offset(x, y, z);
 	}
 
 	@Override
@@ -104,5 +110,4 @@ public class BlockDuster extends BlockBase {
 	public void handleOutputs(World world, int x, int y, int z, List<ItemStack> outputs) {
 		Utils.dropItemstacks(world, x + .5, y + .5, z + .5, outputs);
 	}
-
 }
