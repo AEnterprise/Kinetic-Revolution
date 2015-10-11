@@ -2,6 +2,8 @@ package kineticrevolution.util;
 
 import kineticrevolution.loaders.BlockLoader;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockAnvil;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.init.Blocks;
 
@@ -11,7 +13,8 @@ import net.minecraft.init.Blocks;
 public class FallingBlockUtils {
 
 	public static void onArrival(EntityFallingBlock entity) {
-		if (entity.func_145805_f() == Blocks.anvil) {
+		Block fallingBlock = entity.func_145805_f();
+		if (fallingBlock != null && (fallingBlock instanceof BlockAnvil || fallingBlock.getMaterial() == Material.anvil)) {
 			Block block = entity.worldObj.getBlock((int) Math.floor(entity.posX), (int) Math.floor(entity.posY - 1), (int) Math.floor(entity.posZ));
 			Block block1 = entity.worldObj.getBlock((int) Math.floor(entity.posX), (int) Math.floor(entity.posY), (int) Math.floor(entity.posZ));
 			if (block1 == BlockLoader.duster && entity.worldObj.getBlockMetadata((int) Math.floor(entity.posX), (int) Math.floor(entity.posY), (int) Math.floor(entity.posZ)) == 3) {

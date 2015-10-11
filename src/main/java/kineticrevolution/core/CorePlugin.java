@@ -1,13 +1,15 @@
 package kineticrevolution.core;
 
-import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
-
 import java.util.Map;
 
-/**
- * Created by AEnterprise
- */
+import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
+
+import kineticrevolution.lib.Reference;
+
+@IFMLLoadingPlugin.Name(Reference.MOD_NAME + "-CorePlugin")
+@IFMLLoadingPlugin.MCVersion(Reference.MC_VERSION)
 public class CorePlugin implements IFMLLoadingPlugin {
+
 	@Override
 	public String[] getASMTransformerClass() {
 		return new String[]{"kineticrevolution.util.ASMInjector"};

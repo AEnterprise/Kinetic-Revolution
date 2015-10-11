@@ -1,21 +1,24 @@
 package kineticrevolution.blocks;
 
+import java.util.List;
+import java.util.Random;
+
 import com.google.common.collect.Lists;
-import kineticrevolution.lib.Names;
-import kineticrevolution.recipes.DusterRecipeManager;
-import kineticrevolution.recipes.IChancedOutput;
-import kineticrevolution.recipes.IDusterRecipe;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import java.util.List;
-import java.util.Random;
+import kineticrevolution.lib.Names;
+import kineticrevolution.recipes.DusterRecipeManager;
+import kineticrevolution.recipes.IChancedOutput;
+import kineticrevolution.recipes.IDusterRecipe;
 
 public abstract class BlockDuster extends BlockBase {
-	private AxisAlignedBB[] boxes = {
+
+	private static final AxisAlignedBB[] boxes = {
 			AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1),
 			AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 0.8, 1),
 			AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 0.6, 1),
@@ -69,7 +72,7 @@ public abstract class BlockDuster extends BlockBase {
 				return;
 			int meta = world.getBlockMetadata(x, y, z) + 1;
 			if (meta >= 4) {
-				//TODO: Maybe make the duster fall like an anvil?
+				//TODO: Fancy animation
 				world.setBlockToAir(x, y - 1, z);
 				world.setBlock(x, y - 1, z, this, 0, 2);
 				world.setBlockToAir(x, y, z);
