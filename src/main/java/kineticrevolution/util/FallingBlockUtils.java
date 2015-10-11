@@ -16,8 +16,7 @@ public class FallingBlockUtils {
 			Block block1 = entity.worldObj.getBlock((int) Math.floor(entity.posX), (int) Math.floor(entity.posY), (int) Math.floor(entity.posZ));
 			if (block1 == BlockLoader.duster && entity.worldObj.getBlockMetadata((int) Math.floor(entity.posX), (int) Math.floor(entity.posY), (int) Math.floor(entity.posZ)) == 3) {
 				block1.onFallenUpon(entity.worldObj, (int) Math.floor(entity.posX), (int) Math.floor(entity.posY), (int) Math.floor(entity.posZ), entity, (float) Math.pow(2, entity.ticksExisted / 10));
-			}
-			if (block == BlockLoader.duster) {
+			} else if (block == BlockLoader.duster) {
 				block.onFallenUpon(entity.worldObj, (int) Math.floor(entity.posX), (int) Math.floor(entity.posY - 1), (int) Math.floor(entity.posZ), entity, (float) Math.pow(2, entity.ticksExisted / 10));
 			}
 		}
