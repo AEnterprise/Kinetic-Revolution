@@ -41,6 +41,11 @@ version = "${config.version.mc}-${config.version.mod}"
 group = "com.AEnterprise.KineticRevolution" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "KineticRevolution"
 
+def manifestfile = file('MANIFEST.MF')
+if (manifestfile.exists()) {
+    jar.manifest.from(manifestfile)
+}
+
 if (System.getenv().BUILD_NUMBER != null) {
     version = "-Kinetic Revolution Jenkins Build ${System.getenv().BUILD_NUMBER}"
 }
