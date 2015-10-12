@@ -32,5 +32,10 @@ public class CTabs {
 		public Item getTabIconItem() {
 			return ItemLoader.dust;
 		}
+
+		@Override
+		public boolean hasSearchBar() {
+			return true;
+		}
 	}
 }

@@ -2,7 +2,7 @@
 
 # Creative Tabs #
 itemGroup.kineticrevolution=Kinetic Revolution
-itemGroup.krDusts=Kinetic Revolution: Dusts
+itemGroup.krDusts=KR: Dusts
 
 ## Blocks ##
 
@@ -109,7 +109,8 @@ material.blutonium.name=Blutonium
 material.ludicrite.name=Ludicrite
 material.pyrotheum.name=Pyrotheum
 material.cryotheum.name=Cryotheum
-material.blizz.name=Blizz
+material.aerotheum.name=Aerotheum
+material.petrotheum.name=Petrotheum
 
 ## GUIs ##
 
