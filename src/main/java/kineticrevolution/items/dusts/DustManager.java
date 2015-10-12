@@ -94,7 +94,6 @@ public class DustManager {
 		registerMetal("Tin", 0xF2F2F2);
 		registerMetal("Osmium", 0x92A6B8);
 		registerDust("Sulfur", 0xFFDB50);
-		registerDust("Sulfur", 0xFFDB50);
 		registerDust("Saltpeter", 0xDEDEDE);
 		registerDust("CertusQuartz", 0xBAC5F2);
 		registerMetal("AluminumBrass", 0xF0D467);
