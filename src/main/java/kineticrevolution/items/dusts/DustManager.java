@@ -119,10 +119,10 @@ public class DustManager {
 		registerMetal("Cyanite", 0x0087EF);
 		registerMetal("Blutonium", 0x1B00E6);
 		registerMetal("Ludicrite", 0xEF00EF);
-		registerDust("Pyrotheum", 0xF8B33D);
-		registerDust("Cryotheum", 0x49EFFF);
-		registerDust("Aerotheum", 0x49EFFF);
-		registerDust("Petrotheum", 0x49EFFF);
+		registerDust("Pyrotheum", 0xFFC839);
+		registerDust("Cryotheum", 0x45FCFF);
+		registerDust("Aerotheum", 0xD7D282);
+		registerDust("Petrotheum", 0x635B60);
 	}
 
 	public static void register(String name, int color) {
