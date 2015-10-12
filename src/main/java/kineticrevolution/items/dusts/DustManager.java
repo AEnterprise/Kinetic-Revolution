@@ -93,9 +93,9 @@ public class DustManager {
 		registerMetal("Silver", 0xB3B3B3);
 		registerMetal("Tin", 0xF2F2F2);
 		registerMetal("Osmium", 0x92A6B8);
-		registerMetal("Sulfur", 0xFFDB50);
-		registerMetal("Saltpeter", 0xDEDEDE);
-		registerMetal("CertusQuartz", 0xBAC5F2);
+		registerDust("Sulfur", 0xFFDB50);
+		registerDust("Saltpeter", 0xDEDEDE);
+		registerDust("CertusQuartz", 0xBAC5F2);
 		registerMetal("AluminumBrass", 0xF0D467);
 		registerMetal("Alumite", 0xF4CCEC);
 		registerMetal("PigIron", 0xF0A8A4);
@@ -118,9 +118,10 @@ public class DustManager {
 		registerMetal("Cyanite", 0x0087EF);
 		registerMetal("Blutonium", 0x1B00E6);
 		registerMetal("Ludicrite", 0xEF00EF);
-		registerMetal("Pyrotheum", 0xF8B33D);
-		registerMetal("Cryotheum", 0x49EFFF);
-		registerMetal("Blizz", 0x8BEDFC);
+		registerDust("Pyrotheum", 0xFFC839);
+		registerDust("Cryotheum", 0x45FCFF);
+		registerDust("Aerotheum", 0xD7D282);
+		registerDust("Petrotheum", 0x635B60);
 	}
 
 	public static void register(String name, int color) {
@@ -193,10 +194,25 @@ public class DustManager {
 		}
 	}
 
+	public static void registerDust(final String name, int color) {
+		final Dust dust = new Dust(name, color) {
+
+			@Override
+			public boolean shouldRegister() {
+				return dustPresent(name);
+			}
+
+		};
+
+		register(dust);
+
+	}
+
 	public static void register(Dust dust) {
 		dusts.add(dust.getName());
 		if (dust.shouldRegister()) {
 			registeredDusts.put(dusts.indexOf(dust.getName()), dust);
+			OreDictionary.registerOre("dust" + dust.getName(), dust.getStack());
 			if (dust.getSmeltingOutput() != null)
 				GameRegistry.addSmelting(dust.getStack(), dust.getSmeltingOutput(), 0.5f);
 		}
@@ -212,6 +228,10 @@ public class DustManager {
 
 	public static boolean ingotPresent(String metalname) {
 		return !OreDictHelper.lookup("ingot" + metalname).isEmpty();
+	}
+
+	public static boolean dustPresent(String name) {
+		return !OreDictHelper.lookup("dust" + name).isEmpty();
 	}
 
 	public static int getMeta(String name) {

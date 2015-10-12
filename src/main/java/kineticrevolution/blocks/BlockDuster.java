@@ -40,10 +40,8 @@ public abstract class BlockDuster extends BlockBase {
 
 	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
-		int meta = world.getBlockMetadata(x, y, z);
-		if (meta < 0 || meta > 3)
-			meta = 0;
-		return boxes[meta].copy().offset(x, y, z);
+		setBlockBoundsBasedOnState(world, x, y, z);
+		return super.getCollisionBoundingBoxFromPool(world, x, y, z);
 	}
 
 	@Override

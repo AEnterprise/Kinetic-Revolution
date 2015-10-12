@@ -26,11 +26,17 @@ public class CTabs {
 
 		public DustTab() {
 			super(Names.CTabs.DUST_TAB);
+			setBackgroundImageName("item_search.png");
 		}
 
 		@Override
 		public Item getTabIconItem() {
 			return ItemLoader.dust;
+		}
+
+		@Override
+		public boolean hasSearchBar() {
+			return true;
 		}
 	}
 }

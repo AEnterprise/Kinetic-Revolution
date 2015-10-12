@@ -41,9 +41,11 @@ version = "${config.version.mc}-${config.version.mod}"
 group = "com.AEnterprise.KineticRevolution" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "KineticRevolution"
 
-def manifestfile = file('MANIFEST.MF')
-if (manifestfile.exists()) {
-    jar.manifest.from(manifestfile)
+jar {
+    manifest {
+        attributes 'FMLCorePlugin': 'kineticrevolution.core.CorePlugin'
+        attributes 'FMLCorePluginContainsFMLMod': 'true'
+    }
 }
 
 if (System.getenv().BUILD_NUMBER != null) {
