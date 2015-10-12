@@ -26,6 +26,7 @@ public class CTabs {
 
 		public DustTab() {
 			super(Names.CTabs.DUST_TAB);
+			setBackgroundImageName("item_search.png");
 		}
 
 		@Override

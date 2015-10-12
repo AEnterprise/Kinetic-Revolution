@@ -212,6 +212,7 @@ public class DustManager {
 		dusts.add(dust.getName());
 		if (dust.shouldRegister()) {
 			registeredDusts.put(dusts.indexOf(dust.getName()), dust);
+			OreDictionary.registerOre("dust" + dust.getName(), dust.getStack());
 			if (dust.getSmeltingOutput() != null)
 				GameRegistry.addSmelting(dust.getStack(), dust.getSmeltingOutput(), 0.5f);
 		}
