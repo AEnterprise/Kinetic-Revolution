@@ -1,20 +1,17 @@
 package kineticrevolution.tileEntities;
 
 import com.google.common.collect.Lists;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import io.netty.buffer.ByteBuf;
 import kineticrevolution.loaders.BlockLoader;
-import kineticrevolution.networking.ISynchronizedTile;
-import kineticrevolution.networking.MessageByteBuff;
-import kineticrevolution.networking.PacketHandler;
 import kineticrevolution.recipes.DusterRecipeManager;
 import kineticrevolution.recipes.IChancedOutput;
 import kineticrevolution.recipes.IDusterRecipe;
 import kineticrevolution.util.Utils;
+import kineticrevolution.util.debug.DoubleContainer;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -22,48 +19,57 @@ import java.util.List;
 /**
  * Created by AEnterprise
  */
-public class TileDuster extends TileSyncBase implements ISynchronizedTile {
-	public double targetHeight = 1.0;
+public class TileDuster extends TileSyncBase {
+	private static final AxisAlignedBB[] boxes = {
+			AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1),
+			AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 0.8, 1),
+			AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 0.6, 1),
+			AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 0.4, 1),
+	};
+	private DoubleContainer targetHeight = new DoubleContainer(1.0);
 	private double chanceModifier;
 	private double height = 1.0;
+	//MC resets the client TE when the meta changes so we do meta in the TE
+	private int meta;
 
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
-		if (height > targetHeight) {
+		if (height > targetHeight.getValue()) {
 			height -= 0.05;
 		}
 	}
 
 	public void onFallenUpon(Entity entity, float distance) {
-		if (distance < 0.8 || height > targetHeight)
+		if (distance < 0.8 || height > targetHeight.getValue())
 			return;
 		IDusterRecipe recipe = DusterRecipeManager.getRecipe(worldObj, xCoord, yCoord - 1, zCoord);
 		if (recipe == null)
 			return;
-		int meta = worldObj.getBlockMetadata(xCoord, yCoord, zCoord) + 1;
+		meta++;
 		if (meta >= 4) {
-			targetHeight = 1.0;
-			if (!worldObj.isRemote) {
-				worldObj.setBlock(xCoord, yCoord - 1, zCoord, BlockLoader.duster, 0, 2);
-				NBTTagCompound tag = new NBTTagCompound();
-				writeToNBT(tag);
-				tag.setInteger("y", yCoord - 1);
-				TileEntity tileEntity = worldObj.getTileEntity(xCoord, yCoord - 1, zCoord);
-				if (tileEntity != null)
-					tileEntity.readFromNBT(tag);
-				worldObj.setBlockToAir(xCoord, yCoord, zCoord);
-				handleOutputs(worldObj, xCoord, yCoord, zCoord, getOutputs(recipe));
-			}
+			targetHeight.setValue(1.0, worldObj.isRemote);
+			worldObj.setBlock(xCoord, yCoord - 1, zCoord, BlockLoader.duster, 0, 2);
+			NBTTagCompound tag = new NBTTagCompound();
+			writeToNBT(tag);
+			tag.setInteger("y", yCoord - 1);
+			TileEntity tileEntity = worldObj.getTileEntity(xCoord, yCoord - 1, zCoord);
+			if (tileEntity != null)
+				tileEntity.readFromNBT(tag);
+			worldObj.setBlockToAir(xCoord, yCoord, zCoord);
+			handleOutputs(worldObj, xCoord, yCoord, zCoord, getOutputs(recipe));
+
 		} else {
-			targetHeight -= 0.2;
-			if (!worldObj.isRemote) {
-				worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, meta, 2);
-				PacketHandler.instance.sendToAllAround(new MessageByteBuff(this), new NetworkRegistry.TargetPoint(worldObj.provider.dimensionId, xCoord, yCoord, zCoord, 20));
-			}
+			targetHeight.setValue(targetHeight.getValue() - 0.2, worldObj.isRemote);
+			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		}
-		System.out.println("Target heigt: " + targetHeight + ", world.isRemote: " + worldObj.isRemote);
-		System.out.println("Height: " + height + ", world.isRemote: " + worldObj.isRemote);
+		worldObj.markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord);
+	}
+
+	public AxisAlignedBB getBox() {
+		if (meta >= 4)
+			meta = 0;
+		return boxes[meta].copy();
 	}
 
 
@@ -102,7 +108,8 @@ public class TileDuster extends TileSyncBase implements ISynchronizedTile {
 		super.readFromNBT(tag);
 		chanceModifier = tag.getDouble("chanceModifier");
 		height = tag.getDouble("height");
-		targetHeight = tag.getDouble("targetHeight");
+		targetHeight.setValue(tag.getDouble("targetHeight"), worldObj.isRemote);
+		meta = tag.getInteger("meta");
 	}
 
 	@Override
@@ -110,21 +117,21 @@ public class TileDuster extends TileSyncBase implements ISynchronizedTile {
 		super.writeToNBT(tag);
 		tag.setDouble("chanceModifier", chanceModifier);
 		tag.setDouble("height", height);
-		tag.setDouble("targetHeight", targetHeight);
+		tag.setDouble("targetHeight", targetHeight.getValue());
+		tag.setInteger("meta", meta);
+	}
+
+
+	@Override
+	public NBTTagCompound writeToSyncNBT(NBTTagCompound tag) {
+		tag.setDouble("targetHeight", targetHeight.getValue());
+		tag.setInteger("meta", meta);
+		return tag;
 	}
 
 	@Override
-	public int getIdentifier() {
-		return 0;
-	}
-
-	@Override
-	public void writeToByteBuff(ByteBuf buf) {
-		buf.writeDouble(targetHeight);
-	}
-
-	@Override
-	public void readFromByteBuff(ByteBuf buf) {
-		targetHeight = buf.readDouble();
+	public void readFromSyncNBT(NBTTagCompound tag) {
+		targetHeight.setValue(tag.getDouble("targetHeight"), worldObj.isRemote);
+		meta = tag.getInteger("meta");
 	}
 }

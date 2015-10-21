@@ -1,39 +1,27 @@
 package kineticrevolution.tileEntities;
 
-import cpw.mods.fml.common.network.NetworkRegistry;
-import kineticrevolution.networking.ISynchronizedTile;
-import kineticrevolution.networking.MessageByteBuff;
-import kineticrevolution.networking.PacketHandler;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
 /**
  * Created by AEnterprise
  */
-public abstract class TileSyncBase extends TileEntity implements ISynchronizedTile {
-	private int syncCounter = 100;
+public abstract class TileSyncBase extends TileEntity {
 
 	@Override
-	public void updateEntity() {
-		//sync every 100 ticks to fix any possible desyncs or for players who where not in the area during the last sync
-		syncCounter--;
-		if (syncCounter <= 0) {
-			PacketHandler.instance.sendToAllAround(new MessageByteBuff(this), new NetworkRegistry.TargetPoint(worldObj.provider.dimensionId, xCoord, yCoord, zCoord, 20));
-			syncCounter = 100;
-		}
+	public Packet getDescriptionPacket() {
+		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, writeToSyncNBT(new NBTTagCompound()));
 	}
 
 	@Override
-	public int getX() {
-		return xCoord;
+	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
+		readFromNBT(pkt.func_148857_g());
 	}
 
-	@Override
-	public int getY() {
-		return yCoord;
-	}
+	public abstract NBTTagCompound writeToSyncNBT(NBTTagCompound tag);
 
-	@Override
-	public int getZ() {
-		return zCoord;
-	}
+	public abstract void readFromSyncNBT(NBTTagCompound tag);
 }
