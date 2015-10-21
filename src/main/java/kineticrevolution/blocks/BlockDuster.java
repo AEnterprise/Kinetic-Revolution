@@ -1,22 +1,14 @@
 package kineticrevolution.blocks;
 
-import java.util.List;
-import java.util.Random;
-
-import com.google.common.collect.Lists;
-
+import kineticrevolution.lib.Names;
+import kineticrevolution.tileEntities.TileDuster;
 import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import kineticrevolution.lib.Names;
-import kineticrevolution.recipes.DusterRecipeManager;
-import kineticrevolution.recipes.IChancedOutput;
-import kineticrevolution.recipes.IDusterRecipe;
-
-public abstract class BlockDuster extends BlockBase {
+public class BlockDuster extends BlockBase {
 
 	private static final AxisAlignedBB[] boxes = {
 			AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1),
@@ -25,8 +17,8 @@ public abstract class BlockDuster extends BlockBase {
 			AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 0.4, 1),
 	};
 
-	protected BlockDuster(String name) {
-		super(Names.Blocks.DUSTER + name);
+	public BlockDuster() {
+		super(Names.Blocks.DUSTER);
 	}
 
 	@Override
@@ -64,48 +56,19 @@ public abstract class BlockDuster extends BlockBase {
 
 	@Override
 	public void onFallenUpon(World world, int x, int y, int z, Entity entity, float distance) {
-		if (!world.isRemote) {
-			if (distance < 0.8)
-				return;
-			IDusterRecipe recipe = DusterRecipeManager.getRecipe(world, x, y - 1, z);
-			if (recipe == null)
-				return;
-			int meta = world.getBlockMetadata(x, y, z) + 1;
-			if (meta >= 4) {
-				//TODO: Fancy animation
-				world.setBlockToAir(x, y - 1, z);
-				world.setBlock(x, y - 1, z, this, 0, 2);
-				world.setBlockToAir(x, y, z);
-				handleOutputs(world, x, y, z, getOutputs(recipe, world.rand));
-			} else {
-				world.setBlockMetadataWithNotify(x, y, z, meta, 2);
-			}
+		TileEntity tileEntity = world.getTileEntity(x, y, z);
+		if (tileEntity instanceof TileDuster) {
+			((TileDuster) tileEntity).onFallenUpon(entity, distance);
 		}
 	}
 
-	protected List<ItemStack> getOutputs(IDusterRecipe recipe, Random random) {
-		List<ItemStack> outputs = Lists.newArrayList();
-		if (recipe != null && random != null) {
-			for (IChancedOutput cOutput : recipe.getOutputs()) {
-				if (cOutput != null) {
-					ItemStack output = cOutput.getOutput();
-					if (output != null && output.getItem() != null && output.stackSize > 0) {
-						double chance = cOutput.getChance() + getChanceModifier();
-						while (chance >= 1) {
-							outputs.add(output.copy());
-							chance--;
-						}
-						if (chance > 0 && random.nextDouble() < chance) {
-							outputs.add(output.copy());
-						}
-					}
-				}
-			}
-		}
-		return outputs;
+	@Override
+	public TileEntity createNewTileEntity(World world, int meta) {
+		return new TileDuster();
 	}
 
-	public abstract double getChanceModifier();
-
-	public abstract void handleOutputs(World world, int x, int y, int z, List<ItemStack> outputs);
+	@Override
+	public int getRenderType() {
+		return -1;
+	}
 }

@@ -3,14 +3,14 @@ package kineticrevolution.blocks;
 import cpw.mods.fml.common.registry.GameRegistry;
 import kineticrevolution.core.CTabs;
 import kineticrevolution.lib.Reference;
-import net.minecraft.block.Block;
+import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 
 /**
  * Created by AEnterprise
  */
-public abstract class BlockBase extends Block {
+public abstract class BlockBase extends BlockContainer {
 
 	public BlockBase(String name, String registryName, String texture, CreativeTabs tab) {
 		super(Material.iron);

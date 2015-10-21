@@ -1,12 +1,13 @@
 package kineticrevolution.loaders;
 
 import cpw.mods.fml.common.registry.GameRegistry;
-import kineticrevolution.blocks.BlockDusterBasic;
+import kineticrevolution.blocks.BlockDuster;
 import kineticrevolution.lib.Names;
 import kineticrevolution.multiblocks.blocks.BlockGeneratorCasing;
 import kineticrevolution.multiblocks.blocks.BlockGeneratorInductor;
-import kineticrevolution.multiblocks.tileEntities.TileKineticGenerator;
-import kineticrevolution.multiblocks.tileEntities.TileMultiBlockBase;
+import kineticrevolution.tileEntities.TileDuster;
+import kineticrevolution.tileEntities.TileKineticGenerator;
+import kineticrevolution.tileEntities.TileMultiBlockBase;
 import net.minecraft.block.Block;
 
 /**
@@ -23,10 +24,11 @@ public class BlockLoader {
 		generatorInductor = new BlockGeneratorInductor();
 
 		//dusters
-		duster = new BlockDusterBasic();
+		duster = new BlockDuster();
 
 		GameRegistry.registerTileEntity(TileMultiBlockBase.class, Names.TileEntities.MULTIBLOCK_BASE);
 		GameRegistry.registerTileEntity(TileKineticGenerator.class, Names.TileEntities.MULTIBLOCK_GENERATOR);
+		GameRegistry.registerTileEntity(TileDuster.class, "TileDuster");
 	}
 
 	public static void addRecipes() {

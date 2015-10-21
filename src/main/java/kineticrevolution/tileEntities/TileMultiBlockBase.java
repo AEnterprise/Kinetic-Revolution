@@ -1,4 +1,4 @@
-package kineticrevolution.multiblocks.tileEntities;
+package kineticrevolution.tileEntities;
 
 import cpw.mods.fml.common.network.NetworkRegistry;
 import io.netty.buffer.ByteBuf;

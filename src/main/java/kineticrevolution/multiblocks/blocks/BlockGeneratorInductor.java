@@ -3,7 +3,7 @@ package kineticrevolution.multiblocks.blocks;
 import kineticrevolution.lib.Names;
 import kineticrevolution.multiblocks.patterns.MultiBlockPattern;
 import kineticrevolution.multiblocks.patterns.Patterns;
-import kineticrevolution.multiblocks.tileEntities.TileKineticGenerator;
+import kineticrevolution.tileEntities.TileKineticGenerator;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 

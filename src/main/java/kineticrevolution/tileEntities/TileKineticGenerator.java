@@ -1,4 +1,4 @@
-package kineticrevolution.multiblocks.tileEntities;
+package kineticrevolution.tileEntities;
 
 import kineticrevolution.multiblocks.patterns.MultiBlockPattern;
 import kineticrevolution.multiblocks.patterns.Patterns;
