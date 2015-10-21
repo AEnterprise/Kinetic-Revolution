@@ -17,5 +17,6 @@ public class DoubleContainer {
 
 	public void setValue(double value, boolean onClient) {
 		System.out.println("value being modified, old value: " + this.value + " new value: " + value + " on client: " + onClient);
+		this.value = value;
 	}
 }

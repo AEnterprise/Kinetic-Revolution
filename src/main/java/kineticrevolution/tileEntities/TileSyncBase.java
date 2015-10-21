@@ -18,7 +18,7 @@ public abstract class TileSyncBase extends TileEntity {
 
 	@Override
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
-		readFromNBT(pkt.func_148857_g());
+		readFromSyncNBT(pkt.func_148857_g());
 	}
 
 	public abstract NBTTagCompound writeToSyncNBT(NBTTagCompound tag);

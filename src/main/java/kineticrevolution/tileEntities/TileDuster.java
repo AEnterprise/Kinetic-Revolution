@@ -6,7 +6,6 @@ import kineticrevolution.recipes.DusterRecipeManager;
 import kineticrevolution.recipes.IChancedOutput;
 import kineticrevolution.recipes.IDusterRecipe;
 import kineticrevolution.util.Utils;
-import kineticrevolution.util.debug.DoubleContainer;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -20,13 +19,8 @@ import java.util.List;
  * Created by AEnterprise
  */
 public class TileDuster extends TileSyncBase {
-	private static final AxisAlignedBB[] boxes = {
-			AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1),
-			AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 0.8, 1),
-			AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 0.6, 1),
-			AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 0.4, 1),
-	};
-	private DoubleContainer targetHeight = new DoubleContainer(1.0);
+	private static final AxisAlignedBB box = AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1);
+	private double targetHeight = 1.0;
 	private double chanceModifier;
 	private double height = 1.0;
 	//MC resets the client TE when the meta changes so we do meta in the TE
@@ -35,20 +29,20 @@ public class TileDuster extends TileSyncBase {
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
-		if (height > targetHeight.getValue()) {
+		if (height > targetHeight) {
 			height -= 0.05;
 		}
 	}
 
 	public void onFallenUpon(Entity entity, float distance) {
-		if (distance < 0.8 || height > targetHeight.getValue())
+		if (distance < 0.8 || height > targetHeight)
 			return;
 		IDusterRecipe recipe = DusterRecipeManager.getRecipe(worldObj, xCoord, yCoord - 1, zCoord);
 		if (recipe == null)
 			return;
 		meta++;
 		if (meta >= 4) {
-			targetHeight.setValue(1.0, worldObj.isRemote);
+			targetHeight = 1.0;
 			worldObj.setBlock(xCoord, yCoord - 1, zCoord, BlockLoader.duster, 0, 2);
 			NBTTagCompound tag = new NBTTagCompound();
 			writeToNBT(tag);
@@ -60,16 +54,15 @@ public class TileDuster extends TileSyncBase {
 			handleOutputs(worldObj, xCoord, yCoord, zCoord, getOutputs(recipe));
 
 		} else {
-			targetHeight.setValue(targetHeight.getValue() - 0.2, worldObj.isRemote);
+			targetHeight -= 0.2;
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		}
-		worldObj.markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord);
 	}
 
 	public AxisAlignedBB getBox() {
 		if (meta >= 4)
 			meta = 0;
-		return boxes[meta].copy();
+		return box.copy().offset(0, height - 1, 0);
 	}
 
 
@@ -108,7 +101,7 @@ public class TileDuster extends TileSyncBase {
 		super.readFromNBT(tag);
 		chanceModifier = tag.getDouble("chanceModifier");
 		height = tag.getDouble("height");
-		targetHeight.setValue(tag.getDouble("targetHeight"), worldObj.isRemote);
+		targetHeight = tag.getDouble("targetHeight");
 		meta = tag.getInteger("meta");
 	}
 
@@ -117,21 +110,21 @@ public class TileDuster extends TileSyncBase {
 		super.writeToNBT(tag);
 		tag.setDouble("chanceModifier", chanceModifier);
 		tag.setDouble("height", height);
-		tag.setDouble("targetHeight", targetHeight.getValue());
+		tag.setDouble("targetHeight", targetHeight);
 		tag.setInteger("meta", meta);
 	}
 
 
 	@Override
 	public NBTTagCompound writeToSyncNBT(NBTTagCompound tag) {
-		tag.setDouble("targetHeight", targetHeight.getValue());
+		tag.setDouble("targetHeight", targetHeight);
 		tag.setInteger("meta", meta);
 		return tag;
 	}
 
 	@Override
 	public void readFromSyncNBT(NBTTagCompound tag) {
-		targetHeight.setValue(tag.getDouble("targetHeight"), worldObj.isRemote);
+		targetHeight = tag.getDouble("targetHeight");
 		meta = tag.getInteger("meta");
 	}
 }
