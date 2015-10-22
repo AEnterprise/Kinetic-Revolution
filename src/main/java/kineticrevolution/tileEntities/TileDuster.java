@@ -6,12 +6,14 @@ import kineticrevolution.recipes.DusterRecipeManager;
 import kineticrevolution.recipes.IChancedOutput;
 import kineticrevolution.recipes.IDusterRecipe;
 import kineticrevolution.util.Utils;
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 
 import java.util.List;
 
@@ -31,6 +33,14 @@ public class TileDuster extends TileSyncBase {
 		super.updateEntity();
 		if (height > targetHeight) {
 			height -= 0.05;
+			spawnParticles(10);
+		}
+	}
+
+	protected void spawnParticles(int amount) {
+		if (!worldObj.isRemote && worldObj instanceof WorldServer) {
+			((WorldServer) worldObj).func_147487_a("blockcrack_" + Block.getIdFromBlock(worldObj.getBlock(xCoord, yCoord - 1, zCoord)) + "_" + worldObj.getBlock(xCoord, yCoord - 1, zCoord).damageDropped(worldObj.getBlockMetadata(xCoord, yCoord - 1, zCoord)),
+					xCoord + 0.5, yCoord + height, zCoord + 0.5, amount, 0, 0, 0, 0.075);
 		}
 	}
 
@@ -42,6 +52,7 @@ public class TileDuster extends TileSyncBase {
 			return;
 		meta++;
 		if (meta >= 4) {
+			spawnParticles(30);
 			targetHeight = 1.0;
 			worldObj.setBlock(xCoord, yCoord - 1, zCoord, BlockLoader.duster, 0, 2);
 			NBTTagCompound tag = new NBTTagCompound();
