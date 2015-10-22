@@ -31,8 +31,8 @@ public class TileDuster extends TileSyncBase {
 	private double chanceModifier;
 	private double height = 1.0;
 	//MC resets the client TE when the meta changes we're not using meta
-	private int progress;
-	private int maxProgress = 10;
+	private double progress;
+	private int maxProgress = 20;
 	private ArrayList<Components> components = new ArrayList<Components>();
 
 	@Override
@@ -41,6 +41,33 @@ public class TileDuster extends TileSyncBase {
 		if (height > targetHeight) {
 			height -= 0.05;
 			spawnParticles(10);
+		}
+		if (progress >= maxProgress) {
+			progress -= maxProgress;
+			IDusterRecipe recipe = DusterRecipeManager.getRecipe(worldObj, xCoord, yCoord - 1, zCoord);
+			if (recipe == null)
+				return;
+			worldObj.destroyBlockInWorldPartially(100, xCoord, yCoord - 1, zCoord, 0);
+			spawnParticles(100);
+			targetHeight = 1.0;
+			worldObj.setBlock(xCoord, yCoord - 1, zCoord, BlockLoader.duster, 0, 2);
+			NBTTagCompound tag = new NBTTagCompound();
+			writeToNBT(tag);
+			tag.setInteger("y", yCoord - 1);
+			TileEntity tileEntity = worldObj.getTileEntity(xCoord, yCoord - 1, zCoord);
+			if (tileEntity != null)
+				tileEntity.readFromNBT(tag);
+			worldObj.setBlockToAir(xCoord, yCoord, zCoord);
+
+			handleOutputs(worldObj, xCoord, yCoord, zCoord, getOutputs(recipe));
+
+		} else {
+			double old = targetHeight;
+			targetHeight = 1.0 - (progress * 0.8 / maxProgress);
+			if (old != targetHeight) {
+				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+				worldObj.destroyBlockInWorldPartially(100, xCoord, yCoord - 1, zCoord, (int) (progress * 10) / maxProgress);
+			}
 		}
 	}
 
@@ -54,27 +81,7 @@ public class TileDuster extends TileSyncBase {
 		IDusterRecipe recipe = DusterRecipeManager.getRecipe(worldObj, xCoord, yCoord - 1, zCoord);
 		if (recipe == null)
 			return;
-		progress++;
-		if (progress >= maxProgress) {
-			progress = 0;
-			worldObj.destroyBlockInWorldPartially(100, xCoord, yCoord - 1, zCoord, progress);
-			spawnParticles(100);
-			targetHeight = 1.0;
-			worldObj.setBlock(xCoord, yCoord - 1, zCoord, BlockLoader.duster, 0, 2);
-			NBTTagCompound tag = new NBTTagCompound();
-			writeToNBT(tag);
-			tag.setInteger("y", yCoord - 1);
-			TileEntity tileEntity = worldObj.getTileEntity(xCoord, yCoord - 1, zCoord);
-			if (tileEntity != null)
-				tileEntity.readFromNBT(tag);
-			worldObj.setBlockToAir(xCoord, yCoord, zCoord);
-			handleOutputs(worldObj, xCoord, yCoord, zCoord, getOutputs(recipe));
-
-		} else {
-			targetHeight -= 0.8 / maxProgress;
-			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-			worldObj.destroyBlockInWorldPartially(100, xCoord, yCoord - 1, zCoord, progress);
-		}
+		progress += 2.5 * distance;
 	}
 
 	private boolean canEntityDust(Entity entity) {
@@ -142,7 +149,7 @@ public class TileDuster extends TileSyncBase {
 		chanceModifier = tag.getDouble("chanceModifier");
 		height = tag.getDouble("height");
 		targetHeight = tag.getDouble("targetHeight");
-		progress = tag.getInteger("meta");
+		progress = tag.getDouble("progress");
 		maxProgress = tag.getInteger("maxProgress");
 		int numComponents = tag.getInteger("components");
 		for (int i = 0; i < numComponents; i++) {
@@ -156,7 +163,7 @@ public class TileDuster extends TileSyncBase {
 		tag.setDouble("chanceModifier", chanceModifier);
 		tag.setDouble("height", height);
 		tag.setDouble("targetHeight", targetHeight);
-		tag.setInteger("meta", progress);
+		tag.setDouble("progress", progress);
 		tag.setInteger("maxProgress", maxProgress);
 		tag.setInteger("components", components.size());
 		for (int i = 0; i < components.size(); i++) {
@@ -168,7 +175,7 @@ public class TileDuster extends TileSyncBase {
 	@Override
 	public NBTTagCompound writeToSyncNBT(NBTTagCompound tag) {
 		tag.setDouble("targetHeight", targetHeight);
-		tag.setInteger("progress", progress);
+		tag.setDouble("progress", progress);
 		return tag;
 	}
 
