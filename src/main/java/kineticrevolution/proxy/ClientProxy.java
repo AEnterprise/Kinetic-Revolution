@@ -1,9 +1,9 @@
 package kineticrevolution.proxy;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
+import kineticrevolution.duster.TESRDuster;
+import kineticrevolution.duster.TileDuster;
 import kineticrevolution.render.models.RendererGenerator;
-import kineticrevolution.render.tesr.TESRDuster;
-import kineticrevolution.tileEntities.TileDuster;
 import kineticrevolution.tileEntities.TileKineticGenerator;
 
 /**

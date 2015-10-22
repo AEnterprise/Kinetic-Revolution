@@ -2,10 +2,10 @@ package kineticrevolution.loaders;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import kineticrevolution.blocks.BlockDuster;
+import kineticrevolution.duster.TileDuster;
 import kineticrevolution.lib.Names;
 import kineticrevolution.multiblocks.blocks.BlockGeneratorCasing;
 import kineticrevolution.multiblocks.blocks.BlockGeneratorInductor;
-import kineticrevolution.tileEntities.TileDuster;
 import kineticrevolution.tileEntities.TileKineticGenerator;
 import kineticrevolution.tileEntities.TileMultiBlockBase;
 import net.minecraft.block.Block;

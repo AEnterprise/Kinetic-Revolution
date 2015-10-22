@@ -1,6 +1,5 @@
-package kineticrevolution.render.tesr;
+package kineticrevolution.duster;
 
-import kineticrevolution.tileEntities.TileDuster;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;

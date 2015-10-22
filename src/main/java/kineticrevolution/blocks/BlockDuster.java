@@ -1,7 +1,7 @@
 package kineticrevolution.blocks;
 
+import kineticrevolution.duster.TileDuster;
 import kineticrevolution.lib.Names;
-import kineticrevolution.tileEntities.TileDuster;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
