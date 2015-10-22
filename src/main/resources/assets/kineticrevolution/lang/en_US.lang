@@ -2,12 +2,12 @@
 
 # Creative Tabs #
 itemGroup.kineticrevolution=Kinetic Revolution
-itemGroup.krDusts=Kinetic Revolution: Dusts
+itemGroup.krDusts=KR: Dusts
 
 ## Blocks ##
 
 # Duster #
-tile.dusterBasic.name=Basic Duster
+tile.duster.name=Duster
 
 ## Items ##
 
@@ -16,6 +16,16 @@ item.machineConfigurator.name=Machine Configurator
 
 # Resources #
 item.grindingWheel.name=Grinding Wheel
+item.springTin.name=Tin Spring
+item.springSilver.name=Silver Spring
+item.springLead.name=Lead Spring
+item.springIron.name=Iron Spring
+item.springGold.name=Gold Spring
+item.springEnderium.name=Enderium Spring
+item.springElectrum.name=Electrum Spring
+item.springDiamond.name=Diamond Spring
+item.springCopper.name=Copper Spring
+item.springBronze.name=Bronze Spring
 
 # Dusts #
 item.dust.name=%s Dust

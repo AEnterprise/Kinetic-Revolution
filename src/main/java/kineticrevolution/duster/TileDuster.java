@@ -1,59 +1,74 @@
 package kineticrevolution.duster;
 
+import java.util.EnumSet;
+import java.util.List;
+
 import com.google.common.collect.Lists;
-import kineticrevolution.loaders.BlockLoader;
-import kineticrevolution.recipes.DusterRecipeManager;
-import kineticrevolution.recipes.IChancedOutput;
-import kineticrevolution.recipes.IDusterRecipe;
-import kineticrevolution.tileEntities.TileSyncBase;
-import kineticrevolution.util.Utils;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import net.minecraftforge.common.util.Constants;
+
+import kineticrevolution.lib.UUIDs;
+import kineticrevolution.loaders.BlockLoader;
+import kineticrevolution.recipes.DusterRecipeManager;
+import kineticrevolution.recipes.IChancedOutput;
+import kineticrevolution.recipes.IDusterRecipe;
+import kineticrevolution.tileEntities.TileSyncBase;
+import kineticrevolution.util.PlayerUtils;
+import kineticrevolution.util.Utils;
 
 /**
  * Created by AEnterprise
  */
 public class TileDuster extends TileSyncBase {
-	private static final AxisAlignedBB box = AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1);
-	private double targetHeight = 1.0;
-	private double chanceModifier;
-	private double height = 1.0;
-	//MC resets the client TE when the meta changes we're not using meta
-	private double progress;
+
+	public static final AxisAlignedBB DEFAULT_BOX = AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1);
+
+	private final EnumSet<Components> components = EnumSet.noneOf(Components.class);
+	private double chanceModifier = 0;
+	private double targetHeight = 1;
+	private double height = 1;
 	private int maxProgress = 20;
-	private ArrayList<Components> components = new ArrayList<Components>();
+	private int progress = 0;
+	private int breakProgress = -1;
 
 	@Override
 	public void updateEntity() {
-		super.updateEntity();
+		if (worldObj.isRemote)
+			return;
 		if (height > targetHeight) {
 			height -= 0.05;
 			spawnParticles(10);
 		}
 		if (progress >= maxProgress) {
-			progress -= maxProgress;
+			progress = 0;
+			targetHeight = 1;
+			height = 1;
+			breakProgress = -1;
+			worldObj.destroyBlockInWorldPartially(0, xCoord, yCoord - 1, zCoord, breakProgress);
 			IDusterRecipe recipe = DusterRecipeManager.getRecipe(worldObj, xCoord, yCoord - 1, zCoord);
-			if (recipe == null)
+			if (recipe == null) {
+				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 				return;
-			worldObj.destroyBlockInWorldPartially(100, xCoord, yCoord - 1, zCoord, 0);
+			}
 			spawnParticles(100);
-			targetHeight = 1.0;
-			worldObj.setBlock(xCoord, yCoord - 1, zCoord, BlockLoader.duster, 0, 2);
+			worldObj.setBlock(xCoord, yCoord - 1, zCoord, BlockLoader.duster, 0, 3);
 			NBTTagCompound tag = new NBTTagCompound();
+			yCoord--;
 			writeToNBT(tag);
-			tag.setInteger("y", yCoord - 1);
+			yCoord++;
 			TileEntity tileEntity = worldObj.getTileEntity(xCoord, yCoord - 1, zCoord);
 			if (tileEntity != null)
 				tileEntity.readFromNBT(tag);
@@ -64,9 +79,17 @@ public class TileDuster extends TileSyncBase {
 		} else {
 			double old = targetHeight;
 			targetHeight = 1.0 - (progress * 0.8 / maxProgress);
+			breakProgress = (int) ((progress * 10D) / maxProgress);
 			if (old != targetHeight) {
+				IDusterRecipe recipe = DusterRecipeManager.getRecipe(worldObj, xCoord, yCoord - 1, zCoord);
+				if (recipe == null) {
+					progress = 0;
+					targetHeight = 1;
+					height = 1;
+					breakProgress = -1;
+				}
 				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-				worldObj.destroyBlockInWorldPartially(100, xCoord, yCoord - 1, zCoord, (int) (progress * 10) / maxProgress);
+				worldObj.destroyBlockInWorldPartially(0, xCoord, yCoord - 1, zCoord, breakProgress);
 			}
 		}
 	}
@@ -74,8 +97,8 @@ public class TileDuster extends TileSyncBase {
 	public void onFallenUpon(Entity entity, float distance) {
 		if (distance < 0.8 || height > targetHeight || !canEntityDust(entity))
 			return;
-		//corjaantje asked for ligning, here it is
-		if (entity instanceof EntityPlayer && ((EntityPlayer) entity).getGameProfile().getId().equals(UUID.fromString("209f3364-0042-4d2a-b539-8640e6bbd6c1"))) {
+		//Corjaantje asked for lightning, so here it is ;)
+		if (entity instanceof EntityPlayer && PlayerUtils.playerMatches(UUIDs.CORJAANTJE, (EntityPlayer) entity)) {
 			worldObj.addWeatherEffect(new EntityLightningBolt(worldObj, xCoord, yCoord, zCoord));
 		}
 		IDusterRecipe recipe = DusterRecipeManager.getRecipe(worldObj, xCoord, yCoord - 1, zCoord);
@@ -92,17 +115,18 @@ public class TileDuster extends TileSyncBase {
 		return false;
 	}
 
-	public void installComponent(Components component) {
+	public boolean installComponent(Components component) {
 		if (!components.contains(component))
-			components.add(component);
+			return components.add(component);
+		return false;
 	}
 
-	public void removeComponent(Components component) {
-		components.remove(component);
+	public boolean removeComponent(Components component) {
+		return components.remove(component);
 	}
 
 	public AxisAlignedBB getBox() {
-		return box.copy().offset(0, height - 1, 0);
+		return DEFAULT_BOX.copy().offset(0, height - 1, 0);
 	}
 
 
@@ -144,44 +168,34 @@ public class TileDuster extends TileSyncBase {
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound tag) {
-		super.readFromNBT(tag);
+	public void readFromCustomNBT(NBTTagCompound tag) {
 		chanceModifier = tag.getDouble("chanceModifier");
 		height = tag.getDouble("height");
 		targetHeight = tag.getDouble("targetHeight");
-		progress = tag.getDouble("progress");
 		maxProgress = tag.getInteger("maxProgress");
-		int numComponents = tag.getInteger("components");
-		for (int i = 0; i < numComponents; i++) {
-			components.add(Components.values()[tag.getInteger("component" + i)]);
+		progress = tag.getInteger("progress");
+		breakProgress = tag.getInteger("breakProgress");
+		if (worldObj != null)
+			worldObj.destroyBlockInWorldPartially(0, xCoord, yCoord - 1, zCoord, breakProgress);
+		NBTTagList tagList = tag.getTagList("components", Constants.NBT.TAG_STRING);
+		for (int i = 0; i < tagList.tagCount(); i++) {
+			components.add(Components.getComponent(tagList.getStringTagAt(i)));
 		}
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound tag) {
-		super.writeToNBT(tag);
+	public void writeToCustomNBT(NBTTagCompound tag) {
 		tag.setDouble("chanceModifier", chanceModifier);
 		tag.setDouble("height", height);
 		tag.setDouble("targetHeight", targetHeight);
-		tag.setDouble("progress", progress);
 		tag.setInteger("maxProgress", maxProgress);
+		tag.setInteger("progress", progress);
+		tag.setInteger("breakProgress", breakProgress);
 		tag.setInteger("components", components.size());
-		for (int i = 0; i < components.size(); i++) {
-			tag.setInteger("component" + i, components.get(i).ordinal());
+		NBTTagList tagList = new NBTTagList();
+		for (Components component : components) {
+			tagList.appendTag(new NBTTagString(component.getName()));
 		}
-	}
-
-
-	@Override
-	public NBTTagCompound writeToSyncNBT(NBTTagCompound tag) {
-		tag.setDouble("targetHeight", targetHeight);
-		tag.setDouble("progress", progress);
-		return tag;
-	}
-
-	@Override
-	public void readFromSyncNBT(NBTTagCompound tag) {
-		targetHeight = tag.getDouble("targetHeight");
-		progress = tag.getInteger("progress");
+		tag.setTag("components", tagList);
 	}
 }

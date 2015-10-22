@@ -1,4 +1,4 @@
-package kineticrevolution.render.models;
+package kineticrevolution.client.render.models;
 
 import kineticrevolution.lib.Reference;
 import kineticrevolution.multiblocks.interfaces.IMultiBlock;

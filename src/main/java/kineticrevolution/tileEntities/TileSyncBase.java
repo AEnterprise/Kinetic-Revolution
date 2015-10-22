@@ -13,15 +13,29 @@ public abstract class TileSyncBase extends TileEntity {
 
 	@Override
 	public Packet getDescriptionPacket() {
-		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, writeToSyncNBT(new NBTTagCompound()));
+		NBTTagCompound tag = new NBTTagCompound();
+		writeToCustomNBT(tag);
+		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, getBlockMetadata(), tag);
 	}
 
 	@Override
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
-		readFromSyncNBT(pkt.func_148857_g());
+		readFromCustomNBT(pkt.func_148857_g());
 	}
 
-	public abstract NBTTagCompound writeToSyncNBT(NBTTagCompound tag);
+	@Override
+	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
+		readFromCustomNBT(tag);
+	}
 
-	public abstract void readFromSyncNBT(NBTTagCompound tag);
+	@Override
+	public void writeToNBT(NBTTagCompound tag) {
+		super.writeToNBT(tag);
+		writeToCustomNBT(tag);
+	}
+
+	public abstract void writeToCustomNBT(NBTTagCompound tag);
+
+	public abstract void readFromCustomNBT(NBTTagCompound tag);
 }
