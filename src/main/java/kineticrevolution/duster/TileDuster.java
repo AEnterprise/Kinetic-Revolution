@@ -18,6 +18,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,6 +33,7 @@ public class TileDuster extends TileSyncBase {
 	//MC resets the client TE when the meta changes we're not using meta
 	private int progress;
 	private int maxProgress = 10;
+	private ArrayList<Components> components = new ArrayList<Components>();
 
 	@Override
 	public void updateEntity() {
@@ -42,16 +44,10 @@ public class TileDuster extends TileSyncBase {
 		}
 	}
 
-	protected void spawnParticles(int amount) {
-		if (!worldObj.isRemote && worldObj instanceof WorldServer) {
-			((WorldServer) worldObj).func_147487_a("blockcrack_" + Block.getIdFromBlock(worldObj.getBlock(xCoord, yCoord - 1, zCoord)) + "_" + worldObj.getBlock(xCoord, yCoord - 1, zCoord).damageDropped(worldObj.getBlockMetadata(xCoord, yCoord - 1, zCoord)),
-					xCoord + 0.5, yCoord + height, zCoord + 0.5, amount, 0, 0, 0, 0.075);
-		}
-	}
-
 	public void onFallenUpon(Entity entity, float distance) {
-		if (distance < 0.8 || height > targetHeight)
+		if (distance < 0.8 || height > targetHeight || !canEntityDust(entity))
 			return;
+		//corjaantje asked for ligning, here it is
 		if (entity instanceof EntityPlayer && ((EntityPlayer) entity).getGameProfile().getId().equals(UUID.fromString("209f3364-0042-4d2a-b539-8640e6bbd6c1"))) {
 			worldObj.addWeatherEffect(new EntityLightningBolt(worldObj, xCoord, yCoord, zCoord));
 		}
@@ -79,6 +75,23 @@ public class TileDuster extends TileSyncBase {
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			worldObj.destroyBlockInWorldPartially(100, xCoord, yCoord - 1, zCoord, progress);
 		}
+	}
+
+	private boolean canEntityDust(Entity entity) {
+		for (Components component : components) {
+			if (component.canEntityDust(entity))
+				return true;
+		}
+		return false;
+	}
+
+	public void installComponent(Components component) {
+		if (!components.contains(component))
+			components.add(component);
+	}
+
+	public void removeComponent(Components component) {
+		components.remove(component);
 	}
 
 	public AxisAlignedBB getBox() {
@@ -112,6 +125,13 @@ public class TileDuster extends TileSyncBase {
 		return outputs;
 	}
 
+	protected void spawnParticles(int amount) {
+		if (!worldObj.isRemote && worldObj instanceof WorldServer) {
+			((WorldServer) worldObj).func_147487_a("blockcrack_" + Block.getIdFromBlock(worldObj.getBlock(xCoord, yCoord - 1, zCoord)) + "_" + worldObj.getBlock(xCoord, yCoord - 1, zCoord).damageDropped(worldObj.getBlockMetadata(xCoord, yCoord - 1, zCoord)),
+					xCoord + 0.5, yCoord + height, zCoord + 0.5, amount, 0, 0, 0, 0.075);
+		}
+	}
+
 	public double getHeight() {
 		return height;
 	}
@@ -123,6 +143,11 @@ public class TileDuster extends TileSyncBase {
 		height = tag.getDouble("height");
 		targetHeight = tag.getDouble("targetHeight");
 		progress = tag.getInteger("meta");
+		maxProgress = tag.getInteger("maxProgress");
+		int numComponents = tag.getInteger("components");
+		for (int i = 0; i < numComponents; i++) {
+			components.add(Components.values()[tag.getInteger("component" + i)]);
+		}
 	}
 
 	@Override
@@ -132,6 +157,11 @@ public class TileDuster extends TileSyncBase {
 		tag.setDouble("height", height);
 		tag.setDouble("targetHeight", targetHeight);
 		tag.setInteger("meta", progress);
+		tag.setInteger("maxProgress", maxProgress);
+		tag.setInteger("components", components.size());
+		for (int i = 0; i < components.size(); i++) {
+			tag.setInteger("component" + i, components.get(i).ordinal());
+		}
 	}
 
 
