@@ -9,6 +9,8 @@ import kineticrevolution.tileEntities.TileSyncBase;
 import kineticrevolution.util.Utils;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.effect.EntityLightningBolt;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -17,6 +19,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by AEnterprise
@@ -49,6 +52,9 @@ public class TileDuster extends TileSyncBase {
 	public void onFallenUpon(Entity entity, float distance) {
 		if (distance < 0.8 || height > targetHeight)
 			return;
+		if (entity instanceof EntityPlayer && ((EntityPlayer) entity).getGameProfile().getId().equals(UUID.fromString("209f3364-0042-4d2a-b539-8640e6bbd6c1"))) {
+			worldObj.addWeatherEffect(new EntityLightningBolt(worldObj, xCoord, yCoord, zCoord));
+		}
 		IDusterRecipe recipe = DusterRecipeManager.getRecipe(worldObj, xCoord, yCoord - 1, zCoord);
 		if (recipe == null)
 			return;
