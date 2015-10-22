@@ -11,7 +11,16 @@ public class Names {
 		public static class Resources {
 
 			public static final String GRINDING_WHEEL = "grindingWheel";
-
+			public static final String SPRING_TIN = "springTin";
+			public static final String SPRING_SILVER = "springSilver";
+			public static final String SPRING_LEAD = "springLead";
+			public static final String SPRING_IRON = "springIron";
+			public static final String SPRING_GOLD = "springGold";
+			public static final String SPRING_ENDERIUM = "springEnderium";
+			public static final String SPRING_ELECTRUM = "springElectrum";
+			public static final String SPRING_DIAMOND = "springDiamond";
+			public static final String SPRING_COPPER = "springCopper";
+			public static final String SPRING_BRONZE = "springBronze";
 		}
 
 	}
