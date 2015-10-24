@@ -1,13 +1,12 @@
 package kineticrevolution.duster;
 
+import kineticrevolution.lib.Reference;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
-
-import kineticrevolution.lib.Reference;
 
 /**
  * Created by AEnterprise
@@ -32,44 +31,44 @@ public class TESRDuster extends TileEntitySpecialRenderer {
 		double d = 1D / 8192;
 
 		//NORTH
-		tessellator.addVertexWithUV(0 + d, 0 + d, 0 + d, 1, 1);
-		tessellator.addVertexWithUV(0 + d, 1 - d, 0 + d, 1, 0);
-		tessellator.addVertexWithUV(1 - d, 1 - d, 0 + d, 0, 0);
-		tessellator.addVertexWithUV(1 - d, 0 + d, 0 + d, 0, 1);
+		tessellator.addVertexWithUV(0 - d, 0 - d, 0 - d, 1, 1);
+		tessellator.addVertexWithUV(0 - d, 1 + d, 0 - d, 1, 0);
+		tessellator.addVertexWithUV(1 + d, 1 + d, 0 - d, 0, 0);
+		tessellator.addVertexWithUV(1 + d, 0 - d, 0 - d, 0, 1);
 
 		//EAST
-		tessellator.addVertexWithUV(1 - d, 0 + d, 0 + d, 0, 1);
-		tessellator.addVertexWithUV(1 - d, 1 - d, 0 + d, 0, 0);
-		tessellator.addVertexWithUV(1 - d, 1 - d, 1 - d, 1, 0);
-		tessellator.addVertexWithUV(1 - d, 0 + d, 1 - d, 1, 1);
+		tessellator.addVertexWithUV(1 + d, 0 - d, 0 - d, 0, 1);
+		tessellator.addVertexWithUV(1 + d, 1 + d, 0 - d, 0, 0);
+		tessellator.addVertexWithUV(1 + d, 1 + d, 1 + d, 1, 0);
+		tessellator.addVertexWithUV(1 + d, 0 - d, 1 + d, 1, 1);
 
 		//SOUTH
-		tessellator.addVertexWithUV(1 - d, 0 + d, 1 - d, 0, 1);
-		tessellator.addVertexWithUV(1 - d, 1 - d, 1 - d, 0, 0);
-		tessellator.addVertexWithUV(0 + d, 1 - d, 1 - d, 1, 0);
-		tessellator.addVertexWithUV(0 + d, 0 + d, 1 - d, 1, 1);
+		tessellator.addVertexWithUV(1 + d, 0 - d, 1 + d, 0, 1);
+		tessellator.addVertexWithUV(1 + d, 1 + d, 1 + d, 0, 0);
+		tessellator.addVertexWithUV(0 - d, 1 + d, 1 + d, 1, 0);
+		tessellator.addVertexWithUV(0 - d, 0 - d, 1 + d, 1, 1);
 
 		//WEST
-		tessellator.addVertexWithUV(0 + d, 0 + d, 1 - d, 1, 1);
-		tessellator.addVertexWithUV(0 + d, 1 - d, 1 - d, 1, 0);
-		tessellator.addVertexWithUV(0 + d, 1 - d, 0 + d, 0, 0);
-		tessellator.addVertexWithUV(0 + d, 0 + d, 0 + d, 0, 1);
+		tessellator.addVertexWithUV(0 - d, 0 - d, 1 + d, 1, 1);
+		tessellator.addVertexWithUV(0 - d, 1 + d, 1 + d, 1, 0);
+		tessellator.addVertexWithUV(0 - d, 1 + d, 0 - d, 0, 0);
+		tessellator.addVertexWithUV(0 - d, 0 - d, 0 - d, 0, 1);
 
 		tessellator.draw();
 
 		tessellator.startDrawingQuads();
 
 		//BOTTOM
-		tessellator.addVertexWithUV(1 - d, 0 + d, 0 + d, 1, 1);
-		tessellator.addVertexWithUV(1 - d, 0 + d, 1 - d, 1, 0);
-		tessellator.addVertexWithUV(0 + d, 0 + d, 1 - d, 0, 0);
-		tessellator.addVertexWithUV(0 + d, 0 + d, 0 + d, 0, 1);
+		tessellator.addVertexWithUV(1, 0, 0, 1, 1);
+		tessellator.addVertexWithUV(1, 0, 1, 1, 0);
+		tessellator.addVertexWithUV(0, 0, 1, 0, 0);
+		tessellator.addVertexWithUV(0, 0, 0, 0, 1);
 
 		//TOP
-		tessellator.addVertexWithUV(0 + d, 1 - d, 0 + d, 0, 1);
-		tessellator.addVertexWithUV(0 + d, 1 - d, 1 - d, 0, 0);
-		tessellator.addVertexWithUV(1 - d, 1 - d, 1 - d, 1, 0);
-		tessellator.addVertexWithUV(1 - d, 1 - d, 0 + d, 1, 1);
+		tessellator.addVertexWithUV(0, 1, 0, 0, 1);
+		tessellator.addVertexWithUV(0, 1, 1, 0, 0);
+		tessellator.addVertexWithUV(1, 1, 1, 1, 0);
+		tessellator.addVertexWithUV(1, 1, 0, 1, 1);
 
 		tessellator.draw();
 
