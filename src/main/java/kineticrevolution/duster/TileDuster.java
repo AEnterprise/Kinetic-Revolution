@@ -1,10 +1,14 @@
 package kineticrevolution.duster;
 
-import java.util.EnumSet;
-import java.util.List;
-
 import com.google.common.collect.Lists;
-
+import kineticrevolution.lib.UUIDs;
+import kineticrevolution.loaders.BlockLoader;
+import kineticrevolution.recipes.DusterRecipeManager;
+import kineticrevolution.recipes.IChancedOutput;
+import kineticrevolution.recipes.IDusterRecipe;
+import kineticrevolution.tileEntities.TileSyncBase;
+import kineticrevolution.util.PlayerUtils;
+import kineticrevolution.util.Utils;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.EntityLightningBolt;
@@ -17,17 +21,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-
 import net.minecraftforge.common.util.Constants;
 
-import kineticrevolution.lib.UUIDs;
-import kineticrevolution.loaders.BlockLoader;
-import kineticrevolution.recipes.DusterRecipeManager;
-import kineticrevolution.recipes.IChancedOutput;
-import kineticrevolution.recipes.IDusterRecipe;
-import kineticrevolution.tileEntities.TileSyncBase;
-import kineticrevolution.util.PlayerUtils;
-import kineticrevolution.util.Utils;
+import java.util.EnumSet;
+import java.util.List;
 
 /**
  * Created by AEnterprise
@@ -104,7 +101,11 @@ public class TileDuster extends TileSyncBase {
 		IDusterRecipe recipe = DusterRecipeManager.getRecipe(worldObj, xCoord, yCoord - 1, zCoord);
 		if (recipe == null)
 			return;
-		progress += 2.5 * distance;
+		double addedProgress = 2.5 * distance;
+		for (Components component : components) {
+			addedProgress *= component.getProgressModifier();
+		}
+		progress += addedProgress;
 	}
 
 	private boolean canEntityDust(Entity entity) {
@@ -116,8 +117,10 @@ public class TileDuster extends TileSyncBase {
 	}
 
 	public boolean installComponent(Components component) {
-		if (!components.contains(component))
+		if (!components.contains(component)) {
+			maxProgress *= component.getMaxProgressModifier();
 			return components.add(component);
+		}
 		return false;
 	}
 

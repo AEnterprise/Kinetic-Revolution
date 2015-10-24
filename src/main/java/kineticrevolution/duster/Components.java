@@ -52,4 +52,13 @@ public enum Components {
 	public boolean canEntityDust(Entity entity) {
 		return false;
 	}
+
+
+	public double getMaxProgressModifier() {
+		return 1;
+	}
+
+	public double getProgressModifier() {
+		return 1;
+	}
 }
