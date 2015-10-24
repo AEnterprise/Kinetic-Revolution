@@ -2,7 +2,6 @@ package kineticrevolution.duster;
 
 import com.google.common.collect.Lists;
 import kineticrevolution.lib.UUIDs;
-import kineticrevolution.loaders.BlockLoader;
 import kineticrevolution.recipes.DusterRecipeManager;
 import kineticrevolution.recipes.IChancedOutput;
 import kineticrevolution.recipes.IDusterRecipe;
@@ -17,7 +16,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -55,22 +53,13 @@ public class TileDuster extends TileSyncBase {
 			height = 1;
 			breakProgress = -1;
 			worldObj.destroyBlockInWorldPartially(0, xCoord, yCoord - 1, zCoord, breakProgress);
+			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			IDusterRecipe recipe = DusterRecipeManager.getRecipe(worldObj, xCoord, yCoord - 1, zCoord);
 			if (recipe == null) {
-				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 				return;
 			}
 			spawnParticles(100);
-			worldObj.setBlock(xCoord, yCoord - 1, zCoord, BlockLoader.duster, 0, 3);
-			NBTTagCompound tag = new NBTTagCompound();
-			yCoord--;
-			writeToNBT(tag);
-			yCoord++;
-			TileEntity tileEntity = worldObj.getTileEntity(xCoord, yCoord - 1, zCoord);
-			if (tileEntity != null)
-				tileEntity.readFromNBT(tag);
-			worldObj.setBlockToAir(xCoord, yCoord, zCoord);
-
+			worldObj.setBlockToAir(xCoord, yCoord - 1, zCoord);
 			handleOutputs(worldObj, xCoord, yCoord, zCoord, getOutputs(recipe));
 
 		} else {
