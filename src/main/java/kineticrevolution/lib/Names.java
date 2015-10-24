@@ -31,14 +31,14 @@ public class Names {
 		public static final String GENERATOR_INDUCTOR = "generatorInductor";
 
 		public static final String DUSTER = "duster";
-		public static final String DUSTER_BASIC = "Basic";
 
 	}
 
 	public static class TileEntities {
 
-		public static final String MULTIBLOCK_BASE = "tileMultiBlockTest";
+		public static final String MULTIBLOCK_BASE = "tileMultiBlockBase";
 		public static final String MULTIBLOCK_GENERATOR = "tileKineticGenerator";
+		public static final String DUSTER = "tileDuster";
 
 	}
 

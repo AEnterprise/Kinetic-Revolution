@@ -37,6 +37,14 @@ public enum Components {
 		this.name = name;
 	}
 
+	public static Components getComponent(String name) {
+		for (Components c : values()) {
+			if (c.name.equalsIgnoreCase(name))
+				return c;
+		}
+		return null;
+	}
+
 	public String getName() {
 		return name;
 	}

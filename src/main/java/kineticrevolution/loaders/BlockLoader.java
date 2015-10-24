@@ -28,7 +28,7 @@ public class BlockLoader {
 
 		GameRegistry.registerTileEntity(TileMultiBlockBase.class, Names.TileEntities.MULTIBLOCK_BASE);
 		GameRegistry.registerTileEntity(TileKineticGenerator.class, Names.TileEntities.MULTIBLOCK_GENERATOR);
-		GameRegistry.registerTileEntity(TileDuster.class, "TileDuster");
+		GameRegistry.registerTileEntity(TileDuster.class, Names.TileEntities.DUSTER);
 	}
 
 	public static void addRecipes() {

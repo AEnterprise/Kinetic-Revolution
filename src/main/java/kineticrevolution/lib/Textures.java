@@ -32,4 +32,10 @@ public class Textures {
 
 	}
 
+	public static class CTabs {
+
+		public static final String SEARCH_BAR_BACKGROUND = "item_search.png";
+
+	}
+
 }

@@ -1,16 +1,18 @@
 package kineticrevolution.blocks;
 
-import kineticrevolution.duster.Components;
-import kineticrevolution.duster.TileDuster;
-import kineticrevolution.lib.Names;
-import kineticrevolution.loaders.ItemLoader;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import kineticrevolution.duster.Components;
+import kineticrevolution.duster.TileDuster;
+import kineticrevolution.lib.Names;
+import kineticrevolution.loaders.ItemLoader;
 
 public class BlockDuster extends BlockBase {
 
@@ -21,42 +23,69 @@ public class BlockDuster extends BlockBase {
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int meta, float hitX, float hitY, float hitZ) {
 		ItemStack stack = player.getCurrentEquippedItem();
-		if (stack.getItem() == ItemLoader.resourceItem) {
-			TileEntity e = world.getTileEntity(x, y, z);
-			TileDuster duster = null;
-			if (e instanceof TileDuster) {
-				duster = (TileDuster) e;
-			} else {
-				return false;
-			}
-			switch (stack.getItemDamage()) {
-				//tin spring
-				case 1:
-					duster.installComponent(Components.PLAYER_PRESSURE_PLATE);
-					break;
-				//silver spring
-				case 2:
-					duster.installComponent(Components.SLIME_PRESSURE_PLATE);
-					break;
-				//lead spring
-				case 3:
-					duster.installComponent(Components.ANVIL_PRESSURE_PLATE);
-					break;
-				//iron spring
-				case 4:
-					duster.removeComponent(Components.PLAYER_PRESSURE_PLATE);
-					break;
-				//gold spring
-				case 5:
-					duster.removeComponent(Components.SLIME_PRESSURE_PLATE);
-					break;
-				//enderium spring
-				case 6:
-					duster.removeComponent(Components.ANVIL_PRESSURE_PLATE);
-					break;
+		if (!world.isRemote && stack != null && stack.getItem() == ItemLoader.resourceItem) {
+			TileEntity tile = world.getTileEntity(x, y, z);
+			if (tile instanceof TileDuster) {
+				TileDuster duster = (TileDuster) tile;
+				switch (stack.getItemDamage()) {
+					//tin spring
+					case 1:
+						if (duster.installComponent(Components.PLAYER_PRESSURE_PLATE)) {
+							player.addChatMessage(new ChatComponentText("Successfully installed " + Components.PLAYER_PRESSURE_PLATE));
+							return true;
+						} else {
+							player.addChatMessage(new ChatComponentText("ERROR: " + Components.PLAYER_PRESSURE_PLATE + " is already installed"));
+						}
+						break;
+					//silver spring
+					case 2:
+						if (duster.installComponent(Components.SLIME_PRESSURE_PLATE)) {
+							player.addChatMessage(new ChatComponentText("Successfully installed " + Components.SLIME_PRESSURE_PLATE));
+							return true;
+						} else {
+							player.addChatMessage(new ChatComponentText("ERROR: " + Components.SLIME_PRESSURE_PLATE + " is already installed"));
+						}
+						break;
+					//lead spring
+					case 3:
+						if (duster.installComponent(Components.ANVIL_PRESSURE_PLATE)) {
+							player.addChatMessage(new ChatComponentText("Successfully installed " + Components.ANVIL_PRESSURE_PLATE));
+							return true;
+						} else {
+							player.addChatMessage(new ChatComponentText("ERROR: " + Components.ANVIL_PRESSURE_PLATE + " is already installed"));
+						}
+						break;
+					//iron spring
+					case 4:
+						if (duster.removeComponent(Components.PLAYER_PRESSURE_PLATE)) {
+							player.addChatMessage(new ChatComponentText("Successfully removed " + Components.PLAYER_PRESSURE_PLATE));
+							return true;
+						} else {
+							player.addChatMessage(new ChatComponentText("ERROR: " + Components.PLAYER_PRESSURE_PLATE + " is not installed"));
+						}
+						break;
+					//gold spring
+					case 5:
+						if (duster.removeComponent(Components.SLIME_PRESSURE_PLATE)) {
+							player.addChatMessage(new ChatComponentText("Successfully removed " + Components.SLIME_PRESSURE_PLATE));
+							return true;
+						} else {
+							player.addChatMessage(new ChatComponentText("ERROR: " + Components.SLIME_PRESSURE_PLATE + " is not installed"));
+						}
+						break;
+					//enderium spring
+					case 6:
+						if (duster.removeComponent(Components.ANVIL_PRESSURE_PLATE)) {
+							player.addChatMessage(new ChatComponentText("Successfully removed " + Components.ANVIL_PRESSURE_PLATE));
+							return true;
+						} else {
+							player.addChatMessage(new ChatComponentText("ERROR: " + Components.ANVIL_PRESSURE_PLATE + " is not installed"));
+						}
+						break;
+				}
 			}
 		}
-		return true;
+		return false;
 	}
 
 	@Override
@@ -71,28 +100,23 @@ public class BlockDuster extends BlockBase {
 
 	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
-		AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1);
-		TileEntity entity = world.getTileEntity(x, y, z);
-		if (entity instanceof TileDuster) {
-			aabb = ((TileDuster) entity).getBox();
+		AxisAlignedBB aabb = TileDuster.DEFAULT_BOX;
+		TileEntity tile = world.getTileEntity(x, y, z);
+		if (tile instanceof TileDuster) {
+			aabb = ((TileDuster) tile).getBox();
 		}
 		setBlockBounds((float) aabb.minX, (float) aabb.minY, (float) aabb.minZ, (float) aabb.maxX, (float) aabb.maxY, (float) aabb.maxZ);
 	}
 
 	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
-		AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1);
-		TileEntity entity = world.getTileEntity(x, y, z);
-		if (entity instanceof TileDuster) {
-			aabb = ((TileDuster) entity).getBox();
-		}
-		return aabb.offset(x, y, z);
+		setBlockBoundsBasedOnState(world, x, y, z);
+		return super.getCollisionBoundingBoxFromPool(world, x, y, z);
 	}
 
 	@Override
 	public void setBlockBoundsForItemRender() {
-		AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1);
-		setBlockBounds((float) aabb.minX, (float) aabb.minY, (float) aabb.minZ, (float) aabb.maxX, (float) aabb.maxY, (float) aabb.maxZ);
+		setBlockBounds(0, 0, 0, 1, 1, 1);
 	}
 
 	@Override
@@ -104,7 +128,6 @@ public class BlockDuster extends BlockBase {
 	public boolean renderAsNormalBlock() {
 		return false;
 	}
-
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
