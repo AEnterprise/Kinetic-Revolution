@@ -14,8 +14,10 @@ import org.lwjgl.opengl.GL11;
  */
 public class TESRDuster extends TileEntitySpecialRenderer {
 
-	public final IModelCustom MODEL = AdvancedModelLoader.loadModel(new ResourceLocation(Reference.MOD_ID, "models/duster_frame.obj"));
-	private final ResourceLocation texture = new ResourceLocation(Reference.MOD_ID, "non-existant texture");
+	public final IModelCustom FRAME = AdvancedModelLoader.loadModel(new ResourceLocation(Reference.MOD_ID, "models/duster_frame.obj"));
+	public final IModelCustom DRILL = AdvancedModelLoader.loadModel(new ResourceLocation(Reference.MOD_ID, "models/duster_drill.obj"));
+	private final ResourceLocation FRAME_TEXTURE = new ResourceLocation(Reference.MOD_ID, "non-existant texture");
+	private final ResourceLocation DRILL_TEXTURE = new ResourceLocation(Reference.MOD_ID, "non-existant texture");
 
 	@Override
 	public void renderTileEntityAt(TileEntity entity, double x, double y, double z, float fl) {
@@ -24,9 +26,13 @@ public class TESRDuster extends TileEntitySpecialRenderer {
 		GL11.glPushMatrix();
 		RenderHelper.disableStandardItemLighting();
 
-		GL11.glTranslated(x + 0.5, y - 2 + ((TileDuster) entity).getHeight(), z + 0.5);
-		bindTexture(texture);
-		MODEL.renderAll();
+		GL11.glTranslated(x + 0.5, y - 1, z + 0.5);
+		bindTexture(FRAME_TEXTURE);
+		FRAME.renderAll();
+
+		GL11.glTranslated(0, -0.5, 0);
+		bindTexture(DRILL_TEXTURE);
+		//DRILL.renderAll();
 
 		GL11.glPopMatrix();
 		RenderHelper.enableStandardItemLighting();

@@ -2,6 +2,7 @@ package kineticrevolution.loaders;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import kineticrevolution.blocks.BlockDuster;
+import kineticrevolution.duster.BlockDusterFake;
 import kineticrevolution.duster.TileDuster;
 import kineticrevolution.lib.Names;
 import kineticrevolution.multiblocks.blocks.BlockGeneratorCasing;
@@ -17,6 +18,7 @@ public class BlockLoader {
 	public static Block generatorCasing;
 	public static Block generatorInductor;
 	public static Block duster;
+	public static Block dusterFake;
 
 	public static void init() {
 		//generator
@@ -25,6 +27,7 @@ public class BlockLoader {
 
 		//dusters
 		duster = new BlockDuster();
+		dusterFake = new BlockDusterFake();
 
 		GameRegistry.registerTileEntity(TileMultiBlockBase.class, Names.TileEntities.MULTIBLOCK_BASE);
 		GameRegistry.registerTileEntity(TileKineticGenerator.class, Names.TileEntities.MULTIBLOCK_GENERATOR);

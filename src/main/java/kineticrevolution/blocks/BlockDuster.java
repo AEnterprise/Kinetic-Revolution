@@ -1,5 +1,12 @@
 package kineticrevolution.blocks;
 
+import kineticrevolution.core.CTabs;
+import kineticrevolution.duster.Components;
+import kineticrevolution.duster.ItemBlockDuster;
+import kineticrevolution.duster.TileDuster;
+import kineticrevolution.lib.Names;
+import kineticrevolution.loaders.ItemLoader;
+import kineticrevolution.util.Location;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -9,15 +16,10 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import kineticrevolution.duster.Components;
-import kineticrevolution.duster.TileDuster;
-import kineticrevolution.lib.Names;
-import kineticrevolution.loaders.ItemLoader;
-
 public class BlockDuster extends BlockBase {
 
 	public BlockDuster() {
-		super(Names.Blocks.DUSTER);
+		super(Names.Blocks.DUSTER, Names.Blocks.DUSTER, Names.Blocks.DUSTER, CTabs.MAIN_TAB, ItemBlockDuster.class);
 	}
 
 	@Override
@@ -96,6 +98,26 @@ public class BlockDuster extends BlockBase {
 		if (tileEntity instanceof TileDuster) {
 			((TileDuster) tileEntity).onFallenUpon(entity, distance);
 		}
+	}
+
+	@Override
+	public boolean canPlaceBlockAt(World world, int x, int y, int z) {
+		for (Location location : TileDuster.LOCATIONS) {
+			Location l = location.copy().offset(x, y, z);
+			if (!world.isAirBlock(l.x, l.y, l.z)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	@Override
+	public void onBlockDestroyedByPlayer(World world, int x, int y, int z, int meta) {
+		for (Location l : TileDuster.LOCATIONS) {
+			Location location = l.copy().offset(x, y, z);
+			world.setBlockToAir(location.x, location.y, location.z);
+		}
+		world.setBlockToAir(x, y, z);
 	}
 
 	@Override

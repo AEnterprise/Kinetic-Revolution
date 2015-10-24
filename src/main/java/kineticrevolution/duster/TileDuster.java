@@ -6,6 +6,7 @@ import kineticrevolution.recipes.DusterRecipeManager;
 import kineticrevolution.recipes.IChancedOutput;
 import kineticrevolution.recipes.IDusterRecipe;
 import kineticrevolution.tileEntities.TileSyncBase;
+import kineticrevolution.util.Location;
 import kineticrevolution.util.PlayerUtils;
 import kineticrevolution.util.Utils;
 import net.minecraft.block.Block;
@@ -30,6 +31,24 @@ import java.util.List;
 public class TileDuster extends TileSyncBase {
 
 	public static final AxisAlignedBB DEFAULT_BOX = AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1);
+	public static final Location[] LOCATIONS = {
+			new Location(-1, 0, -1),
+			new Location(-1, 0, 0),
+			new Location(-1, 0, 1),
+			new Location(0, 0, -1),
+			new Location(0, 0, 1),
+			new Location(1, 0, -1),
+			new Location(1, 0, 0),
+			new Location(1, 0, 1),
+			new Location(-1, -1, -1),
+			new Location(-1, -1, 0),
+			new Location(-1, -1, 1),
+			new Location(0, -1, -1),
+			new Location(0, -1, 1),
+			new Location(1, -1, -1),
+			new Location(1, -1, 0),
+			new Location(1, -1, 1),
+	};
 
 	private final EnumSet<Components> components = EnumSet.noneOf(Components.class);
 	private double chanceModifier = 0;
@@ -189,5 +208,10 @@ public class TileDuster extends TileSyncBase {
 			tagList.appendTag(new NBTTagString(component.getName()));
 		}
 		tag.setTag("components", tagList);
+	}
+
+	@Override
+	public AxisAlignedBB getRenderBoundingBox() {
+		return INFINITE_EXTENT_AABB;
 	}
 }
