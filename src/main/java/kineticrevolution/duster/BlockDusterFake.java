@@ -2,7 +2,6 @@ package kineticrevolution.duster;
 
 import kineticrevolution.blocks.BlockBase;
 import kineticrevolution.util.Location;
-import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -17,23 +16,23 @@ import java.util.Random;
  * Created by AEnterprise
  */
 public class BlockDusterFake extends BlockBase {
-	private static AxisAlignedBB[] BOXES = {
-			AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1),
-			AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1),
-			AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1),
-			AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1),
-			AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1),
-			AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1),
-			AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1),
-			AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1),
-			AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1),
-			AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1),
-			AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1),
-			AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1),
-			AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1),
-			AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1),
-			AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1),
-			AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1)
+	private final AxisAlignedBB[] BOXES = {
+			AxisAlignedBB.getBoundingBox(0.65, 0, 0.65, 1, 1, 1),
+			AxisAlignedBB.getBoundingBox(0.65, 0, 0, 1, 1, 1),
+			AxisAlignedBB.getBoundingBox(0.65, 0, 0, 1, 1, 0.45),
+			AxisAlignedBB.getBoundingBox(0, 0, 0.65, 1, 1, 1),
+			AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 0.45),
+			AxisAlignedBB.getBoundingBox(0, 0, 0.65, 0.45, 1, 1),
+			AxisAlignedBB.getBoundingBox(0, 0, 0, 0.45, 1, 1),
+			AxisAlignedBB.getBoundingBox(0, 0, 0, 0.45, 1, 0.45),
+			AxisAlignedBB.getBoundingBox(0.65, 0, 0.65, 1, 1, 1),
+			AxisAlignedBB.getBoundingBox(0.65, 0, 0, 1, 1, 1),
+			AxisAlignedBB.getBoundingBox(0.65, 0, 0, 1, 1, 0.45),
+			AxisAlignedBB.getBoundingBox(0, 0, 0.65, 1, 1, 1),
+			AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 0.45),
+			AxisAlignedBB.getBoundingBox(0, 0, 0.65, 0.45, 1, 1),
+			AxisAlignedBB.getBoundingBox(0, 0, 0, 0.45, 1, 1),
+			AxisAlignedBB.getBoundingBox(0, 0, 0, 0.45, 1, 0.45)
 	};
 
 
@@ -96,27 +95,5 @@ public class BlockDusterFake extends BlockBase {
 	@Override
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
 		return new ArrayList<ItemStack>();
-	}
-
-	@Override
-	public void onFallenUpon(World world, int x, int y, int z, Entity entity, float distance) {
-		BOXES = new AxisAlignedBB[]{
-				AxisAlignedBB.getBoundingBox(0.65, 0, 0.65, 1, 1, 1),
-				AxisAlignedBB.getBoundingBox(0.65, 0, 0, 1, 1, 1),
-				AxisAlignedBB.getBoundingBox(0.65, 0, 0, 1, 1, 0.45),
-				AxisAlignedBB.getBoundingBox(0, 0, 0.65, 1, 1, 1),
-				AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 0.45),
-				AxisAlignedBB.getBoundingBox(0, 0, 0.65, 0.45, 1, 1),
-				AxisAlignedBB.getBoundingBox(0, 0, 0, 0.45, 1, 1),
-				AxisAlignedBB.getBoundingBox(0, 0, 0, 0.45, 1, 0.45),
-				AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1),
-				AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1),
-				AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1),
-				AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1),
-				AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1),
-				AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1),
-				AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1),
-				AxisAlignedBB.getBoundingBox(0, 0, 0, 1, 1, 1)
-		};
 	}
 }
