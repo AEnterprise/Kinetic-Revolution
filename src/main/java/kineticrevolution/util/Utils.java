@@ -12,7 +12,6 @@ import net.minecraft.network.play.client.C07PacketPlayerDigging;
 import net.minecraft.network.play.server.S23PacketBlockChange;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.event.world.BlockEvent;
@@ -75,10 +74,8 @@ public class Utils {
 	}
 
 	public static boolean harvestBlock(World world, int x, int y, int z, EntityPlayer player) {
-		if (!(world instanceof WorldServer))
-			return false;
 		if (player == null) {
-			player = FakePlayerFactory.get((WorldServer) world, FAKEPLAYER_USER_PROFILE);
+			player = FakePlayerFactory.get(Minecraft.getMinecraft().getIntegratedServer().worldServerForDimension(world.provider.dimensionId), FAKEPLAYER_USER_PROFILE);
 			player.setPosition(x, y, z);
 		}
 		if (world.isAirBlock(x, y, z))
