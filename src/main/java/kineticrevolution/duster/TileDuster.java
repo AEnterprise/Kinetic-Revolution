@@ -163,11 +163,15 @@ public class TileDuster extends TileSyncBase {
 	@Override
 	public void readFromCustomNBT(NBTTagCompound tag) {
 		chanceModifier = tag.getDouble("chanceModifier");
-		height = tag.getDouble("height");
-		targetHeight = tag.getDouble("targetHeight");
+		if (tag.hasKey("height"))
+			height = tag.getDouble("height");
+		if (tag.hasKey("targetHeight"))
+			targetHeight = tag.getDouble("targetHeight");
 		maxProgress = tag.getInteger("maxProgress");
-		progress = tag.getInteger("progress");
-		breakProgress = tag.getInteger("breakProgress");
+		if (tag.hasKey("progress"))
+			progress = tag.getInteger("progress");
+		if (tag.hasKey("breakProgress"))
+			breakProgress = tag.getInteger("breakProgress");
 		if (worldObj != null)
 			worldObj.destroyBlockInWorldPartially(0, xCoord, yCoord - 1, zCoord, breakProgress);
 		NBTTagList tagList = tag.getTagList("components", Constants.NBT.TAG_STRING);

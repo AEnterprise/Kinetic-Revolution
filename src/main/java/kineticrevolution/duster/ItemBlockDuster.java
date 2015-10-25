@@ -26,6 +26,13 @@ public class ItemBlockDuster extends ItemBlock {
 			Location location = BlockDuster.LOCATIONS[i].copy().offset(x, y, z);
 			world.setBlock(location.x, location.y, location.z, BlockLoader.dusterFake, i, 3);
 		}
+		if (stack.stackTagCompound != null) {
+			stack.stackTagCompound.setInteger("x", x);
+			stack.stackTagCompound.setInteger("y", y);
+			stack.stackTagCompound.setInteger("z", z);
+			world.getTileEntity(x, y, z).readFromNBT(stack.stackTagCompound);
+		}
+		System.out.println(vanilla);
 		return vanilla;
 	}
 }

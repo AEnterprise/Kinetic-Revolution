@@ -237,6 +237,10 @@ public class BlockDuster extends BlockBase {
 			NBTTagCompound tag = new NBTTagCompound();
 			entity.writeToNBT(tag);
 			stack.stackTagCompound = tag;
+			tag.removeTag("height");
+			tag.removeTag("progress");
+			tag.removeTag("breakProgress");
+			tag.removeTag("targetHeight");
 		}
 		ArrayList<ItemStack> list = new ArrayList<ItemStack>();
 		list.add(stack);
