@@ -32,7 +32,6 @@ public class ItemBlockDuster extends ItemBlock {
 			stack.stackTagCompound.setInteger("z", z);
 			world.getTileEntity(x, y, z).readFromNBT(stack.stackTagCompound);
 		}
-		System.out.println(vanilla);
 		return vanilla;
 	}
 }
