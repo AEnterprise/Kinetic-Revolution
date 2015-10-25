@@ -5,17 +5,23 @@ import kineticrevolution.duster.Components;
 import kineticrevolution.duster.ItemBlockDuster;
 import kineticrevolution.duster.TileDuster;
 import kineticrevolution.lib.Names;
+import kineticrevolution.loaders.BlockLoader;
 import kineticrevolution.loaders.ItemLoader;
 import kineticrevolution.util.Location;
+import kineticrevolution.util.Utils;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import java.util.ArrayList;
 
 public class BlockDuster extends BlockBase {
 	public static final Location[] LOCATIONS = {
@@ -138,6 +144,16 @@ public class BlockDuster extends BlockBase {
 		return isSupported(world, x, y, z);
 	}
 
+	public boolean isIntact(World world, int x, int y, int z) {
+		for (Location l : LOCATIONS) {
+			Location location = l.copy().offset(x, y, z);
+			if (!(world.getBlock(location.x, location.y, location.z) == BlockLoader.dusterFake)) {
+				return false;
+			}
+		}
+		return isSupported(world, x, y, z);
+	}
+
 	public boolean isSupported(World world, int x, int y, int z) {
 		for (Location l : SUPPORT_LOCATIONS) {
 			Location location = l.copy().offset(x, y, z);
@@ -149,23 +165,28 @@ public class BlockDuster extends BlockBase {
 	}
 
 	@Override
-	public boolean canBlockStay(World world, int x, int y, int z) {
-		return super.canBlockStay(world, x, y, z);
+	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
+		if (!isIntact(world, x, y, z) && world.getBlockMetadata(x, y, z) == 0) {
+			Utils.dropItemstacks(world, x, y, z, getDrops(world, x, y, z, 0, 0));
+			world.setBlockToAir(x, y, z);
+		}
 	}
 
 	@Override
 	public void onBlockPreDestroy(World world, int x, int y, int z, int meta) {
-		super.onBlockPreDestroy(world, x, y, z, meta);
-	}
-
-	@Override
-	public void onBlockDestroyedByPlayer(World world, int x, int y, int z, int meta) {
+		if (meta == 1) {
+			//we're already removing the structure, return to prevent overflow
+			return;
+		}
+		world.setBlockMetadataWithNotify(x, y, z, 1, 3);
 		for (Location l : LOCATIONS) {
 			Location location = l.copy().offset(x, y, z);
-			world.setBlockToAir(location.x, location.y, location.z);
+			if (world.getBlock(location.x, location.y, location.z) == BlockLoader.dusterFake)
+				world.setBlockToAir(location.x, location.y, location.z);
 		}
-		world.setBlockToAir(x, y, z);
 	}
+
+
 
 	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
@@ -206,5 +227,19 @@ public class BlockDuster extends BlockBase {
 	@Override
 	public int getRenderType() {
 		return -1;
+	}
+
+	@Override
+	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
+		TileEntity entity = world.getTileEntity(x, y, z);
+		ItemStack stack = new ItemStack(BlockLoader.duster);
+		if (entity != null) {
+			NBTTagCompound tag = new NBTTagCompound();
+			entity.writeToNBT(tag);
+			stack.stackTagCompound = tag;
+		}
+		ArrayList<ItemStack> list = new ArrayList<ItemStack>();
+		list.add(stack);
+		return list;
 	}
 }

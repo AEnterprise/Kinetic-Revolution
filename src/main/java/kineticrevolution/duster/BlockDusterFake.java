@@ -4,7 +4,6 @@ import kineticrevolution.blocks.BlockBase;
 import kineticrevolution.blocks.BlockDuster;
 import kineticrevolution.loaders.BlockLoader;
 import kineticrevolution.util.Location;
-import kineticrevolution.util.Utils;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -15,7 +14,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * Created by AEnterprise
@@ -57,12 +55,6 @@ public class BlockDusterFake extends BlockBase {
 		location.z *= -1;
 		location.offset(x, y, z);
 		return location;
-	}
-
-	@Override
-	public void onBlockDestroyedByPlayer(World world, int x, int y, int z, int meta) {
-		Location location = getDusterLocation(x, y, z, meta);
-		world.getBlock(location.x, location.y, location.z).onBlockDestroyedByPlayer(world, location.x, location.y, location.z, meta);
 	}
 
 	@Override
@@ -108,18 +100,13 @@ public class BlockDusterFake extends BlockBase {
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
 		Location location = getDusterLocation(x, y, z, world.getBlockMetadata(x, y, z));
-		if (!BlockLoader.duster.isSupported(world, location.x, location.y, location.z)) {
-			Utils.harvestBlock(world, location.x, location.y, location.z, null);
+		if (world.getBlock(location.x, location.y, location.z) == BlockLoader.duster) {
+			BlockLoader.duster.onNeighborBlockChange(world, location.x, location.y, location.z, block);
 		}
 	}
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
-		return null;
-	}
-
-	@Override
-	public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_) {
 		return null;
 	}
 

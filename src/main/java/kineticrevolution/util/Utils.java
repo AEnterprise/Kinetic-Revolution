@@ -100,7 +100,7 @@ public class Utils {
 				world.playAuxSFX(2001, x, y, z, Block.getIdFromBlock(block) | (meta << 12));
 			if (block.removedByPlayer(world, player, x, y, z, false))
 				block.onBlockDestroyedByPlayer(world, x, y, z, meta);
-			if (!world.isRemote && playerMP != null)
+			if (!world.isRemote && playerMP != null && !(playerMP instanceof FakePlayer))
 				playerMP.playerNetServerHandler.sendPacket(new S23PacketBlockChange(x, y, z, world));
 			else
 				Minecraft.getMinecraft().getNetHandler().addToSendQueue(new C07PacketPlayerDigging(2, x, y, z, Minecraft.getMinecraft().objectMouseOver.sideHit));
@@ -116,7 +116,7 @@ public class Utils {
 			if (playerMP != null && !(playerMP instanceof FakePlayer))
 				playerMP.playerNetServerHandler.sendPacket(new S23PacketBlockChange(x, y, z, world));
 		} else {
-			world.playAuxSFX(2001, x, y, z, Block.getIdFromBlock(block) | (meta << 12));
+			//world.playAuxSFX(2001, x, y, z, Block.getIdFromBlock(block) | (meta << 12));
 			if (block.removedByPlayer(world, player, x, y, z, true))
 				block.onBlockDestroyedByPlayer(world, x, y, z, meta);
 			Minecraft.getMinecraft().getNetHandler().addToSendQueue(new C07PacketPlayerDigging(2, x, y, z, Minecraft.getMinecraft().objectMouseOver.sideHit));

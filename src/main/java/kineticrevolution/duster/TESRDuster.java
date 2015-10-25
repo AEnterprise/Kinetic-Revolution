@@ -16,9 +16,7 @@ public class TESRDuster extends TileEntitySpecialRenderer {
 
 	public final IModelCustom FRAME = AdvancedModelLoader.loadModel(new ResourceLocation(Reference.MOD_ID, "models/duster_frame.obj"));
 	public final IModelCustom DRILL = AdvancedModelLoader.loadModel(new ResourceLocation(Reference.MOD_ID, "models/duster_drill.obj"));
-	private final ResourceLocation FRAME_TEXTURE = new ResourceLocation(Reference.MOD_ID, "non-existant texture");
-	private final ResourceLocation DRILL_TEXTURE = new ResourceLocation(Reference.MOD_ID, "non-existant texture");
-
+	private final ResourceLocation TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/models/duster.png");
 	@Override
 	public void renderTileEntityAt(TileEntity entity, double x, double y, double z, float fl) {
 		if (!(entity instanceof TileDuster))
@@ -27,12 +25,11 @@ public class TESRDuster extends TileEntitySpecialRenderer {
 		RenderHelper.disableStandardItemLighting();
 
 		GL11.glTranslated(x + 0.5, y - 1, z + 0.5);
-		bindTexture(FRAME_TEXTURE);
+		bindTexture(TEXTURE);
 		FRAME.renderAll();
 
 		GL11.glTranslated(0, -0.5, 0);
-		bindTexture(DRILL_TEXTURE);
-		//DRILL.renderAll();
+		DRILL.renderAll();
 
 		GL11.glPopMatrix();
 		RenderHelper.enableStandardItemLighting();
