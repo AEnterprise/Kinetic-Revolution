@@ -42,16 +42,19 @@ public class TileDuster extends TileSyncBase {
 
 	@Override
 	public void updateEntity() {
+		//first move up if needed, this is so it goes up on the client as well
+		if (height < targetHeight && targetHeight - height > 0.01) {
+			height += 0.01;
+		}
 		if (worldObj.isRemote)
 			return;
-		if (height > targetHeight) {
+		if (height > targetHeight && height - targetHeight > 0.05) {
 			height -= 0.05;
 			spawnParticles(10);
 		}
 		if (progress >= maxProgress) {
 			progress = 0;
 			targetHeight = 1;
-			height = 1;
 			breakProgress = -1;
 			worldObj.destroyBlockInWorldPartially(0, xCoord, yCoord - 1, zCoord, breakProgress);
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
@@ -72,7 +75,6 @@ public class TileDuster extends TileSyncBase {
 				if (recipe == null) {
 					progress = 0;
 					targetHeight = 1;
-					height = 1;
 					breakProgress = -1;
 				}
 				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
@@ -82,7 +84,7 @@ public class TileDuster extends TileSyncBase {
 	}
 
 	public void onFallenUpon(Entity entity, float distance) {
-		if (distance < 0.8 || height > targetHeight || !canEntityDust(entity))
+		if (distance < 0.8 || (height > targetHeight && height - targetHeight > 0.5) || !canEntityDust(entity))
 			return;
 		//Corjaantje asked for lightning, so here it is ;)
 		if (entity instanceof EntityPlayer && PlayerUtils.playerMatches(UUIDs.CORJAANTJE, (EntityPlayer) entity)) {

@@ -179,6 +179,7 @@ public class BlockDuster extends BlockBase {
 			return;
 		}
 		world.setBlockMetadataWithNotify(x, y, z, 1, 3);
+		world.destroyBlockInWorldPartially(0, x, y - 1, z, -1);
 		for (Location l : LOCATIONS) {
 			Location location = l.copy().offset(x, y, z);
 			if (world.getBlock(location.x, location.y, location.z) == BlockLoader.dusterFake)
@@ -191,10 +192,6 @@ public class BlockDuster extends BlockBase {
 	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
 		AxisAlignedBB aabb = TileDuster.DEFAULT_BOX;
-		TileEntity tile = world.getTileEntity(x, y, z);
-		if (tile instanceof TileDuster) {
-			aabb = ((TileDuster) tile).getBox();
-		}
 		setBlockBounds((float) aabb.minX, (float) aabb.minY, (float) aabb.minZ, (float) aabb.maxX, (float) aabb.maxY, (float) aabb.maxZ);
 	}
 

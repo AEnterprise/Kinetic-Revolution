@@ -28,7 +28,7 @@ public class TESRDuster extends TileEntitySpecialRenderer {
 		bindTexture(TEXTURE);
 		FRAME.renderAll();
 
-		GL11.glTranslated(0, -0.5, 0);
+		GL11.glTranslated(0, -1.15 + ((TileDuster) entity).getHeight(), 0);
 		DRILL.renderAll();
 
 		GL11.glPopMatrix();
