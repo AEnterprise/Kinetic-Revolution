@@ -13,6 +13,7 @@ import net.minecraft.network.play.server.S23PacketBlockChange;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.event.world.BlockEvent;
 
@@ -112,7 +113,7 @@ public class Utils {
 				block.onBlockDestroyedByPlayer(world, x, y, z, meta);
 				block.harvestBlock(world, player, x, y, z, meta);
 			}
-			if (playerMP != null)
+			if (playerMP != null && !(playerMP instanceof FakePlayer))
 				playerMP.playerNetServerHandler.sendPacket(new S23PacketBlockChange(x, y, z, world));
 		} else {
 			world.playAuxSFX(2001, x, y, z, Block.getIdFromBlock(block) | (meta << 12));

@@ -7,6 +7,7 @@ import kineticrevolution.duster.TileDuster;
 import kineticrevolution.lib.Names;
 import kineticrevolution.loaders.ItemLoader;
 import kineticrevolution.util.Location;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -44,7 +45,7 @@ public class BlockDuster extends BlockBase {
 	};
 
 	public BlockDuster() {
-		super(Names.Blocks.DUSTER, Names.Blocks.DUSTER, Names.Blocks.DUSTER, CTabs.MAIN_TAB, ItemBlockDuster.class);
+		super(Names.Blocks.DUSTER, Names.Blocks.DUSTER, Names.Blocks.DUSTER, CTabs.MAIN_TAB, ItemBlockDuster.class, Material.grass);
 	}
 
 	@Override
@@ -145,6 +146,16 @@ public class BlockDuster extends BlockBase {
 			}
 		}
 		return true;
+	}
+
+	@Override
+	public boolean canBlockStay(World world, int x, int y, int z) {
+		return super.canBlockStay(world, x, y, z);
+	}
+
+	@Override
+	public void onBlockPreDestroy(World world, int x, int y, int z, int meta) {
+		super.onBlockPreDestroy(world, x, y, z, meta);
 	}
 
 	@Override

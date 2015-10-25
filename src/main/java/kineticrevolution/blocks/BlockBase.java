@@ -13,8 +13,8 @@ import net.minecraft.item.ItemBlock;
  */
 public abstract class BlockBase extends BlockContainer {
 
-	public BlockBase(String name, String registryName, String texture, CreativeTabs tab, Class<? extends ItemBlock> itemBlock) {
-		super(Material.iron);
+	public BlockBase(String name, String registryName, String texture, CreativeTabs tab, Class<? extends ItemBlock> itemBlock, Material material) {
+		super(material);
 		setBlockName(name);
 		setBlockTextureName(Reference.MOD_ID + ":" + texture);
 		setCreativeTab(tab);
@@ -28,7 +28,7 @@ public abstract class BlockBase extends BlockContainer {
 	}
 
 	public BlockBase(String name, String registryName, String texture, CreativeTabs tab) {
-		this(name, registryName, texture, tab, null);
+		this(name, registryName, texture, tab, null, Material.iron);
 	}
 
 	public BlockBase(String name, String texture) {
