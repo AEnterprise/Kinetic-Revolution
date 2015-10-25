@@ -17,7 +17,7 @@ import net.minecraft.block.Block;
 public class BlockLoader {
 	public static Block generatorCasing;
 	public static Block generatorInductor;
-	public static Block duster;
+	public static BlockDuster duster;
 	public static Block dusterFake;
 
 	public static void init() {

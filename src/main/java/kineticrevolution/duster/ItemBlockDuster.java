@@ -1,5 +1,6 @@
 package kineticrevolution.duster;
 
+import kineticrevolution.blocks.BlockDuster;
 import kineticrevolution.loaders.BlockLoader;
 import kineticrevolution.util.Location;
 import net.minecraft.block.Block;
@@ -22,7 +23,7 @@ public class ItemBlockDuster extends ItemBlock {
 	public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metadata) {
 		boolean vanilla = super.placeBlockAt(stack, player, world, x, y, z, side, hitX, hitY, hitZ, metadata);
 		for (int i = 0; i < 16; i++) {
-			Location location = TileDuster.LOCATIONS[i].copy().offset(x, y, z);
+			Location location = BlockDuster.LOCATIONS[i].copy().offset(x, y, z);
 			world.setBlock(location.x, location.y, location.z, BlockLoader.dusterFake, i, 3);
 		}
 		return vanilla;

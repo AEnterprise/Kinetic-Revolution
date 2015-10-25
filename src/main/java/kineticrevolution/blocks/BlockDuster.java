@@ -17,6 +17,31 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class BlockDuster extends BlockBase {
+	public static final Location[] LOCATIONS = {
+			new Location(-1, 0, -1),
+			new Location(-1, 0, 0),
+			new Location(-1, 0, 1),
+			new Location(0, 0, -1),
+			new Location(0, 0, 1),
+			new Location(1, 0, -1),
+			new Location(1, 0, 0),
+			new Location(1, 0, 1),
+			new Location(-1, -1, -1),
+			new Location(-1, -1, 0),
+			new Location(-1, -1, 1),
+			new Location(0, -1, -1),
+			new Location(0, -1, 1),
+			new Location(1, -1, -1),
+			new Location(1, -1, 0),
+			new Location(1, -1, 1),
+	};
+
+	private final Location[] SUPPORT_LOCATIONS = {
+			new Location(-1, -2, -1),
+			new Location(-1, -2, 1),
+			new Location(1, -2, -1),
+			new Location(1, -2, -1)
+	};
 
 	public BlockDuster() {
 		super(Names.Blocks.DUSTER, Names.Blocks.DUSTER, Names.Blocks.DUSTER, CTabs.MAIN_TAB, ItemBlockDuster.class);
@@ -102,9 +127,20 @@ public class BlockDuster extends BlockBase {
 
 	@Override
 	public boolean canPlaceBlockAt(World world, int x, int y, int z) {
-		for (Location location : TileDuster.LOCATIONS) {
-			Location l = location.copy().offset(x, y, z);
-			if (!world.isAirBlock(l.x, l.y, l.z)) {
+		for (Location l : LOCATIONS) {
+			Location location = l.copy().offset(x, y, z);
+			if (!world.isAirBlock(location.x, location.y, location.z)) {
+				return false;
+			}
+		}
+
+		return isSupported(world, x, y, z);
+	}
+
+	public boolean isSupported(World world, int x, int y, int z) {
+		for (Location l : SUPPORT_LOCATIONS) {
+			Location location = l.copy().offset(x, y, z);
+			if (world.isAirBlock(location.x, location.y, location.z)) {
 				return false;
 			}
 		}
@@ -113,7 +149,7 @@ public class BlockDuster extends BlockBase {
 
 	@Override
 	public void onBlockDestroyedByPlayer(World world, int x, int y, int z, int meta) {
-		for (Location l : TileDuster.LOCATIONS) {
+		for (Location l : LOCATIONS) {
 			Location location = l.copy().offset(x, y, z);
 			world.setBlockToAir(location.x, location.y, location.z);
 		}

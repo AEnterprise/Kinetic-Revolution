@@ -1,11 +1,16 @@
 package kineticrevolution.duster;
 
 import kineticrevolution.blocks.BlockBase;
+import kineticrevolution.blocks.BlockDuster;
+import kineticrevolution.loaders.BlockLoader;
 import kineticrevolution.util.Location;
+import kineticrevolution.util.Utils;
+import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -45,13 +50,18 @@ public class BlockDusterFake extends BlockBase {
 		return -1;
 	}
 
-	@Override
-	public void onBlockDestroyedByPlayer(World world, int x, int y, int z, int meta) {
-		Location location = TileDuster.LOCATIONS[meta].copy();
+	private Location getDusterLocation(int x, int y, int z, int meta) {
+		Location location = BlockDuster.LOCATIONS[meta].copy();
 		location.x *= -1;
 		location.y *= -1;
 		location.z *= -1;
 		location.offset(x, y, z);
+		return location;
+	}
+
+	@Override
+	public void onBlockDestroyedByPlayer(World world, int x, int y, int z, int meta) {
+		Location location = getDusterLocation(x, y, z, meta);
 		world.getBlock(location.x, location.y, location.z).onBlockDestroyedByPlayer(world, location.x, location.y, location.z, meta);
 	}
 
@@ -70,6 +80,37 @@ public class BlockDusterFake extends BlockBase {
 	@Override
 	public void setBlockBoundsForItemRender() {
 		setBlockBounds(0, 0, 0, 1, 1, 1);
+	}
+
+	@Override
+	public String getLocalizedName() {
+		return BlockLoader.duster.getLocalizedName();
+	}
+
+	@Override
+	public String getUnlocalizedName() {
+		return BlockLoader.duster.getUnlocalizedName();
+	}
+
+	@Override
+	public Item getItem(World world, int x, int y, int z) {
+		Location location = getDusterLocation(x, y, z, world.getBlockMetadata(x, y, z));
+		return BlockLoader.duster.getItem(world, location.x, location.y, location.z);
+	}
+
+	@Override
+	public void onBlockExploded(World world, int x, int y, int z, Explosion explosion) {
+		Location location = getDusterLocation(x, y, z, world.getBlockMetadata(x, y, z));
+		BlockLoader.duster.onBlockExploded(world, location.x, location.y, location.z, explosion);
+	}
+
+
+	@Override
+	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
+		Location location = getDusterLocation(x, y, z, world.getBlockMetadata(x, y, z));
+		if (!BlockLoader.duster.isSupported(world, location.x, location.y, location.z)) {
+			Utils.harvestBlock(world, location.x, location.y, location.z, null);
+		}
 	}
 
 	@Override
