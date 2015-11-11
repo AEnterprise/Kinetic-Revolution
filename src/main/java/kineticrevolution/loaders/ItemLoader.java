@@ -5,6 +5,7 @@ import kineticrevolution.items.ItemResource;
 import kineticrevolution.items.blueprints.ItemBlueprint;
 import kineticrevolution.items.dusts.ItemDust;
 import net.minecraft.item.Item;
+import net.minecraftforge.oredict.OreDictionary;
 
 /**
  * Created by AEnterprise
@@ -23,6 +24,6 @@ public class ItemLoader {
 	}
 
 	public static void addRecipes() {
-		//add the recipes
+		OreDictionary.registerOre("springTin", ItemResource.Resource.SPRING_TIN.getStack());
 	}
 }

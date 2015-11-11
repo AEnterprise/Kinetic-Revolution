@@ -39,6 +39,7 @@ public class Names {
 		public static final String MULTIBLOCK_BASE = "tileMultiBlockBase";
 		public static final String MULTIBLOCK_GENERATOR = "tileKineticGenerator";
 		public static final String DUSTER = "tileDuster";
+		public static final String ASSEMBLER = "tileAssembler";
 
 	}
 
@@ -56,6 +57,10 @@ public class Names {
 
 		}
 
+	}
+
+	public static class GUIIDs {
+		public static final int ASSEMBLER = 0;
 	}
 
 	public static class CTabs {

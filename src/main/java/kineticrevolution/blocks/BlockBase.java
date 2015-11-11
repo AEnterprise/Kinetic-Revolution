@@ -2,11 +2,16 @@ package kineticrevolution.blocks;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import kineticrevolution.core.CTabs;
+import kineticrevolution.inventories.IInventoryTE;
 import kineticrevolution.lib.Reference;
+import kineticrevolution.util.Utils;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 
 /**
  * Created by AEnterprise
@@ -39,4 +44,11 @@ public abstract class BlockBase extends BlockContainer {
 		this(name, name);
 	}
 
+	@Override
+	public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
+		TileEntity entity = world.getTileEntity(x, y, z);
+		if (entity instanceof IInventoryTE)
+			Utils.dropItemstacks(world, x, y, z, ((IInventoryTE) entity).getInventory().getContent());
+		super.breakBlock(world, x, y, z, block, meta);
+	}
 }

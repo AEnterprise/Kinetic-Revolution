@@ -123,4 +123,8 @@ public class Utils {
 		}
 		return true;
 	}
+
+	public static boolean areItemStacksEqual(ItemStack stack1, ItemStack stack2) {
+		return stack1 != null && stack2 != null && stack1.getItem() == stack2.getItem() && ItemStack.areItemStackTagsEqual(stack1, stack2) && stack1.getItemDamage() == stack2.getItemDamage();
+	}
 }
