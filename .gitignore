@@ -1,24 +1,22 @@
-# Folders
-.gradle/
-build/
-.settings/
-.idea/
-bin/
-out/
-eclipse/
+# eclipse
+bin
+*.launch
+.settings
+.metadata
+.classpath
+.project
 
-# Files
-*.eml
-*.iml
-*.bat
-*.blend
-*.class
-*.classpath
-*.project
+# idea
+out
 *.ipr
 *.iws
-*.mtl
-*.xcf
-*.bat
-!/gradlew.bat
-curse.properties
+*.iml
+.idea
+
+# gradle
+build
+.gradle
+
+# other
+eclipse
+run

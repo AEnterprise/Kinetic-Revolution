@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/diamond_pickaxe",
+  "textures": {
+    "layer0": "kineticrevolution:items/machineConfigurator"
+  }
+}
