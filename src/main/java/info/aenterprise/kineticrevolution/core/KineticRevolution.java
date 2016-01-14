@@ -1,8 +1,12 @@
 package info.aenterprise.kineticrevolution.core;
 
 import info.aenterprise.kineticrevolution.gui.GuiHandler;
+import info.aenterprise.kineticrevolution.networking.NetworkManager;
+import info.aenterprise.kineticrevolution.utils.FluidUtils;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -31,16 +35,25 @@ public class KineticRevolution {
 		}
 	};
 
+	static {
+		MinecraftForge.EVENT_BUS.register(new EventListener());
+	}
+
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		BlockLoader.addBlocks();
 		ItemLoader.addItems();
 		BlockLoader.addRecipes();
 		ItemLoader.addRecipes();
+		proxy.preInit();
+		FluidUtils.registerFluidContainers(FluidRegistry.getFluid("water"));
+		FluidUtils.registerFluidContainers(FluidRegistry.getFluid("lava"));
 	}
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
 		NetworkRegistry.INSTANCE.registerGuiHandler(INSTANCE, new GuiHandler());
+		proxy.init();
+		NetworkManager.init();
 	}
 }

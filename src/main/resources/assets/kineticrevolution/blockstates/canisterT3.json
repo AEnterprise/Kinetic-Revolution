@@ -1,9 +1,18 @@
 {
   "forge_marker": 1,
-  "defaults": {
-    "textures": { "layer0": "kineticrevolution:items/canisterT3"},
-    "model": "builtin/generated",
-    "transform": "forge:default-item"
-  },
-  "variants": { "inventory": [{}]}
+  "variants": {
+    "inventory": {
+      "model": "forge:forgebucket",
+      "textures": {
+        "base": "kineticrevolution:items/canisterT3",
+        "fluid": "kineticrevolution:items/cansterFluidMask",
+        "cover": "kineticrevolution:items/canisterT3Overlay"
+      },
+      "transform": "forge:default-item",
+      "custom": {
+        "fluid": "water",
+        "flipGas": false
+      }
+    }
+  }
 }

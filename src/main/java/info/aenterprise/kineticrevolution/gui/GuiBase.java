@@ -1,10 +1,14 @@
 package info.aenterprise.kineticrevolution.gui;
 
+import info.aenterprise.kineticrevolution.gui.widgets.WidgetBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.client.FMLClientHandler;
+
+import java.util.ArrayList;
 
 /**
  * Copyright (c) 2015, AEnterprise
@@ -15,6 +19,7 @@ public class GuiBase extends GuiContainer {
 	private final ResourceLocation texture;
 	private final boolean drawPlayerInv;
 	private final int xSize, ySize;
+	private final ArrayList<WidgetBase> widgets = new ArrayList<WidgetBase>();
 
 	public GuiBase(Container inventorySlotsIn, boolean drawPlayerInv, int xSize, int ySize, String texture) {
 		super(inventorySlotsIn);
@@ -22,6 +27,14 @@ public class GuiBase extends GuiContainer {
 		this.texture = new ResourceLocation("kineticRevolution:textures/gui/" + texture + ".png");
 		this.xSize = xSize;
 		this.ySize = ySize;
+	}
+
+	protected void addWidget(WidgetBase widget) {
+		widgets.add(widget);
+	}
+
+	public void bindTexture(ResourceLocation texture) {
+		FMLClientHandler.instance().getClient().getTextureManager().bindTexture(texture);
 	}
 
 	@Override
@@ -33,6 +46,10 @@ public class GuiBase extends GuiContainer {
 		if (drawPlayerInv) {
 			Minecraft.getMinecraft().renderEngine.bindTexture(PLAYER_INV_TEXTURE);
 			drawTexturedModalRect(guiLeft, guiTop + ySize, 0, 0, 176, 100);
+		}
+
+		for (WidgetBase widget: widgets) {
+			widget.render(partialTicks, mouseX, mouseY);
 		}
 	}
 }

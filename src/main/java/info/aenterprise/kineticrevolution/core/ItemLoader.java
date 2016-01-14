@@ -11,9 +11,9 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
  */
 public class ItemLoader {
 	public static Item machineConfigurator;
-	public static Item canisterT1;
-	public static Item canisterT2;
-	public static Item canisterT3;
+	public static ItemCanister canisterT1;
+	public static ItemCanister canisterT2;
+	public static ItemCanister canisterT3;
 
 	public static void addItems() {
 		machineConfigurator = new MachineConfigurator();

@@ -1,5 +1,6 @@
 package info.aenterprise.kineticrevolution.utils;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
@@ -9,7 +10,7 @@ import net.minecraftforge.fluids.IFluidTank;
  * Copyright (c) 2015, AEnterprise
  * http://www.aenterprise.info/
  */
-public class FluidTank implements IFluidTank {
+public class FluidTank implements IFluidTank, INBTSavable {
 	private FluidStack fluid;
 	private final int capacity;
 	private final TileEntity owner;
@@ -55,7 +56,7 @@ public class FluidTank implements IFluidTank {
 
 	@Override
 	public int fill(FluidStack resource, boolean doFill) {
-		if (resource == null || fluid.isFluidEqual(resource) || isFull())
+		if (resource == null || (fluid != null && !resource.isFluidEqual(fluid)) || isFull())
 			return 0;
 		if (!doFill)
 			return Math.min(getSpace(), resource.amount);
@@ -84,5 +85,26 @@ public class FluidTank implements IFluidTank {
 			owner.markDirty();
 		}
 		return stack;
+	}
+
+	@Override
+	public void saveToNBT(NBTTagCompound tag) {
+		if (isEmpty()) {
+			tag.setBoolean("Empty", true);
+		} else {
+			fluid.writeToNBT(tag);
+		}
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound tag) {
+		if (!tag.hasKey("Empty")) {
+			fluid = FluidStack.loadFluidStackFromNBT(tag);
+		}
+	}
+
+	@Override
+	public String tagName() {
+		return name;
 	}
 }

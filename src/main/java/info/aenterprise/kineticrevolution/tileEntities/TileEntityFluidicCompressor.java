@@ -1,22 +1,26 @@
 package info.aenterprise.kineticrevolution.tileEntities;
 
+import info.aenterprise.kineticrevolution.networking.SyncIDs;
+import info.aenterprise.kineticrevolution.utils.FluidTank;
 import info.aenterprise.kineticrevolution.utils.Inventory;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.fluids.*;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 
 /**
  * Copyright (c) 2015, AEnterprise
  * http://www.aenterprise.info/
  */
-public class TileEntityFluidicCompressor extends TileEntity implements ITickable, ISidedInventory, IFluidHandler {
+public class TileEntityFluidicCompressor extends TileSyncBase implements ITickable, ISidedInventory, IFluidHandler {
 	private final Inventory inventory = new Inventory(2, 64, this, "inventory");
+	private final FluidTank tank = new FluidTank(this, "tank", 10000);
 
 
 	@Override
@@ -28,14 +32,18 @@ public class TileEntityFluidicCompressor extends TileEntity implements ITickable
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
 		inventory.readFromNBT(compound.getCompoundTag(inventory.tagName()));
+		tank.readFromNBT(compound.getCompoundTag(tank.tagName()));
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
-		NBTTagCompound tag = new NBTTagCompound();
-		inventory.saveToNBT(tag);
-		compound.setTag(inventory.tagName(), tag);
+		NBTTagCompound inventoryTag = new NBTTagCompound();
+		inventory.saveToNBT(inventoryTag);
+		compound.setTag(inventory.tagName(), inventoryTag);
+		NBTTagCompound tankTag = new NBTTagCompound();
+		tank.saveToNBT(tankTag);;
+		compound.setTag(tank.tagName(), tankTag);
 	}
 
 	@Override
@@ -140,31 +148,54 @@ public class TileEntityFluidicCompressor extends TileEntity implements ITickable
 
 	@Override
 	public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
-		return 0;
+		return tank.fill(resource, doFill);
 	}
 
 	@Override
 	public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
-		return null;
+		if (resource == null) return null;
+		return tank.drain(resource.amount, doDrain);
 	}
 
 	@Override
 	public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
-		return null;
+		return tank.drain(maxDrain, doDrain);
 	}
 
 	@Override
 	public boolean canFill(EnumFacing from, Fluid fluid) {
-		return false;
+		return !tank.isFull() && (tank.getFluid() == null || tank.getFluid().getFluid() == fluid);
 	}
 
 	@Override
 	public boolean canDrain(EnumFacing from, Fluid fluid) {
-		return false;
+		return !tank.isEmpty() && tank.getFluid() != null && tank.getFluid().getFluid() == fluid;
 	}
 
 	@Override
 	public FluidTankInfo[] getTankInfo(EnumFacing from) {
-		return new FluidTankInfo[0];
+		return new FluidTankInfo[] {tank.getInfo()};
+	}
+
+	@Override
+	public int getIdentifier() {
+		return SyncIDs.FLUIDIC_COMPRESSOR.ordinal();
+	}
+
+	@Override
+	public void writeToByteBuff(ByteBuf buf) {
+		NBTTagCompound tag = new NBTTagCompound();
+		tank.saveToNBT(tag);
+		ByteBufUtils.writeTag(buf, tag);
+	}
+
+	@Override
+	public void readFromByteBuff(ByteBuf buf) {
+		NBTTagCompound tag = ByteBufUtils.readTag(buf);
+		tank.readFromNBT(tag);
+	}
+
+	public FluidTank getTank() {
+		return tank;
 	}
 }

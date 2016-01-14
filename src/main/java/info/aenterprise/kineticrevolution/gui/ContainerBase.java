@@ -1,7 +1,9 @@
 package info.aenterprise.kineticrevolution.gui;
 
+import info.aenterprise.kineticrevolution.tileEntities.TileSyncBase;
 import info.aenterprise.kineticrevolution.utils.StackUtils;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -27,6 +29,14 @@ public class ContainerBase<T extends TileEntity> extends Container {
 					addSlotToContainer(new Slot(player.inventory, 9 + inventoryColumnIndex + inventoryRowIndex * 9, x + inventoryColumnIndex * 18, y + inventoryRowIndex * 18));
 			for (int hotBarIndex = 0; hotBarIndex < 9; ++hotBarIndex)
 				addSlotToContainer(new Slot(player.inventory, hotBarIndex, 8 + hotBarIndex * 18, y + 58));
+		}
+	}
+
+	@Override
+	public void detectAndSendChanges() {
+		super.detectAndSendChanges();
+		if (player != null && entity instanceof TileSyncBase) {
+			((TileSyncBase) entity).syncToPlayer((EntityPlayerMP) player);
 		}
 	}
 
