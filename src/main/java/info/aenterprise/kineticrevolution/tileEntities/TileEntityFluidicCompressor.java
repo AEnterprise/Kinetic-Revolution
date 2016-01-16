@@ -1,8 +1,10 @@
 package info.aenterprise.kineticrevolution.tileEntities;
 
+import cofh.api.energy.IEnergyReceiver;
 import info.aenterprise.kineticrevolution.networking.SyncIDs;
 import info.aenterprise.kineticrevolution.utils.FluidTank;
 import info.aenterprise.kineticrevolution.utils.Inventory;
+import info.aenterprise.kineticrevolution.utils.RFBattery;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
@@ -18,10 +20,10 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
  * Copyright (c) 2015, AEnterprise
  * http://www.aenterprise.info/
  */
-public class TileEntityFluidicCompressor extends TileSyncBase implements ITickable, ISidedInventory, IFluidHandler {
+public class TileEntityFluidicCompressor extends TileSyncBase implements ITickable, ISidedInventory, IFluidHandler, IEnergyReceiver {
 	private final Inventory inventory = new Inventory(2, 64, this, "inventory");
 	private final FluidTank tank = new FluidTank(this, "tank", 10000);
-
+	private final RFBattery battery = new RFBattery(5000, 300, 300);
 
 	@Override
 	public void update() {
@@ -33,6 +35,7 @@ public class TileEntityFluidicCompressor extends TileSyncBase implements ITickab
 		super.readFromNBT(compound);
 		inventory.readFromNBT(compound.getCompoundTag(inventory.tagName()));
 		tank.readFromNBT(compound.getCompoundTag(tank.tagName()));
+		battery.readFromNBT(compound.getCompoundTag(battery.tagName()));
 	}
 
 	@Override
@@ -44,6 +47,9 @@ public class TileEntityFluidicCompressor extends TileSyncBase implements ITickab
 		NBTTagCompound tankTag = new NBTTagCompound();
 		tank.saveToNBT(tankTag);;
 		compound.setTag(tank.tagName(), tankTag);
+		NBTTagCompound batteryTag = new NBTTagCompound();
+		battery.saveToNBT(batteryTag);
+		compound.setTag(battery.tagName(), batteryTag);
 	}
 
 	@Override
@@ -197,5 +203,25 @@ public class TileEntityFluidicCompressor extends TileSyncBase implements ITickab
 
 	public FluidTank getTank() {
 		return tank;
+	}
+
+	@Override
+	public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
+		return battery.receiveEnergy(maxReceive, simulate);
+	}
+
+	@Override
+	public int getEnergyStored(EnumFacing from) {
+		return battery.getEnergyStored();
+	}
+
+	@Override
+	public int getMaxEnergyStored(EnumFacing from) {
+		return battery.getMaxEnergyStored();
+	}
+
+	@Override
+	public boolean canConnectEnergy(EnumFacing from) {
+		return true;
 	}
 }

@@ -8,11 +8,7 @@
         "fluid": "kineticrevolution:items/cansterFluidMask",
         "cover": "kineticrevolution:items/canisterT3Overlay"
       },
-      "transform": "forge:default-item",
-      "custom": {
-        "fluid": "water",
-        "flipGas": false
-      }
+      "transform": "forge:default-item"
     }
   }
 }

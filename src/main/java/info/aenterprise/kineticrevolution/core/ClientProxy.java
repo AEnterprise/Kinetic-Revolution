@@ -21,14 +21,13 @@ public class ClientProxy extends CommonProxy {
 		super.preInit();
 		ModelLoader.setBucketModelDefinition(ItemLoader.canisterT1);
 		final ModelResourceLocation withFluid = new ModelResourceLocation(new ResourceLocation("kineticrevolution", "canisterT1"), "inventory");
-		final ModelResourceLocation empty = new ModelResourceLocation(new ResourceLocation("kineticrevolution", "canisterT1Empty"), "inventory");
 		ModelLoader.setCustomMeshDefinition(ItemLoader.canisterT1, new ItemMeshDefinition() {
 			@Override
 			public ModelResourceLocation getModelLocation(ItemStack stack) {
-				return stack.getMetadata() == 0 ? empty : withFluid;
+				return withFluid;
 			}
 		});
-		ModelBakery.registerItemVariants(ItemLoader.canisterT1, withFluid, empty);
+		ModelBakery.registerItemVariants(ItemLoader.canisterT1, withFluid);
 
 		ModelLoader.setBucketModelDefinition(ItemLoader.canisterT2);
 		final ModelResourceLocation withFluid1 = new ModelResourceLocation(new ResourceLocation("kineticrevolution", "canisterT2"), "inventory");

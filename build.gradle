@@ -32,7 +32,7 @@ group= "info.aenterprise.kineticrevolution" // http://maven.apache.org/guides/mi
 archivesBaseName = "Kinetic Revolution"
 
 minecraft {
-    version = "1.8.9-11.15.0.1695"
+    version = "1.8.9-11.15.0.1699"
     runDir = "run"
     useDepAts = true
     
@@ -46,7 +46,7 @@ minecraft {
 }
 
 dependencies {
-    deobfCompile "mezz.jei:jei_1.8.9:2.16.1.77"
+    deobfCompile "mezz.jei:jei_1.8.9:2.18.1.88"
 }
 
 processResources
