@@ -1,6 +1,8 @@
 package info.aenterprise.kineticrevolution.tileEntities;
 
 import cofh.api.energy.IEnergyReceiver;
+import info.aenterprise.kineticrevolution.networking.MessageFluidicCompressorMode;
+import info.aenterprise.kineticrevolution.networking.NetworkManager;
 import info.aenterprise.kineticrevolution.networking.SyncIDs;
 import info.aenterprise.kineticrevolution.utils.FluidTank;
 import info.aenterprise.kineticrevolution.utils.Inventory;
@@ -21,13 +23,53 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
  * http://www.aenterprise.info/
  */
 public class TileEntityFluidicCompressor extends TileSyncBase implements ITickable, ISidedInventory, IFluidHandler, IEnergyReceiver {
-	private final Inventory inventory = new Inventory(2, 64, this, "inventory");
+	private final Inventory inventory = new Inventory(2, 1, this, "inventory");
 	private final FluidTank tank = new FluidTank(this, "tank", 10000);
 	private final RFBattery battery = new RFBattery(5000, 300, 300);
+	private Mode mode = Mode.FILL;
 
 	@Override
 	public void update() {
+		if (worldObj.isRemote || inventory.getStackInSlot(0) == null || !(inventory.getStackInSlot(0).getItem() instanceof IFluidContainerItem))
+			return;
+		IFluidContainerItem container = (IFluidContainerItem) inventory.getStackInSlot(0).getItem();
+		FluidStack stack = container.getFluid(inventory.getStackInSlot(0));
 
+		if (mode == Mode.FILL && !tank.isEmpty()) {
+			if (stack == null || stack.isFluidEqual(tank.getFluid())) {
+				int amount = Math.min(container.getCapacity(inventory.getStackInSlot(0)) - (stack == null ? 0 : stack.amount), Math.min(tank.getFluidAmount(), 50));
+				if (amount == 0) {
+					inventory.moveSlotToSlot(0, 1);
+					return;
+				}
+				if (battery.hasEnergy(amount)) {
+					container.fill(inventory.getStackInSlot(0), tank.drain(amount, true), true);
+					battery.extractEnergy(amount, false);
+				}
+			}
+		}
+
+		if (mode == Mode.EMPTY && !tank.isFull()) {
+			if (tank.isEmpty() || tank.getFluid().isFluidEqual(stack)) {
+				int amount = Math.min(tank.getCapacity(), Math.min(stack.amount, 100));
+				if (battery.hasEnergy(amount / 4)) {
+					tank.fill(container.drain(inventory.getStackInSlot(0), amount, true), true);
+					battery.extractEnergy(amount / 4, false);
+				}
+			}
+			if (container.getFluid(inventory.getStackInSlot(0)) == null)
+				inventory.moveSlotToSlot(0, 1);
+		}
+	}
+
+	public Mode getMode() {
+		return mode;
+	}
+
+	public void setMode(Mode mode) {
+		this.mode = mode;
+		if (worldObj.isRemote)
+			NetworkManager.INSTANCE.sendToServer(new MessageFluidicCompressorMode(pos, mode));
 	}
 
 	@Override
@@ -36,6 +78,7 @@ public class TileEntityFluidicCompressor extends TileSyncBase implements ITickab
 		inventory.readFromNBT(compound.getCompoundTag(inventory.tagName()));
 		tank.readFromNBT(compound.getCompoundTag(tank.tagName()));
 		battery.readFromNBT(compound.getCompoundTag(battery.tagName()));
+		mode = Mode.values()[compound.getInteger("mode")];
 	}
 
 	@Override
@@ -45,11 +88,12 @@ public class TileEntityFluidicCompressor extends TileSyncBase implements ITickab
 		inventory.saveToNBT(inventoryTag);
 		compound.setTag(inventory.tagName(), inventoryTag);
 		NBTTagCompound tankTag = new NBTTagCompound();
-		tank.saveToNBT(tankTag);;
+		tank.saveToNBT(tankTag);
 		compound.setTag(tank.tagName(), tankTag);
 		NBTTagCompound batteryTag = new NBTTagCompound();
 		battery.saveToNBT(batteryTag);
 		compound.setTag(battery.tagName(), batteryTag);
+		compound.setInteger("mode", mode.ordinal());
 	}
 
 	@Override
@@ -139,7 +183,7 @@ public class TileEntityFluidicCompressor extends TileSyncBase implements ITickab
 
 	@Override
 	public int[] getSlotsForFace(EnumFacing side) {
-		return new int[] {0, 1};
+		return new int[]{0, 1};
 	}
 
 	@Override
@@ -180,7 +224,7 @@ public class TileEntityFluidicCompressor extends TileSyncBase implements ITickab
 
 	@Override
 	public FluidTankInfo[] getTankInfo(EnumFacing from) {
-		return new FluidTankInfo[] {tank.getInfo()};
+		return new FluidTankInfo[]{tank.getInfo()};
 	}
 
 	@Override
@@ -223,5 +267,10 @@ public class TileEntityFluidicCompressor extends TileSyncBase implements ITickab
 	@Override
 	public boolean canConnectEnergy(EnumFacing from) {
 		return true;
+	}
+
+	public enum Mode {
+		FILL,
+		EMPTY
 	}
 }

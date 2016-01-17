@@ -11,10 +11,10 @@ import net.minecraftforge.fluids.IFluidTank;
  * http://www.aenterprise.info/
  */
 public class FluidTank implements IFluidTank, INBTSavable {
-	private FluidStack fluid;
 	private final int capacity;
 	private final TileEntity owner;
 	private final String name;
+	private FluidStack fluid;
 
 	public FluidTank(TileEntity owner, String name, int capacity) {
 		this.owner = owner;
@@ -100,6 +100,8 @@ public class FluidTank implements IFluidTank, INBTSavable {
 	public void readFromNBT(NBTTagCompound tag) {
 		if (!tag.hasKey("Empty")) {
 			fluid = FluidStack.loadFluidStackFromNBT(tag);
+		} else {
+			fluid = null;
 		}
 	}
 

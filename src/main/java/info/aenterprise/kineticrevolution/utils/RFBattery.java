@@ -21,6 +21,10 @@ public class RFBattery implements IEnergyStorage, INBTSavable {
 		return capacity - storedEnergy;
 	}
 
+	public boolean hasEnergy(int amount) {
+		return extractEnergy(amount, true) == amount;
+	}
+
 	@Override
 	public int receiveEnergy(int maxReceive, boolean simulate) {
 		int received = Math.min(Math.min(maxReceive, getRemainingStorage()), maxIn);

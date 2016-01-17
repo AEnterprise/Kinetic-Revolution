@@ -14,5 +14,6 @@ public class NetworkManager {
 
 	public static void init() {
 		INSTANCE.registerMessage(MessageByteBuff.class, MessageByteBuff.class, 0, Side.CLIENT);
+		INSTANCE.registerMessage(MessageFluidicCompressorMode.class, MessageFluidicCompressorMode.class, 1, Side.SERVER);
 	}
 }

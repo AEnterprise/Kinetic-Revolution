@@ -27,14 +27,24 @@ repositories {
   }
 }
 
-version = "0.1.0"
+
+ext.buildProps = file "gradle.properties"
+
+buildProps.withReader {
+    def prop = new Properties()
+    prop.load(it)
+    ext.config = new ConfigSlurper().parse prop
+}
+
+version = "${config.version.mod}"
 group= "info.aenterprise.kineticrevolution" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "Kinetic Revolution"
 
 minecraft {
-    version = "1.8.9-11.15.0.1699"
+    version = "${config.version.forge}"
     runDir = "run"
     useDepAts = true
+    replace "@MODVERSION@", config.version.mod
     
     // the mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   snapshot are built nightly.

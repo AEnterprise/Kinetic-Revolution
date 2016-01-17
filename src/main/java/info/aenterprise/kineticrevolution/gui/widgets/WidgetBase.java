@@ -1,33 +1,28 @@
 package info.aenterprise.kineticrevolution.gui.widgets;
 
 import info.aenterprise.kineticrevolution.gui.GuiBase;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
+
+import java.awt.*;
 
 /**
  * Copyright (c) 2015, AEnterprise
  * http://www.aenterprise.info/
  */
 public class WidgetBase {
-	public final int id, x, y, width, height;
+	public final int x, y, width, height;
+	protected final GuiBase gui;
 	public int u, v;
 	public ResourceLocation texture;
-	protected final GuiBase gui;
 
-	public WidgetBase(int id, int x, int y, int width, int height, int u, int v, ResourceLocation texture, GuiBase gui) {
-		this.id = id;
-		this.x = x;
-		this.y = y;
-		this.width = width;
-		this.height = height;
+	public WidgetBase(int x, int y, int width, int height, int u, int v, ResourceLocation texture, GuiBase gui) {
+		this(x, y, width, height, gui);
 		this.u = u;
 		this.v = v;
 		this.texture = texture;
-		this.gui = gui;
 	}
 
-	public WidgetBase(int id, int x, int y, int width, int height, GuiBase gui) {
-		this.id = id;
+	public WidgetBase(int x, int y, int width, int height, GuiBase gui) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
@@ -37,8 +32,15 @@ public class WidgetBase {
 
 	public void render(float partialTicks, int mouseX, int mouseY) {
 		if (texture == null) return;
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		gui.bindTexture(texture);
 		gui.drawTexturedModalRect(gui.guiLeft + x, gui.guiTop + y, u, v, width, height);
+	}
+
+	public void onClick() {
+
+	}
+
+	public Rectangle getBounds() {
+		return new Rectangle(x, y, width, height);
 	}
 }

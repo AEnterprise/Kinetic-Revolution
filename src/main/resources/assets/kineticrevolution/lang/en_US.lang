@@ -1,5 +1,9 @@
 tile.fluidicCompressor.name=Fluidic Compressor
 
+fluidicCompressor.currentMode=Current mode: %s
+mode.FILL=Fill
+mode.EMPTY=Empty
+
 item.machineConfigurator.name=Machine Configurator
 item.canisterT1.name=Iron Canister
 item.canisterT2.name=Golden Canister

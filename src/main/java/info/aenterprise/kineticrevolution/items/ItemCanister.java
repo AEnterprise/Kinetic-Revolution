@@ -3,6 +3,7 @@ package info.aenterprise.kineticrevolution.items;
 import info.aenterprise.kineticrevolution.utils.FluidUtils;
 import info.aenterprise.kineticrevolution.utils.StackUtils;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -55,7 +56,10 @@ public class ItemCanister extends ItemBase implements IFluidContainerItem {
 	public FluidStack getFluid(ItemStack container) {
 		NBTTagCompound tag = StackUtils.getTagCompound(container);
 		if (tag.hasKey("fluid")) {
-			return FluidStack.loadFluidStackFromNBT(tag.getCompoundTag("fluid"));
+			FluidStack fluid = FluidStack.loadFluidStackFromNBT(tag.getCompoundTag("fluid"));
+			if (fluid.amount > 0)
+				return fluid;
+			return null;
 		}
 		return null;
 	}
@@ -102,5 +106,13 @@ public class ItemCanister extends ItemBase implements IFluidContainerItem {
 		NBTTagCompound tag = new NBTTagCompound();
 		fluid.writeToNBT(tag);
 		container.getTagCompound().setTag("fluid", tag);
+		if (fluid.amount == 0)
+			container.getTagCompound().removeTag("fluid");
+	}
+
+	@Override
+	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+		FluidStack fluid = getFluid(stack);
+		tooltip.add("" + (fluid == null ? 0 : fluid.amount) + "/" + capacity);
 	}
 }

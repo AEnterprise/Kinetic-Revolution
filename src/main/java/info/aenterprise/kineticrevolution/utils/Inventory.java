@@ -26,6 +26,22 @@ public class Inventory implements IInventory, INBTSavable {
 		this.name = name;
 	}
 
+	public void moveSlotToSlot(int from, int to) {
+		if (isItemValidForSlot(to, stacks[from])) {
+			if (stacks[to] == null) {
+				stacks[to] = stacks[from];
+				stacks[from] = null;
+			} else {
+				while (stacks[from].stackSize > 0 && stacks[to].stackSize < stacks[to].getMaxStackSize()) {
+					stacks[from].stackSize--;
+					stacks[to].stackSize++;
+				}
+				if (stacks[from].stackSize == 0)
+					stacks[from] = null;
+			}
+		}
+	}
+
 	@Override
 	public int getSizeInventory() {
 		return size;

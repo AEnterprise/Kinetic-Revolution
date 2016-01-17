@@ -2,12 +2,14 @@ package info.aenterprise.kineticrevolution.gui;
 
 import info.aenterprise.kineticrevolution.gui.widgets.WidgetBase;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.FMLClientHandler;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -49,7 +51,21 @@ public class GuiBase extends GuiContainer {
 		}
 
 		for (WidgetBase widget: widgets) {
+			GlStateManager.color(1f, 1f, 1f);
 			widget.render(partialTicks, mouseX, mouseY);
 		}
+	}
+
+	@Override
+	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+		super.mouseClicked(mouseX, mouseY, mouseButton);
+		for (WidgetBase widget : widgets) {
+			if (widget.getBounds().contains(mouseX - guiLeft, mouseY - guiTop))
+				widget.onClick();
+		}
+	}
+
+	public FontRenderer getFontRenderer() {
+		return fontRendererObj;
 	}
 }
